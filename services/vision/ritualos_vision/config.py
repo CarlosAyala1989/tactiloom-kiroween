@@ -5,7 +5,10 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+_PARENTS = Path(__file__).resolve().parents
+# Repository layout: services/vision/ritualos_vision/config.py → repo root is 3 levels up.
+# In the container the package lives at /app/ritualos_vision and paths come from env vars.
+REPO_ROOT = _PARENTS[3] if len(_PARENTS) > 3 else _PARENTS[-1]
 
 
 def _path(name: str, default: Path) -> Path:
