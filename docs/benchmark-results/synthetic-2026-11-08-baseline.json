@@ -1,0 +1,93 @@
+{
+  "kind": "synthetic",
+  "warning": "Imágenes sintéticas renderizadas desde el kit; NO sustituye pruebas con cámara y tarjetas impresas.",
+  "detectorVersion": "ritualos-vision/1.0.0",
+  "opencv": "5.0.0",
+  "machine": {
+    "python": "3.14.6",
+    "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64"
+  },
+  "seed": 7,
+  "overall": {
+    "scenes": 120,
+    "boardsCalibrated": "113/120",
+    "cardIdRecall": 0.9418,
+    "cellAccuracyOfIdentified": 1.0,
+    "orientationAccuracyOfIdentified": 1.0,
+    "fullyCorrectCards": 0.9418,
+    "falsePositiveCards": 0,
+    "perfectScenes": "113/120"
+  },
+  "byCondition": {
+    "frontal-normal": {
+      "scenes": 20,
+      "boardsCalibrated": "20/20",
+      "cardIdRecall": 1.0,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 1.0,
+      "falsePositiveCards": 0,
+      "perfectScenes": "20/20"
+    },
+    "perspective-normal": {
+      "scenes": 20,
+      "boardsCalibrated": "20/20",
+      "cardIdRecall": 1.0,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 1.0,
+      "falsePositiveCards": 0,
+      "perfectScenes": "20/20"
+    },
+    "low-light": {
+      "scenes": 20,
+      "boardsCalibrated": "20/20",
+      "cardIdRecall": 1.0,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 1.0,
+      "falsePositiveCards": 0,
+      "perfectScenes": "20/20"
+    },
+    "low-resolution": {
+      "scenes": 20,
+      "boardsCalibrated": "20/20",
+      "cardIdRecall": 1.0,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 1.0,
+      "falsePositiveCards": 0,
+      "perfectScenes": "20/20"
+    },
+    "high-resolution": {
+      "scenes": 20,
+      "boardsCalibrated": "19/20",
+      "cardIdRecall": 0.9455,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 0.9455,
+      "falsePositiveCards": 0,
+      "perfectScenes": "19/20"
+    },
+    "strong-blur": {
+      "scenes": 20,
+      "boardsCalibrated": "14/20",
+      "cardIdRecall": 0.6689,
+      "cellAccuracyOfIdentified": 1.0,
+      "orientationAccuracyOfIdentified": 1.0,
+      "fullyCorrectCards": 0.6689,
+      "falsePositiveCards": 0,
+      "perfectScenes": "14/20"
+    }
+  },
+  "latencyMs": {
+    "median": 23.3,
+    "p95": 41.9,
+    "max": 54.7,
+    "note": "analyze_image() sin overlay, un hilo; excluye decodificación y red"
+  },
+  "missedCardReasons": {
+    "BOARD_NOT_CALIBRATED": 58
+  }
+}

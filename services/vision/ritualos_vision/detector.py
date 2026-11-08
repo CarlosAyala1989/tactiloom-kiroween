@@ -80,8 +80,29 @@ def _plausible_quad(corners: np.ndarray, max_ratio: float) -> bool:
     return max(sides) / min(sides) <= max_ratio and max(diagonals) / min(diagonals) <= max_ratio
 
 
+def _run_detector(work: np.ndarray, scale: float) -> list[RawMarker]:
+    corners, ids, _rejected = _detector().detectMarkers(work)
+    if ids is None:
+        return []
+    return [
+        RawMarker(int(marker_id), np.asarray(quad, dtype=np.float64).reshape(4, 2) / scale)
+        for quad, marker_id in zip(corners, ids.ravel(), strict=True)
+    ]
+
+
+def _sharpened(gray: np.ndarray) -> np.ndarray:
+    """Unsharp mask + CLAHE: recovers fiducials softened by focus blur (see docs/benchmarking.md)."""
+    blurred = cv2.GaussianBlur(gray, (0, 0), 2.0)
+    sharp = cv2.addWeighted(gray, 1.8, blurred, -0.8, 0)
+    return cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(sharp)
+
+
 def detect_markers(gray: np.ndarray) -> tuple[list[RawMarker], list[RawMarker]]:
-    """Return (plausible markers, discarded slivers) in a stable order."""
+    """Return (plausible markers, discarded slivers) in a stable order.
+
+    A second pass on a sharpened image runs only when a corner fiducial is missing; its markers are
+    merged when they do not duplicate a first-pass detection (same id within 12 px).
+    """
     height, width = gray.shape[:2]
     scale = 1.0
     work = gray
@@ -89,13 +110,14 @@ def detect_markers(gray: np.ndarray) -> tuple[list[RawMarker], list[RawMarker]]:
     if longest > config.DETECTION_MAX_SIDE_PX:
         scale = config.DETECTION_MAX_SIDE_PX / longest
         work = cv2.resize(gray, (round(width * scale), round(height * scale)), interpolation=cv2.INTER_AREA)
-    corners, ids, _rejected = _detector().detectMarkers(work)
-    if ids is None:
-        return [], []
-    markers = [
-        RawMarker(int(marker_id), np.asarray(quad, dtype=np.float64).reshape(4, 2) / scale)
-        for quad, marker_id in zip(corners, ids.ravel(), strict=True)
-    ]
+    markers = _run_detector(work, scale)
+    if {m.marker_id for m in markers}.issuperset(FIDUCIAL_IDS) is False:
+        for extra in _run_detector(_sharpened(work), scale):
+            duplicate = any(
+                m.marker_id == extra.marker_id and np.linalg.norm(m.center - extra.center) < 12 for m in markers
+            )
+            if not duplicate:
+                markers.append(extra)
     # Stable order independent of detectMarkers() internals.
     markers.sort(key=lambda m: (m.marker_id, round(float(m.center[1]), 1), round(float(m.center[0]), 1)))
     plausible = [m for m in markers if _plausible_quad(m.corners, IMAGE_MAX_SIDE_RATIO)]

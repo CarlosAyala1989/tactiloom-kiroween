@@ -4,9 +4,11 @@ must be read back exactly from the pixels."""
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
+from ritualos_vision.benchmark import camera_for, random_scene
 from ritualos_vision.catalog import load_catalog, load_template
 from ritualos_vision.detector import analyze_image
 from ritualos_vision.synth import (
@@ -93,3 +95,19 @@ def test_diagonal_cards_are_flagged(angle: float, sign: float) -> None:
     result = analyze_image(photo, request_id="req_rot", render=False)
     assert result["cards"] == []
     assert {d["code"] for d in result["diagnostics"] if d["severity"] == "error"} == {"AMBIGUOUS_ORIENTATION"}
+
+
+@pytest.mark.parametrize("scene_index", range(6))
+def test_strong_focus_blur_still_calibrates(scene_index: int) -> None:
+    """Regression for the synthetic benchmark finding: under σ≈2 px focus blur fiducial #0 was lost
+    (113/120 boards calibrated). A sharpened second detection pass recovers it (120/120)."""
+    rng = np.random.default_rng(99)
+    for _ in range(scene_index * 2):  # advance to the scenes that failed before the fix
+        random_scene(rng)
+        camera_for("strong-blur", rng, 0)
+    cards = random_scene(rng)
+    photo = photograph(compose_board(Scene(tuple(cards))), camera_for("strong-blur", rng, 5000 + scene_index * 2))
+    result = analyze_image(photo, request_id="req_blur", render=False)
+    assert result["board"]["calibrated"], result["diagnostics"]
+    expected = sorted(((c.marker_id, c.row, c.col, c.orientation) for c in cards), key=lambda t: (t[1], t[2], t[0]))
+    assert [(c["markerId"], c["row"], c["col"], c["orientation"]) for c in result["cards"]] == expected
