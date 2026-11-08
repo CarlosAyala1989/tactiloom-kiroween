@@ -337,3 +337,12 @@ model AuditEvent {
   @@index([workspaceId, createdAt])
   @@index([action, createdAt])
 }
+
+/// Liveness of runner processes (shown by /api/health so the UI can say "worker no disponible").
+model WorkerStatus {
+  id         String   @id
+  version    String
+  startedAt  DateTime
+  lastSeenAt DateTime
+  jobsDone   Int      @default(0)
+}

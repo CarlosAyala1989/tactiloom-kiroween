@@ -1,0 +1,23 @@
+import 'dotenv/config';
+import { createPrismaClient } from '@ritualos/db';
+import { FileSandbox } from '@ritualos/workflow-engine';
+import { loadRunnerConfig } from './config';
+import { log } from './log';
+import { RUNNER_VERSION, runLoop } from './worker';
+
+const config = loadRunnerConfig();
+const prisma = createPrismaClient(config.databaseUrl);
+const sandbox = await FileSandbox.open(config.workspaceRoot);
+
+let stopping = false;
+for (const signal of ['SIGINT', 'SIGTERM'] as const) {
+  process.on(signal, () => {
+    log('info', 'runner.stopping', { signal });
+    stopping = true;
+  });
+}
+
+log('info', 'runner.started', { runnerId: config.runnerId, version: RUNNER_VERSION, leaseMs: config.leaseMs, maxDurationMs: config.maxDurationMs });
+await runLoop({ prisma, sandbox, config }, () => stopping);
+await prisma.$disconnect();
+log('info', 'runner.stopped', { runnerId: config.runnerId });

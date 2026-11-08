@@ -1,0 +1,114 @@
+# RitualOS full stack: `docker compose up --build`
+# Only the web UI is published (127.0.0.1); vision and the runner live on the private network.
+name: ritualos
+
+x-node-env: &node-env
+  DATABASE_URL: postgresql://${POSTGRES_USER:-ritualos}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-ritualos}
+  WORKSPACE_ROOT: /workspace
+  NODE_ENV: production
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ritualos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-ritualos}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55439}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  vision:
+    build:
+      context: .
+      dockerfile: services/vision/Dockerfile
+    image: ritualos-vision:local
+    restart: unless-stopped
+    environment:
+      VISION_INTERNAL_TOKEN: ${VISION_INTERNAL_TOKEN:?set VISION_INTERNAL_TOKEN in .env}
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ritualos-node:local
+    command: ["sh", "-c", "pnpm exec prisma migrate deploy && pnpm exec tsx prisma/seed.ts"]
+    environment:
+      <<: *node-env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  runner:
+    image: ritualos-node:local
+    command: ["pnpm", "--filter", "@ritualos/runner", "start"]
+    restart: unless-stopped
+    environment:
+      <<: *node-env
+      RUNNER_POLL_INTERVAL_MS: ${RUNNER_POLL_INTERVAL_MS:-500}
+      RUNNER_LEASE_MS: ${RUNNER_LEASE_MS:-30000}
+      RUNNER_MAX_ATTEMPTS: ${RUNNER_MAX_ATTEMPTS:-3}
+      RUNNER_MAX_DURATION_MS: ${RUNNER_MAX_DURATION_MS:-60000}
+    volumes:
+      - demo-workspace:/workspace
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  web:
+    image: ritualos-node:local
+    command: ["pnpm", "--filter", "@ritualos/web", "start"]
+    restart: unless-stopped
+    environment:
+      <<: *node-env
+      WEB_PORT: "3210"
+      HOSTNAME: 0.0.0.0
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:3210}
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env}
+      VISION_URL: http://vision:8000
+      VISION_INTERNAL_TOKEN: ${VISION_INTERNAL_TOKEN:?set VISION_INTERNAL_TOKEN in .env}
+      DEMO_SESSION_TTL_HOURS: ${DEMO_SESSION_TTL_HOURS:-24}
+      DEMO_MAX_ANALYSES_PER_HOUR: ${DEMO_MAX_ANALYSES_PER_HOUR:-60}
+      DEMO_MAX_RUNS_PER_HOUR: ${DEMO_MAX_RUNS_PER_HOUR:-40}
+      DEMO_MAX_UPLOADS: ${DEMO_MAX_UPLOADS:-20}
+      DEMO_MAX_CONCURRENT_RUNS: ${DEMO_MAX_CONCURRENT_RUNS:-2}
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3210}:3210"
+    volumes:
+      - demo-workspace:/workspace
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      vision:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3210/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  pgdata:
+  demo-workspace:

@@ -21,18 +21,36 @@ importers:
       '@playwright/test':
         specifier: 1.65.0
         version: 1.65.0
+      '@ritualos/compiler':
+        specifier: workspace:*
+        version: link:packages/compiler
+      '@ritualos/runner':
+        specifier: workspace:*
+        version: link:apps/runner
+      '@ritualos/workflow-engine':
+        specifier: workspace:*
+        version: link:packages/workflow-engine
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
+      '@types/pg':
+        specifier: 8.23.1
+        version: 8.23.1
       dotenv:
         specifier: 18.0.9
         version: 18.0.9
       eslint:
         specifier: 9.39.5
         version: 9.39.5(jiti@2.7.0)
+      fast-check:
+        specifier: 4.10.2
+        version: 4.10.2
       globals:
         specifier: 17.14.0
         version: 17.14.0
+      pg:
+        specifier: 8.23.1
+        version: 8.23.1
       prisma:
         specifier: 7.10.1
         version: 7.10.1(@types/node@24.19.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3)
