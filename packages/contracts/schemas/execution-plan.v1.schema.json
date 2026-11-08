@@ -13,35 +13,42 @@
       "pattern": "^sha256:[0-9a-f]{64}$"
     },
     "input": {
-      "type": "object",
-      "properties": {
-        "uploadedFileId": {
-          "type": "string"
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "uploadedFileId": {
+              "type": "string"
+            },
+            "originalName": {
+              "type": "string"
+            },
+            "mime": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "uploadedFileId",
+            "originalName",
+            "mime",
+            "bytes",
+            "sha256"
+          ],
+          "additionalProperties": false
         },
-        "originalName": {
-          "type": "string"
-        },
-        "mime": {
-          "type": "string"
-        },
-        "bytes": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 9007199254740991
-        },
-        "sha256": {
-          "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+        {
+          "type": "null"
         }
-      },
-      "required": [
-        "uploadedFileId",
-        "originalName",
-        "mime",
-        "bytes",
-        "sha256"
-      ],
-      "additionalProperties": false
+      ]
     },
     "path": {
       "type": "array",

@@ -45,13 +45,15 @@ export const FieldValuesSchema = z.object({
 export const ExecutionPlanSchema = z.object({
   planVersion: z.literal(PLAN_VERSION),
   contentHash: z.string().regex(HASH_PATTERN),
-  input: z.object({
-    uploadedFileId: z.string(),
-    originalName: z.string(),
-    mime: z.string(),
-    bytes: z.number().int().nonnegative(),
-    sha256: z.string().regex(/^[0-9a-f]{64}$/),
-  }),
+  input: z
+    .object({
+      uploadedFileId: z.string(),
+      originalName: z.string(),
+      mime: z.string(),
+      bytes: z.number().int().nonnegative(),
+      sha256: z.string().regex(/^[0-9a-f]{64}$/),
+    })
+    .nullable(),
   path: z.array(z.object({ nodeId: z.string(), kind: CardKindSchema })),
   decision: z
     .object({ nodeId: z.string(), predicate: z.literal('allRequiredPresent'), result: z.boolean(), port: PortSchema })

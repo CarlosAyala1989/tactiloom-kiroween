@@ -1,0 +1,70 @@
+{
+  "note": "Datos ficticios. Resultados esperados del motor para cada documento.",
+  "documents": [
+    {
+      "file": "assets/examples/documents/valid-application.pdf",
+      "mime": "application/pdf",
+      "fields": {
+        "name": "Ana Ejemplo Ríos",
+        "email": "ana.ejemplo@example.org",
+        "workshop": "Diseño de procesos con tarjetas"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application.txt",
+      "mime": "text/plain",
+      "fields": {
+        "name": "Ana Ejemplo Ríos",
+        "email": "ana.ejemplo@example.org",
+        "workshop": "Diseño de procesos con tarjetas"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application.pdf",
+      "mime": "application/pdf",
+      "fields": {
+        "name": "Bruno Prueba Díaz",
+        "email": "bruno.prueba-arroba-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application.txt",
+      "mime": "text/plain",
+      "fields": {
+        "name": "Bruno Prueba Díaz",
+        "email": "bruno.prueba-arroba-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/scanned-application.pdf",
+      "mime": "application/pdf",
+      "error": "PDF_NO_TEXT_LAYER"
+    }
+  ]
+}

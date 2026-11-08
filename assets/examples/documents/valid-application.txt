@@ -1,0 +1,8 @@
+Solicitud de participación - Taller RitualOS
+Documento ficticio para demostración (no contiene datos reales).
+
+Nombre: Ana Ejemplo Ríos
+Correo: ana.ejemplo@example.org
+Taller: Diseño de procesos con tarjetas
+Fecha preferida: 2026-11-20
+Comentarios: Me interesa automatizar la revisión de solicitudes.
