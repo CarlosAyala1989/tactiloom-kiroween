@@ -84,9 +84,9 @@ function compilerDiagnostic(
   code: Diagnostic['code'],
   severity: Diagnostic['severity'],
   message: string,
-  extra: Partial<Pick<Diagnostic, 'markerIds' | 'cells' | 'nodeIds' | 'suggestion'>> = {},
+  extra: Partial<Pick<Diagnostic, 'markerIds' | 'cells' | 'nodeIds' | 'suggestion' | 'params'>> = {},
 ): Diagnostic {
-  return { code, severity, stage: 'compiler', message, ...extra };
+  return { code, severity, stage: 'compiler', message, params: {}, ...extra };
 }
 
 function portDirection(orientation: Orientation, direction: 'FORWARD' | 'RIGHT'): Orientation {
@@ -115,6 +115,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
       diagnostics: [
         compilerDiagnostic('INVALID_BOARD_STATE', 'error', `El estado del tablero no cumple el contrato tactiloom-board/1: ${issues}`, {
           suggestion: 'Vuelve a analizar la imagen o recarga el simulador.',
+          params: { issues: issues.slice(0, 400) },
         }),
       ],
       ir: null,
@@ -134,6 +135,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
         'BOARD_DIMENSIONS_MISMATCH',
         'error',
         `El tablero declara ${state.board.columns}×${state.board.rows} casillas; board-v1 exige ${template.columns}×${template.rows}.`,
+        { params: { columns: state.board.columns, rows: state.board.rows, expectedColumns: template.columns, expectedRows: template.rows } },
       ),
     );
   }
@@ -149,7 +151,9 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
   const rawParams: Record<string, Record<string, unknown>> = parsedParams.success ? parsedParams.data : {};
   if (!parsedParams.success) {
     diagnostics.push(
-      compilerDiagnostic('INVALID_PARAMETER', 'error', 'Los parámetros deben ser un objeto { "<instancia>": { ... } } con ids como "input-11".'),
+      compilerDiagnostic('INVALID_PARAMETER', 'error', 'Los parámetros deben ser un objeto { "<instancia>": { ... } } con ids como "input-11".', {
+        params: { variant: 'shape' },
+      }),
     );
   }
 
@@ -167,6 +171,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
           markerIds: [card.markerId],
           cells,
           suggestion: 'Retírala o usa una tarjeta impresa con el kit oficial.',
+          params: { markerId: card.markerId, row: card.row, col: card.col, catalogVersion: catalog.catalog.catalogVersion },
         }),
       );
       continue;
@@ -177,6 +182,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
           markerIds: [card.markerId],
           cells,
           suggestion: 'Colócala dentro de una casilla del tablero.',
+          params: { markerId: card.markerId, kind: entry.kind, columns: template.columns, rows: template.rows },
         }),
       );
       continue;
@@ -205,6 +211,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
             ],
             nodeIds: [node.id],
             suggestion: 'Cada tarjeta física es única: retira la copia o usa otra tarjeta del mismo tipo (otro número).',
+            params: { markerId: node.markerId, kind: node.kind, firstRow: previous.row, firstCol: previous.col, secondRow: node.row, secondCol: node.col },
           },
         ),
       );
@@ -222,6 +229,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
             cells,
             nodeIds: [occupant.id, node.id],
             suggestion: 'Deja una sola tarjeta por casilla.',
+            params: { markerA: occupant.markerId, kindA: occupant.kind, markerB: node.markerId, kindB: node.kind, row: node.row, col: node.col },
           },
         ),
       );
@@ -235,7 +243,11 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
   }
 
   if (nodes.length > maxNodes) {
-    diagnostics.push(compilerDiagnostic('TOO_MANY_NODES', 'error', `Hay ${nodes.length} tarjetas; el máximo por flujo es ${maxNodes}.`));
+    diagnostics.push(
+      compilerDiagnostic('TOO_MANY_NODES', 'error', `Hay ${nodes.length} tarjetas; el máximo por flujo es ${maxNodes}.`, {
+        params: { count: nodes.length, max: maxNodes },
+      }),
+    );
   }
 
   // 2. Resolve output ports geometrically (adjacency + orientation), never by proximity heuristics.
@@ -263,6 +275,9 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
               suggestion: inside
                 ? `Coloca la siguiente tarjeta en ${cellLabel(target.row, target.col)} con su flecha hacia el ${directionLabel(direction)}, o gira ${cardLabel(node.markerId, node.kind)}.`
                 : `Gira ${cardLabel(node.markerId, node.kind)} para que su ${portName} apunte hacia dentro del tablero.`,
+              params: inside
+                ? { markerId: node.markerId, kind: node.kind, row: node.row, col: node.col, port: output.port, direction, targetRow: target.row, targetCol: target.col }
+                : { variant: 'outside', markerId: node.markerId, kind: node.kind, row: node.row, col: node.col, port: output.port, direction },
             },
           ),
         );
@@ -289,6 +304,18 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
               suggestion: !receiverSpec.hasInput
                 ? `Mueve ${cardLabel(receiver.markerId, receiver.kind)} o gira ${cardLabel(node.markerId, node.kind)}.`
                 : `Gira ${cardLabel(receiver.markerId, receiver.kind)} para que su flecha apunte al ${directionLabel(direction)}.`,
+              params: !receiverSpec.hasInput
+                ? { variant: 'noInput', fromMarker: node.markerId, fromKind: node.kind, toMarker: receiver.markerId, toKind: receiver.kind, port: output.port }
+                : {
+                    fromMarker: node.markerId,
+                    fromKind: node.kind,
+                    toMarker: receiver.markerId,
+                    toKind: receiver.kind,
+                    port: output.port,
+                    direction,
+                    arrivingSide,
+                    expectedSide,
+                  },
             },
           ),
         );
@@ -312,6 +339,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
           cells: [{ row: node.row, col: node.col }],
           nodeIds: [node.id],
           suggestion: 'Corrige el valor en el panel de parámetros.',
+          params: { markerId: node.markerId, kind: node.kind, detail: detail.slice(0, 400) },
         }),
       );
       continue;
@@ -323,13 +351,18 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
           markerIds: [node.markerId],
           cells: [{ row: node.row, col: node.col }],
           nodeIds: [node.id],
+          params: { markerId: node.markerId, kind: node.kind },
         }),
       );
     }
   }
   for (const instanceId of Object.keys(rawParams).sort()) {
     if (!byInstance.has(instanceId)) {
-      diagnostics.push(compilerDiagnostic('UNUSED_PARAMETER', 'info', `Hay parámetros para «${instanceId}», pero esa tarjeta no está en el tablero; se ignoran.`));
+      diagnostics.push(
+        compilerDiagnostic('UNUSED_PARAMETER', 'info', `Hay parámetros para «${instanceId}», pero esa tarjeta no está en el tablero; se ignoran.`, {
+          params: { instanceId },
+        }),
+      );
     }
   }
 

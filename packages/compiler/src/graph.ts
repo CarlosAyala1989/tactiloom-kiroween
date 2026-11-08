@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, type CardKind, type DataFact, type Diagnostic, type IrEdge } from '@tactiloom/contracts';
+import { CARD_KIND_SPECS, type CardKind, type DataFact, type Diagnostic, type IrEdge, type MessageParams } from '@tactiloom/contracts';
 import { cardLabel, DATA_FACT_LABEL_ES, listEs, PRODUCER_OF } from './messages';
 
 export interface GraphNodeInput {
@@ -22,7 +22,7 @@ export interface GraphAnalysis {
   readonly reachable: ReadonlySet<string>;
 }
 
-function diag(code: Diagnostic['code'], message: string, nodes: readonly GraphNodeInput[], suggestion?: string): Diagnostic {
+function diag(code: Diagnostic['code'], message: string, nodes: readonly GraphNodeInput[], suggestion?: string, params: MessageParams = {}): Diagnostic {
   const cells = nodes.filter((n) => n.row !== undefined && n.col !== undefined).map((n) => ({ row: n.row as number, col: n.col as number }));
   return {
     code,
@@ -33,7 +33,15 @@ function diag(code: Diagnostic['code'], message: string, nodes: readonly GraphNo
     ...(cells.length > 0 ? { cells } : {}),
     nodeIds: nodes.map((n) => n.id),
     ...(suggestion ? { suggestion } : {}),
+    params,
   };
+}
+
+/** Identity of one node as message params (markerId + kind, plus its cell when known). */
+function nodeParams(node: GraphNodeInput): MessageParams {
+  return node.row !== undefined && node.col !== undefined
+    ? { markerId: node.markerId, kind: node.kind, row: node.row, col: node.col }
+    : { markerId: node.markerId, kind: node.kind };
 }
 
 /** Tarjan's strongly connected components (iterative-safe for ≤ 64 nodes). */
@@ -89,13 +97,27 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
     const from = byId.get(edge.from);
     const to = byId.get(edge.to);
     if (!from || !to) {
-      diagnostics.push({ code: 'IR_INVALID', severity: 'error', stage: 'compiler', message: `Arista ${edge.from} → ${edge.to} referencia nodos inexistentes.` });
+      diagnostics.push({
+        code: 'IR_INVALID',
+        severity: 'error',
+        stage: 'compiler',
+        message: `Arista ${edge.from} → ${edge.to} referencia nodos inexistentes.`,
+        params: { variant: 'edgeRefs', from: edge.from, to: edge.to },
+      });
       continue;
     }
     const declared = CARD_KIND_SPECS[from.kind].outputs.some((output) => output.port === edge.port);
     const duplicatePort = (outgoing.get(from.id) ?? []).some((existing) => existing.port === edge.port);
     if (!declared || duplicatePort) {
-      diagnostics.push(diag('IR_INVALID', `${cardLabel(from.markerId, from.kind)} no puede tener ${duplicatePort ? 'dos aristas' : 'una arista'} por el puerto ${edge.port}.`, [from]));
+      diagnostics.push(
+        diag(
+          'IR_INVALID',
+          `${cardLabel(from.markerId, from.kind)} no puede tener ${duplicatePort ? 'dos aristas' : 'una arista'} por el puerto ${edge.port}.`,
+          [from],
+          undefined,
+          { variant: duplicatePort ? 'duplicatePort' : 'undeclaredPort', ...nodeParams(from), port: edge.port },
+        ),
+      );
       continue;
     }
     outgoing.get(from.id)?.push(edge);
@@ -111,9 +133,14 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
       stage: 'compiler',
       message: 'No hay ninguna tarjeta INICIO en el tablero.',
       suggestion: 'Coloca una tarjeta INICIO al comienzo del flujo.',
+      params: {},
     });
   } else if (starts.length > 1) {
-    diagnostics.push(diag('MULTIPLE_STARTS', `Hay ${starts.length} tarjetas INICIO; un flujo v1 tiene exactamente una.`, starts, 'Retira las tarjetas INICIO sobrantes.'));
+    diagnostics.push(
+      diag('MULTIPLE_STARTS', `Hay ${starts.length} tarjetas INICIO; un flujo v1 tiene exactamente una.`, starts, 'Retira las tarjetas INICIO sobrantes.', {
+        count: starts.length,
+      }),
+    );
   }
   if (ends.length === 0) {
     diagnostics.push({
@@ -122,17 +149,21 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
       stage: 'compiler',
       message: 'No hay ninguna tarjeta FIN: todo camino debe terminar en FIN.',
       suggestion: 'Coloca una tarjeta FIN al final de cada rama.',
+      params: {},
     });
   }
 
   for (const node of input.nodes) {
     const inputs = incoming.get(node.id) ?? [];
     if (!CARD_KIND_SPECS[node.kind].hasInput && inputs.length > 0) {
-      diagnostics.push(diag('INCOMPATIBLE_PORTS', `${cardLabel(node.markerId, node.kind)} no admite entrada.`, [node]));
+      diagnostics.push(diag('INCOMPATIBLE_PORTS', `${cardLabel(node.markerId, node.kind)} no admite entrada.`, [node], undefined, { variant: 'nodeNoInput', ...nodeParams(node) }));
     } else if (inputs.length > 1) {
       const sources = inputs.map((edge) => byId.get(edge.from)).filter((n): n is GraphNodeInput => n !== undefined);
       diagnostics.push(
-        diag('MULTIPLE_INPUTS', `${cardLabel(node.markerId, node.kind)} recibe ${inputs.length} entradas; v1 solo admite una (no existe MERGE).`, [node, ...sources]),
+        diag('MULTIPLE_INPUTS', `${cardLabel(node.markerId, node.kind)} recibe ${inputs.length} entradas; v1 solo admite una (no existe MERGE).`, [node, ...sources], undefined, {
+          ...nodeParams(node),
+          count: inputs.length,
+        }),
       );
     }
     if (node.kind === 'CONDITION') {
@@ -140,7 +171,9 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
       const yes = out.find((e) => e.port === 'TRUE');
       const no = out.find((e) => e.port === 'FALSE');
       if (yes && no && yes.to === no.to) {
-        diagnostics.push(diag('BRANCH_TARGETS_IDENTICAL', `Las ramas SÍ y NO de ${cardLabel(node.markerId, node.kind)} llegan a la misma tarjeta.`, [node]));
+        diagnostics.push(
+          diag('BRANCH_TARGETS_IDENTICAL', `Las ramas SÍ y NO de ${cardLabel(node.markerId, node.kind)} llegan a la misma tarjeta.`, [node], undefined, nodeParams(node)),
+        );
       }
     }
   }
@@ -164,6 +197,7 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
           `Las tarjetas ${listEs(members.map((m) => cardLabel(m.markerId, m.kind)))} forman un ciclo; v1 no admite bucles.`,
           members,
           'Rompe el ciclo girando o retirando una de esas tarjetas.',
+          { markers: members.map((m) => m.markerId), kinds: members.map((m) => m.kind) },
         ),
       );
     }
@@ -193,6 +227,7 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
             `${cardLabel(node.markerId, node.kind)}${node.row !== undefined ? ` en (${node.row},${node.col})` : ''} no está conectada con INICIO.`,
             [node],
             'Conéctala a la cadena: debe estar en la casilla vecina hacia la que apunta la tarjeta anterior y mirar en la misma dirección.',
+            nodeParams(node),
           ),
         );
       }
@@ -213,6 +248,7 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
             `El camino ${chain.map((n) => cardLabel(n.markerId, n.kind)).join(' → ')} no termina en una tarjeta FIN.`,
             [node],
             'Completa la rama hasta una tarjeta FIN.',
+            { markers: chain.map((n) => n.markerId), kinds: chain.map((n) => n.kind) },
           ),
         );
       }
@@ -255,14 +291,16 @@ export function analyzeGraph(input: GraphInput): GraphAnalysis {
       const spec = CARD_KIND_SPECS[node.kind];
       const missing = spec.requires.filter((fact) => !facts.has(fact));
       if (missing.length > 0) {
-        diagnostics.push({
-          ...diag(
+        const producers = [...new Set(missing.map((f) => PRODUCER_OF[f]))];
+        diagnostics.push(
+          diag(
             'MISSING_REQUIRED_DATA',
             `${cardLabel(node.markerId, node.kind)} necesita ${listEs(missing.map((f) => DATA_FACT_LABEL_ES[f]))}, pero ningún paso anterior en su camino lo produce.`,
             [node],
-            `Coloca antes ${listEs([...new Set(missing.map((f) => CARD_KIND_SPECS[PRODUCER_OF[f]].labelEs.toUpperCase()))])} en el mismo camino.`,
+            `Coloca antes ${listEs(producers.map((kind) => CARD_KIND_SPECS[kind].labelEs.toUpperCase()))} en el mismo camino.`,
+            { ...nodeParams(node), facts: [...missing], producers },
           ),
-        });
+        );
       }
       const out = new Set(facts);
       for (const fact of spec.produces) out.add(fact);

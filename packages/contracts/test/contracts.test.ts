@@ -10,6 +10,9 @@ import {
   getBoardTemplate,
   getCardCatalog,
   indexCatalog,
+  isLocale,
+  LOCALES,
+  negotiateLocale,
   opposite,
   PARAM_SCHEMAS,
   rotateClockwise,
@@ -73,6 +76,10 @@ describe('params', () => {
       requiredFields: ['name', 'workshop'],
     });
     expect(PARAM_SCHEMAS.INPUT_FILE.parse({})).toEqual({ uploadedFileId: null });
+    // No default: pre-i18n programs keep their canonical params (and contentHash).
+    expect(PARAM_SCHEMAS.CREATE_REPORT.parse({})).toEqual({ template: 'workshop-summary-v1', format: 'both' });
+    expect(PARAM_SCHEMAS.CREATE_REPORT.parse({ language: 'fr' }).language).toBe('fr');
+    expect(PARAM_SCHEMAS.EXTRACT_TEXT.parse({ language: 'it' })).toEqual({ language: 'it' });
   });
 
   it('rejects unsafe values', () => {
@@ -82,6 +89,25 @@ describe('params', () => {
     expect(PARAM_SCHEMAS.CONDITION.safeParse({ predicate: 'process.exit()' }).success).toBe(false);
     expect(PARAM_SCHEMAS.START.safeParse({ command: 'rm -rf /' }).success).toBe(false);
     expect(PARAM_SCHEMAS.VALIDATE_FIELDS.safeParse({ requiredFields: ['name', 'name'] }).success).toBe(false);
+    expect(PARAM_SCHEMAS.CREATE_REPORT.safeParse({ language: 'de' }).success).toBe(false);
+  });
+});
+
+describe('locales', () => {
+  it('lists the four supported languages', () => {
+    expect(LOCALES).toEqual(['es', 'en', 'it', 'fr']);
+    expect(isLocale('it')).toBe(true);
+    expect(isLocale('de')).toBe(false);
+  });
+
+  it('negotiates Accept-Language with weights and fallbacks', () => {
+    expect(negotiateLocale('fr-FR,fr;q=0.9,en;q=0.8')).toBe('fr');
+    expect(negotiateLocale('de-DE,it;q=0.7,en;q=0.9')).toBe('en');
+    expect(negotiateLocale('de,nl;q=0.5')).toBe('es');
+    expect(negotiateLocale('en;q=0, it')).toBe('it');
+    expect(negotiateLocale('')).toBe('es');
+    expect(negotiateLocale(null)).toBe('es');
+    expect(negotiateLocale('garbage;;;q=x')).toBe('es');
   });
 });
 

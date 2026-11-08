@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { FIELD_IDS, FieldIdSchema, type CardKind, type FieldId } from './cards';
+import { LocaleSchema } from './locales';
 
 /** Characters allowed in free-text labels (letters incl. accents, digits, basic punctuation). */
 export const SAFE_LABEL_PATTERN = /^[\p{L}\p{N} .,:;()_¿?¡!-]{1,80}$/u;
@@ -17,7 +18,8 @@ export const PARAM_SCHEMAS = {
     uploadedFileId: z.string().regex(SAFE_ID_PATTERN).nullable().default(null),
   }),
   EXTRACT_TEXT: z.strictObject({
-    language: z.enum(['es', 'en']).default('es'),
+    /** Language the document is written in (informative; field labels are recognised in all four). */
+    language: LocaleSchema.default('es'),
   }),
   VALIDATE_FIELDS: z.strictObject({
     requiredFields: z
@@ -36,6 +38,11 @@ export const PARAM_SCHEMAS = {
   CREATE_REPORT: z.strictObject({
     template: z.literal('workshop-summary-v1').default('workshop-summary-v1'),
     format: z.enum(['markdown', 'json', 'both']).default('both'),
+    /**
+     * Language of the generated Markdown report (JSON keys are language-neutral). Optional with no
+     * default so programs saved before i18n keep their canonical params and contentHash; absent = es.
+     */
+    language: LocaleSchema.optional(),
   }),
   SAVE_REPORT: z.strictObject({
     baseName: z.string().regex(SAFE_BASENAME_PATTERN).default('workshop-report'),
@@ -84,6 +91,8 @@ export const PARAM_UI: Readonly<Record<CardKind, readonly ParamFieldUi[]>> = {
       options: [
         { value: 'es', labelEs: 'Español' },
         { value: 'en', labelEs: 'Inglés' },
+        { value: 'it', labelEs: 'Italiano' },
+        { value: 'fr', labelEs: 'Francés' },
       ],
     },
   ],
@@ -116,6 +125,17 @@ export const PARAM_UI: Readonly<Record<CardKind, readonly ParamFieldUi[]>> = {
         { value: 'both', labelEs: 'Markdown + JSON' },
         { value: 'markdown', labelEs: 'Solo Markdown' },
         { value: 'json', labelEs: 'Solo JSON' },
+      ],
+    },
+    {
+      key: 'language',
+      labelEs: 'Idioma del reporte',
+      control: 'select',
+      options: [
+        { value: 'es', labelEs: 'Español' },
+        { value: 'en', labelEs: 'Inglés' },
+        { value: 'it', labelEs: 'Italiano' },
+        { value: 'fr', labelEs: 'Francés' },
       ],
     },
   ],

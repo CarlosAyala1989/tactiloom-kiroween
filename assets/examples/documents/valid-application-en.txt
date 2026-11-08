@@ -1,0 +1,8 @@
+Application form - Tactiloom workshop
+Fictitious document for demonstration purposes (contains no real data).
+
+Name: Alice Sample Rivers
+Email: alice.sample@example.org
+Workshop: Process design with cards
+Preferred date: 2026-11-20
+Comments: I would like to automate the review of applications.

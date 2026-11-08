@@ -1,0 +1,7 @@
+Application form - Tactiloom workshop
+Fictitious document for demonstration purposes (contains no real data).
+
+Name: Bruno Test Diaz
+Email: bruno.test-at-example.org
+Preferred date: 2026-11-21
+Comments: I forgot to state which session I want to join.

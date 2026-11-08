@@ -1,0 +1,8 @@
+Domanda di partecipazione - Laboratorio Tactiloom
+Documento fittizio a scopo dimostrativo (non contiene dati reali).
+
+Nome: Anna Esempio Rossi
+E-mail: anna.esempio@example.org
+Laboratorio: Progettazione di processi con le carte
+Data preferita: 2026-11-20
+Commenti: Mi interessa automatizzare la revisione delle domande.

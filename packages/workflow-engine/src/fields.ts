@@ -17,14 +17,27 @@ export interface ValidationResult {
   readonly evidence: Partial<Record<FieldId, FieldEvidence>>;
 }
 
+/**
+ * Accepted labels per field, in the four supported languages (es, en, it, fr).
+ * Matching is case-insensitive and applied to the cleaned label (single spaces).
+ */
 const LABEL_TO_FIELD: readonly (readonly [RegExp, FieldId])[] = [
-  [/^(?:nombre(?:\s+completo)?|name|full\s+name)$/iu, 'name'],
-  [/^(?:correo(?:\s+electr[oó]nico)?|e-?mail|email)$/iu, 'email'],
-  [/^(?:taller|workshop)$/iu, 'workshop'],
+  [
+    /^(?:nombre(?:\s+completo)?|name|full\s+name|nome(?:\s+completo|\s+e\s+cognome)?|nom(?:\s+complet)?|nom\s+et\s+pr[ée]nom|pr[ée]nom\s+et\s+nom)$/iu,
+    'name',
+  ],
+  [
+    /^(?:correo(?:\s+electr[oó]nico)?|e-?mail(?:\s+address)?|posta\s+elettronica|indirizzo\s+e-?mail|courriel|adresse\s+e-?mail|adresse\s+[ée]lectronique)$/iu,
+    'email',
+  ],
+  [/^(?:taller|workshop|laboratorio|atelier)$/iu, 'workshop'],
 ];
 
-/** "Label: value" at the start of a line (deterministic; no ML, no LLM). */
-const LINE_PATTERN = /^[ \t]*([\p{L}][\p{L} .-]{1,30}?)[ \t]*[:：][ \t]*(.*)$/u;
+/**
+ * "Label: value" at the start of a line (deterministic; no ML, no LLM).
+ * French typography puts a (non-breaking) space before the colon: "Nom : Anne".
+ */
+const LINE_PATTERN = /^[ \t\u00a0\u202f]*([\p{L}][\p{L} .-]{1,30}?)[ \t\u00a0\u202f]*[:：][ \t\u00a0\u202f]*(.*)$/u;
 const EMAIL = z.email();
 const MAX_VALUE_LENGTH = 200;
 

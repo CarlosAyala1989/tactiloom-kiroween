@@ -1,6 +1,7 @@
 import { verifyIr } from '@tactiloom/compiler';
 import {
   canonicalHash,
+  DEFAULT_LOCALE,
   PLAN_VERSION,
   type CardKind,
   type ExecutionMode,
@@ -212,7 +213,8 @@ const HANDLERS: Readonly<Record<CardKind, Handler>> = {
     const document = need(state.document, 'DocumentRef');
     const text = need(state.text, 'ExtractedText');
     const validation = need(state.validation, 'ValidationResult');
-    const { format } = params(node, 'CREATE_REPORT');
+    // `language` is optional in tactiloom-ir/1 (programs saved before i18n omit it): absent = es.
+    const { format, language = DEFAULT_LOCALE } = params(node, 'CREATE_REPORT');
     const report = renderReport({
       runId: ctx.runId,
       nodeId: node.id,
@@ -220,13 +222,14 @@ const HANDLERS: Readonly<Record<CardKind, Handler>> = {
       document: { originalName: document.originalName, sha256: document.sha256, mime: document.mime },
       validation,
       format,
+      language,
       extraction: { method: text.method, pages: text.pages, chars: text.chars },
     });
     const size = Buffer.byteLength(report.markdown ?? '') + Buffer.byteLength(report.json ?? '');
     if (size > ctx.limits.maxOutputBytes) throw new EngineError('OUTPUT_TOO_LARGE', 'El reporte supera el tamaño máximo.');
     state.report = report;
     state.reportNodeId = node.id;
-    return { port: 'NEXT', input: { format }, output: { bytes: size, isValid: validation.isValid } };
+    return { port: 'NEXT', input: { format, language }, output: { bytes: size, isValid: validation.isValid } };
   },
 
   SAVE_REPORT: async (node, state, ctx) => {
@@ -235,12 +238,17 @@ const HANDLERS: Readonly<Record<CardKind, Handler>> = {
     const outputs: { type: ArtifactType; content: string; mime: string; ext: string }[] = [];
     if (report.markdown !== null) outputs.push({ type: 'REPORT_MARKDOWN', content: report.markdown, mime: 'text/markdown; charset=utf-8', ext: 'md' });
     if (report.json !== null) outputs.push({ type: 'REPORT_JSON', content: report.json, mime: 'application/json', ext: 'json' });
-    const effects: PlannedEffect[] = outputs.map((output) => ({
-      nodeId: node.id,
-      kind: 'WRITE_ARTIFACT',
-      descriptionEs: `Guardar reporte ${output.ext === 'md' ? 'Markdown' : 'JSON'} (${Buffer.byteLength(output.content)} bytes) como «${baseName}-${ctx.runId.slice(-8)}.${output.ext}».`,
-      target: artifactPath(ctx.runId, node.id, output.type),
-    }));
+    const effects: PlannedEffect[] = outputs.map((output) => {
+      const bytes = Buffer.byteLength(output.content);
+      const fileName = `${baseName}-${ctx.runId.slice(-8)}.${output.ext}`;
+      return {
+        nodeId: node.id,
+        kind: 'WRITE_ARTIFACT',
+        descriptionEs: `Guardar reporte ${output.ext === 'md' ? 'Markdown' : 'JSON'} (${bytes} bytes) como «${fileName}».`,
+        target: artifactPath(ctx.runId, node.id, output.type),
+        params: { format: output.ext, bytes, fileName },
+      };
+    });
     if (ctx.mode === 'dry-run') return { port: 'NEXT', input: { baseName }, output: { predicted: effects.length }, effects };
     const saved: SavedArtifactRef[] = [];
     for (const output of outputs) {
@@ -272,6 +280,7 @@ const HANDLERS: Readonly<Record<CardKind, Handler>> = {
       kind: 'CREATE_REVIEW_TASK',
       descriptionEs: `Crear tarea de revisión «${label}» (OPEN): faltan [${validation.missingFields.join(', ') || '—'}], inválidos [${validation.invalidFields.join(', ') || '—'}]. Sin correos ni notificaciones.`,
       target: `review-task:${node.id}`,
+      params: { label, missing: [...validation.missingFields], invalid: [...validation.invalidFields] },
     };
     if (ctx.mode === 'dry-run') return { port: 'NEXT', input: { label }, output: { predicted: true }, effects: [effect] };
     const task = await ctx.ports.createReviewTask({ nodeId: node.id, label, missingFields: validation.missingFields, invalidFields: validation.invalidFields });

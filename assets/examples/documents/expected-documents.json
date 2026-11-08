@@ -4,6 +4,7 @@
     {
       "file": "assets/examples/documents/valid-application.pdf",
       "mime": "application/pdf",
+      "locale": "es",
       "fields": {
         "name": "Ana Ejemplo Ríos",
         "email": "ana.ejemplo@example.org",
@@ -17,6 +18,7 @@
     {
       "file": "assets/examples/documents/valid-application.txt",
       "mime": "text/plain",
+      "locale": "es",
       "fields": {
         "name": "Ana Ejemplo Ríos",
         "email": "ana.ejemplo@example.org",
@@ -30,6 +32,7 @@
     {
       "file": "assets/examples/documents/invalid-application.pdf",
       "mime": "application/pdf",
+      "locale": "es",
       "fields": {
         "name": "Bruno Prueba Díaz",
         "email": "bruno.prueba-arroba-example.org",
@@ -47,9 +50,202 @@
     {
       "file": "assets/examples/documents/invalid-application.txt",
       "mime": "text/plain",
+      "locale": "es",
       "fields": {
         "name": "Bruno Prueba Díaz",
         "email": "bruno.prueba-arroba-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-en.pdf",
+      "mime": "application/pdf",
+      "locale": "en",
+      "fields": {
+        "name": "Alice Sample Rivers",
+        "email": "alice.sample@example.org",
+        "workshop": "Process design with cards"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-en.txt",
+      "mime": "text/plain",
+      "locale": "en",
+      "fields": {
+        "name": "Alice Sample Rivers",
+        "email": "alice.sample@example.org",
+        "workshop": "Process design with cards"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-en.pdf",
+      "mime": "application/pdf",
+      "locale": "en",
+      "fields": {
+        "name": "Bruno Test Diaz",
+        "email": "bruno.test-at-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-en.txt",
+      "mime": "text/plain",
+      "locale": "en",
+      "fields": {
+        "name": "Bruno Test Diaz",
+        "email": "bruno.test-at-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-it.pdf",
+      "mime": "application/pdf",
+      "locale": "it",
+      "fields": {
+        "name": "Anna Esempio Rossi",
+        "email": "anna.esempio@example.org",
+        "workshop": "Progettazione di processi con le carte"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-it.txt",
+      "mime": "text/plain",
+      "locale": "it",
+      "fields": {
+        "name": "Anna Esempio Rossi",
+        "email": "anna.esempio@example.org",
+        "workshop": "Progettazione di processi con le carte"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-it.pdf",
+      "mime": "application/pdf",
+      "locale": "it",
+      "fields": {
+        "name": "Bruno Prova Bianchi",
+        "email": "bruno.prova-chiocciola-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-it.txt",
+      "mime": "text/plain",
+      "locale": "it",
+      "fields": {
+        "name": "Bruno Prova Bianchi",
+        "email": "bruno.prova-chiocciola-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-fr.pdf",
+      "mime": "application/pdf",
+      "locale": "fr",
+      "fields": {
+        "name": "Anne Exemple Martin",
+        "email": "anne.exemple@example.org",
+        "workshop": "Conception de processus avec des cartes"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/valid-application-fr.txt",
+      "mime": "text/plain",
+      "locale": "fr",
+      "fields": {
+        "name": "Anne Exemple Martin",
+        "email": "anne.exemple@example.org",
+        "workshop": "Conception de processus avec des cartes"
+      },
+      "missingFields": [],
+      "invalidFields": [],
+      "isValid": true,
+      "branch": "TRUE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-fr.pdf",
+      "mime": "application/pdf",
+      "locale": "fr",
+      "fields": {
+        "name": "Bruno Essai Dubois",
+        "email": "bruno.essai-arobase-example.org",
+        "workshop": null
+      },
+      "missingFields": [
+        "workshop"
+      ],
+      "invalidFields": [
+        "email"
+      ],
+      "isValid": false,
+      "branch": "FALSE"
+    },
+    {
+      "file": "assets/examples/documents/invalid-application-fr.txt",
+      "mime": "text/plain",
+      "locale": "fr",
+      "fields": {
+        "name": "Bruno Essai Dubois",
+        "email": "bruno.essai-arobase-example.org",
         "workshop": null
       },
       "missingFields": [

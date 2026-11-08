@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CardKindSchema, FieldIdSchema, PortSchema } from './cards';
 import { HASH_PATTERN } from './canonical';
-import { DiagnosticCodeSchema } from './diagnostics';
+import { DiagnosticCodeSchema, MessageParamsSchema } from './diagnostics';
 
 /** Run lifecycle: DRAFT → COMPILED → AWAITING_APPROVAL → QUEUED → RUNNING → SUCCEEDED | FAILED | CANCELLED */
 export const RUN_STATUSES = [
@@ -33,6 +33,8 @@ export const PlannedEffectSchema = z.object({
   descriptionEs: z.string(),
   /** Relative sandbox location or entity description. Never an absolute host path. */
   target: z.string(),
+  /** Structured values for localized rendering (format, bytes, fileName / label, missing, invalid). */
+  params: MessageParamsSchema.optional(),
 });
 export type PlannedEffect = z.infer<typeof PlannedEffectSchema>;
 

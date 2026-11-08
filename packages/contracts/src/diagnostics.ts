@@ -58,6 +58,21 @@ export const DiagnosticCodeSchema = z.enum(DIAGNOSTIC_CODES);
 export const SEVERITIES = ['error', 'warning', 'info'] as const;
 export type Severity = (typeof SEVERITIES)[number];
 
+const MessageParamValueSchema = z.union([
+  z.string().max(500),
+  z.number(),
+  z.boolean(),
+  z.null(),
+  z.array(z.union([z.string().max(200), z.number()])).max(64),
+]);
+
+/**
+ * Structured values behind a human message (card ids, kinds, directions, counts…). Clients render
+ * localized text from `code` + `params`; `message` stays as the canonical Spanish text.
+ */
+export const MessageParamsSchema = z.record(z.string().regex(/^[A-Za-z][A-Za-z0-9]{0,40}$/), MessageParamValueSchema);
+export type MessageParams = z.infer<typeof MessageParamsSchema>;
+
 export const DiagnosticSchema = z.object({
   code: DiagnosticCodeSchema,
   severity: z.enum(SEVERITIES),
@@ -67,6 +82,7 @@ export const DiagnosticSchema = z.object({
   cells: z.array(CellSchema).max(64).optional(),
   nodeIds: z.array(z.string().max(64)).max(64).optional(),
   suggestion: z.string().max(500).optional(),
+  params: MessageParamsSchema.optional(),
 });
 export type Diagnostic = z.infer<typeof DiagnosticSchema>;
 

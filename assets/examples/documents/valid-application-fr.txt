@@ -1,0 +1,8 @@
+Demande d’inscription - Atelier Tactiloom
+Document fictif à des fins de démonstration (ne contient aucune donnée réelle).
+
+Nom : Anne Exemple Martin
+Courriel : anne.exemple@example.org
+Atelier : Conception de processus avec des cartes
+Date souhaitée : 2026-11-20
+Commentaires : Je souhaite automatiser l’examen des demandes.

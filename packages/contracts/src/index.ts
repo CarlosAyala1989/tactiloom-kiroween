@@ -6,5 +6,6 @@ export * from './catalog';
 export * from './diagnostics';
 export * from './geometry';
 export * from './ir';
+export * from './locales';
 export * from './params';
 export * from './runs';
