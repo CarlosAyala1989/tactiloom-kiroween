@@ -24,6 +24,8 @@ type RunWithVersion = Run & { workflowVersion: WorkflowVersion };
 type Phase = 'PREVIEW' | 'EXECUTE';
 
 const TERMINAL = new Set(['SUCCEEDED', 'FAILED', 'CANCELLED']);
+/** An approved run that has not started within this window must be previewed again. */
+export const EXECUTION_WINDOW_MS = 60 * 60 * 1000;
 
 function limitsFor(config: RunnerConfig): EngineLimits {
   return { ...DEFAULT_LIMITS, maxDurationMs: config.maxDurationMs };
@@ -210,6 +212,12 @@ async function processExecute(ctx: RunnerContext, job: Job, run: RunWithVersion,
     return finishRun(ctx, run, 'FAILED', { errorCode: 'PRECONDITION_FAILED', errorMessage: 'La ejecución no tiene una aprobación válida.' });
   }
   if (run.cancelRequestedAt) return finishRun(ctx, run, 'CANCELLED');
+  if (run.status === 'QUEUED' && Date.now() - run.approvedAt.getTime() > EXECUTION_WINDOW_MS) {
+    return finishRun(ctx, run, 'FAILED', {
+      errorCode: 'PRECONDITION_FAILED',
+      errorMessage: 'La aprobación caducó antes de que el worker pudiera ejecutarla; repite la vista previa.',
+    });
+  }
   const snapshot = run.inputSnapshot as { uploadedFileId?: string; sha256?: string } | null;
   if (snapshot?.uploadedFileId) {
     const doc = await ctx.prisma.uploadedDocument.findFirst({ where: { id: snapshot.uploadedFileId, workspaceId: run.workspaceId } });
@@ -217,11 +225,30 @@ async function processExecute(ctx: RunnerContext, job: Job, run: RunWithVersion,
       return finishRun(ctx, run, 'FAILED', { errorCode: 'FILE_CHANGED', errorMessage: 'El documento aprobado ya no es el mismo; repite la vista previa.' });
     }
   }
-  await ctx.prisma.run.update({ where: { id: run.id }, data: { status: 'RUNNING', startedAt: run.startedAt ?? new Date() } });
-  if (job.attempts === 1) await audit(ctx, run, 'RUN_STARTED', { attempt: job.attempts });
   const limits = limitsFor(ctx.config);
+  // Fail closed: re-plan without side effects and require the exact approved planHash.
+  const verificationPorts = { ...createPorts(ctx, run, job, 'PREVIEW', limits, leaseLost), emit: async () => undefined };
+  const verification = await runWorkflow(
+    { ir: run.workflowVersion.irJson, expectedContentHash: run.contentHash, runId: run.id, mode: 'dry-run', limits, reportDate: run.approvedAt },
+    verificationPorts,
+  );
+  if (verification.status !== 'SUCCEEDED' || verification.plan?.planHash !== run.planHash) {
+    return finishRun(ctx, run, 'FAILED', {
+      errorCode: verification.failure?.code ?? 'PRECONDITION_FAILED',
+      errorMessage: verification.failure
+        ? `Verificación previa fallida: ${verification.failure.messageEs}`
+        : 'La ejecución ya no coincide con el plan aprobado; repite la vista previa.',
+    });
+  }
+  // Guarded transition: a concurrent cancellation is never overwritten.
+  const started = await ctx.prisma.run.updateMany({
+    where: { id: run.id, status: { in: ['QUEUED', 'RUNNING'] }, cancelRequestedAt: null },
+    data: { status: 'RUNNING', startedAt: run.startedAt ?? new Date() },
+  });
+  if (started.count !== 1) return finishRun(ctx, run, 'CANCELLED');
+  if (job.attempts === 1) await audit(ctx, run, 'RUN_STARTED', { attempt: job.attempts });
   const outcome = await runWorkflow(
-    { ir: run.workflowVersion.irJson, expectedContentHash: run.contentHash, runId: run.id, mode: 'execute', limits },
+    { ir: run.workflowVersion.irJson, expectedContentHash: run.contentHash, runId: run.id, mode: 'execute', limits, reportDate: run.approvedAt },
     createPorts(ctx, run, job, 'EXECUTE', limits, leaseLost),
   );
   if (leaseLost()) throw new Error('lease perdido durante la ejecución');
@@ -248,8 +275,9 @@ export async function processJob(ctx: RunnerContext, job: Job, leaseLost: () => 
   else await processExecute(ctx, job, run, leaseLost);
 }
 
-export async function failRunForDeadJob(ctx: RunnerContext, job: Job, reason: string): Promise<void> {
+export async function failRunForDeadJob(ctx: RunnerContext, job: Job, _reason: string): Promise<void> {
   const run = await ctx.prisma.run.findUnique({ where: { id: job.runId } });
   if (!run) return;
-  await finishRun(ctx, run, 'FAILED', { errorCode: 'INTERNAL_ERROR', errorMessage: `El trabajo agotó sus reintentos: ${reason}` });
+  // The raw reason stays in runner logs and Job.lastError (internal); clients get a generic message.
+  await finishRun(ctx, run, 'FAILED', { errorCode: 'INTERNAL_ERROR', errorMessage: 'El trabajo agotó sus reintentos por un error interno del worker.' });
 }

@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Contracts drift check",
+      "trigger": "PostFileSave",
+      "description": "Re-runs the contract tests (including the JSON Schema drift test) whenever a Zod contract file is saved, so Zod, JSON Schema and Pydantic never diverge silently.",
+      "matcher": "packages/contracts/(src|catalog)/.*\\.(ts|json)$",
+      "action": {
+        "type": "command",
+        "command": "pnpm --filter @ritualos/contracts test",
+        "timeout": 120
+      }
+    }
+  ]
+}

@@ -63,6 +63,14 @@ class BodySizeLimitMiddleware:
             await self.app(scope, receive, send)
             return
         headers = dict(scope.get("headers") or [])
+        # Authenticate BEFORE any body is read or multipart-parsed.
+        if config.INTERNAL_TOKEN is not None and scope.get("path") != "/health":
+            provided = headers.get(b"x-internal-token", b"")
+            if not hmac.compare_digest(provided, config.INTERNAL_TOKEN.encode()):
+                await error_response(401, "UNAUTHORIZED", "Token interno inválido.", new_request_id())(
+                    scope, receive, send
+                )
+                return
         declared = headers.get(b"content-length")
         if declared is not None:
             try:
@@ -152,7 +160,12 @@ async def analyze(
         return error_response(400, "BAD_REQUEST", "sourceMode debe ser 'physical' o 'image'.", request_id)
     data = await image.read(config.MAX_UPLOAD_BYTES + 1)
     await image.close()
-    async with _semaphore:
+    try:
+        await asyncio.wait_for(_semaphore.acquire(), timeout=config.QUEUE_TIMEOUT_S)
+    except TimeoutError:
+        log_event(event="analyze.busy", requestId=request_id)
+        return error_response(503, "VISION_BUSY", "El servicio de visión está ocupado; inténtalo de nuevo.", request_id)
+    try:
         try:
             t0 = time.perf_counter()
             decoded = await run_in_threadpool(decode_image, data)
@@ -163,6 +176,8 @@ async def analyze(
         result = await run_in_threadpool(
             analyze_image, decoded, request_id=request_id, source_mode=sourceMode, decode_ms=decode_ms
         )
+    finally:
+        _semaphore.release()
     DetectionResult.model_validate(result)  # contract guard: never emit an invalid payload
     log_event(
         event="analyze.done",

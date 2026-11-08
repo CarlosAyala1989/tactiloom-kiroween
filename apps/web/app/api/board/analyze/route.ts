@@ -2,9 +2,9 @@ import { createHash } from 'node:crypto';
 import { boardStateFromDetection } from '@ritualos/contracts';
 import { readScenarioImage } from '@/lib/server/assets';
 import { audit } from '@/lib/server/audit';
-import { assertSameOrigin, handler, HttpError, ok } from '@/lib/server/http';
+import { assertSameOrigin, handler, HttpError, ok, parseFormLimited } from '@/lib/server/http';
 import { json, prisma } from '@/lib/server/prisma';
-import { assertAnalysisQuota } from '@/lib/server/quotas';
+import { consumeQuota, withAnalysisSlot } from '@/lib/server/quotas';
 import { requireSession } from '@/lib/server/session';
 import { analyzeWithVision } from '@/lib/server/vision';
 
@@ -19,10 +19,8 @@ const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 export const POST = handler(async (request, _context: unknown, requestId) => {
   assertSameOrigin(request);
   const session = await requireSession();
-  const declared = Number(request.headers.get('content-length') ?? '0');
-  if (declared > MAX_IMAGE_BYTES + 64 * 1024) throw new HttpError(413, 'IMAGE_TOO_LARGE', 'La imagen supera 12 MB.');
-  await assertAnalysisQuota(session.workspaceId);
-  const form = await request.formData();
+  const form = await parseFormLimited(request, MAX_IMAGE_BYTES + 64 * 1024);
+  await consumeQuota(session.workspaceId, 'ANALYZE');
   const scenarioId = form.get('scenarioId');
   const requestedMode = form.get('sourceMode');
   let bytes: Uint8Array;
@@ -46,7 +44,7 @@ export const POST = handler(async (request, _context: unknown, requestId) => {
     filename = 'upload';
     mime = image.type || 'application/octet-stream';
   }
-  const detection = await analyzeWithVision(bytes, filename, mime, sourceMode, requestId);
+  const detection = await withAnalysisSlot(session.workspaceId, () => analyzeWithVision(bytes, filename, mime, sourceMode, requestId));
   const boardState = boardStateFromDetection(detection);
   const { overlay, ...detectionWithoutOverlay } = detection;
   const capture = await prisma().boardCapture.create({

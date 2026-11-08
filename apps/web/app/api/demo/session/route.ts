@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createDemoSession } from '@/lib/server/demo';
 import { env } from '@/lib/server/env';
-import { assertSameOrigin, clientIp, handler, ok, rateLimit } from '@/lib/server/http';
-import { cookieOptions, readSession, SESSION_COOKIE } from '@/lib/server/session';
+import { assertSameOrigin, clientKey, handler, ok, rateLimit } from '@/lib/server/http';
+import { cookieOptions, readSession, sessionCookieName } from '@/lib/server/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,12 +23,12 @@ export const POST = handler(async (request, _context: unknown, requestId) => {
   if (existing) {
     return ok({ active: true, workspaceId: existing.workspaceId, workspaceName: existing.workspaceName, expiresAt: existing.expiresAt, created: false }, requestId);
   }
-  rateLimit(`session:${clientIp(request)}`, env().DEMO_MAX_SESSIONS_PER_IP_HOUR, 3_600_000);
+  rateLimit(`session:${clientKey(request)}`, env().DEMO_MAX_SESSIONS_PER_IP_HOUR, 3_600_000);
   const created = await createDemoSession(requestId);
   const response = NextResponse.json(
     { active: true, workspaceId: created.workspaceId, expiresAt: created.expiresAt, created: true },
     { status: 201, headers: { 'x-request-id': requestId, 'cache-control': 'no-store' } },
   );
-  response.cookies.set(SESSION_COOKIE, created.token, cookieOptions(created.expiresAt));
+  response.cookies.set(sessionCookieName(), created.token, cookieOptions(created.expiresAt));
   return response;
 });

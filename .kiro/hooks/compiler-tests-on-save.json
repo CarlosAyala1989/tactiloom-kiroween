@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Compiler tests on save",
+      "trigger": "PostFileSave",
+      "description": "Runs the compiler unit and property tests (fast-check) whenever the agent saves a compiler TypeScript file.",
+      "matcher": "packages/compiler/.*\\.ts$",
+      "action": {
+        "type": "command",
+        "command": "pnpm --filter @ritualos/compiler test",
+        "timeout": 180
+      }
+    }
+  ]
+}

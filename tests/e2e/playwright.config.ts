@@ -1,5 +1,6 @@
 import { defineConfig } from '@playwright/test';
 import { fakeCameraVideo } from './fake-camera';
+import { STORAGE_STATE } from './global-setup';
 
 /**
  * E2E against a running stack (`docker compose up --build` or scripts/dev/*.sh).
@@ -17,9 +18,11 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   outputDir: '../../test-results/e2e',
+  globalSetup: './global-setup.ts',
   reporter: [['list'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]],
   use: {
     baseURL,
+    storageState: STORAGE_STATE,
     channel: 'chrome',
     headless: true,
     locale: 'es-PE',

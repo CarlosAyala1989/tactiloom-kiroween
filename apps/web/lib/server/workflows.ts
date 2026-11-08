@@ -112,7 +112,7 @@ export async function getVersionDetail(session: SessionContext, versionId: strin
   });
   if (!version) throw new HttpError(404, 'NOT_FOUND', 'Versión no encontrada en tu workspace.');
   const siblings = await prisma().workflowVersion.findMany({
-    where: { workflowId: version.workflowId },
+    where: { workflowId: version.workflowId, workspaceId: session.workspaceId },
     orderBy: { versionNumber: 'desc' },
     select: { id: true, versionNumber: true, valid: true, contentHash: true, sourceMode: true, createdAt: true },
     take: 50,

@@ -27,6 +27,8 @@ function extractPdfIsolated(bytes: Uint8Array, limits: ExtractionLimits): Promis
   return new Promise((resolve, reject) => {
     const worker = new Worker(new URL('./pdf-worker.mjs', import.meta.url), {
       workerData: { bytes: Buffer.from(bytes), maxPages: limits.maxPages },
+      // The parser of untrusted PDFs gets no secrets (empty environment) and bounded memory.
+      env: {},
       resourceLimits: { maxOldGenerationSizeMb: 192, maxYoungGenerationSizeMb: 48, stackSizeMb: 4 },
     });
     let settled = false;

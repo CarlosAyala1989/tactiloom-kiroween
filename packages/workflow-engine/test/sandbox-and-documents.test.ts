@@ -85,6 +85,15 @@ describe('document extraction', () => {
     expect(sniffMime(new Uint8Array([0xff, 0xfe, 0xfd]))).toBeNull();
   });
 
+  it('rejects text files that turn binary after the first 8 KB (whole-buffer check)', () => {
+    const text = new TextEncoder().encode('Nombre: Ana\n'.repeat(1000)); // ~12 KB of valid UTF-8
+    const withNul = new Uint8Array([...text, 0x00, 0x41]);
+    const withInvalidUtf8 = new Uint8Array([...text, 0xc3, 0x28]);
+    expect(sniffMime(text)).toBe('text/plain');
+    expect(sniffMime(withNul)).toBeNull();
+    expect(sniffMime(withInvalidUtf8)).toBeNull();
+  });
+
   it('extracts the real text layer of the demo PDFs in an isolated worker', async () => {
     const doc = await exampleDocument('valid-application.pdf', 'd');
     const text = await extractDocumentText(doc.bytes, doc.mime, LIMITS);

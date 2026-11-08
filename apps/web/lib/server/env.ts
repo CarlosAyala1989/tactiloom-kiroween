@@ -10,14 +10,17 @@ const EnvSchema = z.object({
   VISION_INTERNAL_TOKEN: z.string().optional(),
   WORKSPACE_ROOT: z.string().default('./.data/workspace'),
   ASSETS_DIR: z.string().optional(),
-  TRUST_PROXY: z.enum(['0', '1']).default('0'),
+  /** Number of trusted reverse proxies in front of the app (0 = exposed directly). */
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
   DEMO_SESSION_TTL_HOURS: z.coerce.number().positive().max(24 * 30).default(24),
   DEMO_MAX_ANALYSES_PER_HOUR: z.coerce.number().int().positive().default(60),
   DEMO_MAX_RUNS_PER_HOUR: z.coerce.number().int().positive().default(40),
   DEMO_MAX_UPLOADS: z.coerce.number().int().positive().default(20),
   DEMO_MAX_UPLOAD_BYTES: z.coerce.number().int().positive().max(10 * 1024 * 1024).default(10 * 1024 * 1024),
+  DEMO_MAX_UPLOAD_TOTAL_BYTES: z.coerce.number().int().positive().default(30 * 1024 * 1024),
   DEMO_MAX_CONCURRENT_RUNS: z.coerce.number().int().positive().default(2),
   DEMO_MAX_SESSIONS_PER_IP_HOUR: z.coerce.number().int().positive().default(30),
+  DEMO_MAX_ACTIVE_WORKSPACES: z.coerce.number().int().positive().default(300),
 });
 
 export type WebEnv = z.infer<typeof EnvSchema> & { repoRoot: string; assetsDir: string; workspaceRoot: string; allowedOrigins: string[] };

@@ -107,9 +107,21 @@ model Workspace {
   artifacts   GeneratedArtifact[]
   reviewTasks ReviewTask[]
   auditEvents AuditEvent[]
+  quotaUsages QuotaUsage[]
 
   @@index([ownerId])
   @@index([expiresAt])
+}
+
+/// Atomic per-workspace usage counters in fixed hourly windows (see packages/db/src/quota.ts).
+model QuotaUsage {
+  workspaceId String
+  kind        String
+  windowStart DateTime
+  count       Int       @default(0)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@id([workspaceId, kind, windowStart])
 }
 
 model BoardTemplate {

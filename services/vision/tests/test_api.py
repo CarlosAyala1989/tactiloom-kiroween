@@ -104,3 +104,23 @@ def test_internal_token_enforced(monkeypatch: pytest.MonkeyPatch) -> None:
     assert post_image(data).status_code == 401
     assert post_image(data, headers={"x-internal-token": "wrong"}).status_code == 401
     assert post_image(data, headers={"x-internal-token": "s3cret-token"}).status_code == 200
+    assert client.get("/health").status_code == 200  # liveness stays open on the private network
+
+
+def test_bad_token_is_rejected_before_the_body_is_read(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(config, "INTERNAL_TOKEN", "s3cret-token")
+    # A malformed multipart body would be a 400 if parsed; the token check must answer first.
+    response = client.post(
+        "/v1/analyze", content=b"--x\r\nnot multipart", headers={"content-type": "multipart/form-data; boundary=x"}
+    )
+    assert response.status_code == 401
+
+
+def test_busy_service_answers_503(monkeypatch: pytest.MonkeyPatch) -> None:
+    import asyncio
+
+    monkeypatch.setattr(config, "QUEUE_TIMEOUT_S", 0)
+    monkeypatch.setattr(app_module, "_semaphore", asyncio.Semaphore(0))
+    response = post_image(read_bytes("assets/examples/boards/valid-board.png"))
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "VISION_BUSY"

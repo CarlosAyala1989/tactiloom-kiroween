@@ -91,6 +91,11 @@ export interface RunRequest {
   readonly runId: string;
   readonly mode: ExecutionMode;
   readonly limits?: Partial<EngineLimits>;
+  /**
+   * Timestamp written into generated reports. The runner passes the approval time so a retried
+   * execution regenerates byte-identical files (create-only writes then stay idempotent).
+   */
+  readonly reportDate?: Date;
 }
 
 export interface RunOutcome {
@@ -131,6 +136,7 @@ interface HandlerContext {
   readonly runId: string;
   readonly limits: EngineLimits;
   readonly ports: EnginePorts;
+  readonly reportDate: Date;
 }
 
 type Handler = (node: IrNode, state: ExecState, ctx: HandlerContext) => Promise<HandlerResult>;
@@ -210,7 +216,7 @@ const HANDLERS: Readonly<Record<CardKind, Handler>> = {
     const report = renderReport({
       runId: ctx.runId,
       nodeId: node.id,
-      generatedAt: ctx.ports.now(),
+      generatedAt: ctx.reportDate,
       document: { originalName: document.originalName, sha256: document.sha256, mime: document.mime },
       validation,
       format,
@@ -334,7 +340,7 @@ export async function runWorkflow(request: RunRequest, ports: EnginePorts): Prom
   const outgoing = new Map<string, IrEdge[]>();
   for (const edge of ir.edges) outgoing.set(edge.from, [...(outgoing.get(edge.from) ?? []), edge]);
   const state: ExecState = { artifacts: base.artifacts, reviewTasks: base.reviewTasks };
-  const ctx: HandlerContext = { mode: request.mode, runId: request.runId, limits, ports };
+  const ctx: HandlerContext = { mode: request.mode, runId: request.runId, limits, ports, reportDate: request.reportDate ?? ports.now() };
   const deadline = started + limits.maxDurationMs;
   let seq = 0;
   let currentId: string | undefined = ir.startNodeId;

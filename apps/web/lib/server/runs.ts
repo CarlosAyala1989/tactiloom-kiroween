@@ -1,10 +1,11 @@
 import 'server-only';
 import { ExecutionPlanSchema, TERMINAL_RUN_STATUSES, type ApproveRunRequest, type RunStatus, type WorkflowIR } from '@ritualos/contracts';
-import { Prisma } from '@ritualos/db';
+import { lockWorkspace, Prisma } from '@ritualos/db';
 import { audit } from './audit';
+import { env } from './env';
 import { HttpError } from './http';
 import { prisma } from './prisma';
-import { assertConcurrentRuns, assertRunQuota } from './quotas';
+import { consumeQuota } from './quotas';
 import type { SessionContext } from './session';
 
 export const APPROVAL_WINDOW_MS = 30 * 60 * 1000;
@@ -24,7 +25,7 @@ export async function requestPreview(session: SessionContext, workflowVersionId:
     const doc = await db.uploadedDocument.findFirst({ where: { id: fileId, workspaceId: session.workspaceId }, select: { id: true } });
     if (!doc) throw new HttpError(422, 'FILE_NOT_FOUND', 'El documento elegido no existe en tu workspace.');
   }
-  await assertRunQuota(session.workspaceId);
+  await consumeQuota(session.workspaceId, 'RUN');
   const run = await db.$transaction(async (tx) => {
     const created = await tx.run.create({
       data: {
@@ -66,9 +67,14 @@ export async function approveRun(session: SessionContext, body: ApproveRunReques
     const doc = await db.uploadedDocument.findFirst({ where: { id: plan.input.uploadedFileId, workspaceId: session.workspaceId } });
     if (!doc || doc.sha256 !== plan.input.sha256) throw new HttpError(409, 'FILE_CHANGED', 'El documento de entrada cambió desde la vista previa.');
   }
-  await assertConcurrentRuns(session.workspaceId);
   try {
     await db.$transaction(async (tx) => {
+      // Workspace row lock: the concurrent-runs check and the enqueue happen atomically.
+      if (!(await lockWorkspace(tx, session.workspaceId))) throw new HttpError(401, 'NO_SESSION', 'El workspace ya no existe.');
+      const active = await tx.run.count({ where: { workspaceId: session.workspaceId, status: { in: ['QUEUED', 'RUNNING'] } } });
+      if (active >= env().DEMO_MAX_CONCURRENT_RUNS) {
+        throw new HttpError(429, 'TOO_MANY_ACTIVE_RUNS', `Ya hay ${active} ejecuciones activas; espera a que terminen.`);
+      }
       const updated = await tx.run.updateMany({
         where: { id: run.id, status: 'AWAITING_APPROVAL', planHash: body.planHash },
         data: { status: 'QUEUED', approvedAt: new Date(), approvedById: session.userId },
@@ -98,13 +104,22 @@ export async function cancelRun(session: SessionContext, runId: string, requestI
   if (!run) throw new HttpError(404, 'NOT_FOUND', 'Ejecución no encontrada en tu workspace.');
   if ((TERMINAL_RUN_STATUSES as readonly string[]).includes(run.status)) throw new HttpError(409, 'INVALID_STATE', 'La ejecución ya terminó.');
   const leased = run.jobs.some((job) => job.status === 'LEASED');
+  const now = new Date();
   if (!leased && run.status !== 'RUNNING') {
-    await db.$transaction([
-      db.run.update({ where: { id: run.id }, data: { status: 'CANCELLED', cancelRequestedAt: new Date(), endedAt: new Date() } }),
-      db.job.updateMany({ where: { runId: run.id, status: 'PENDING' }, data: { status: 'DONE', lastError: 'cancelado antes de procesarse' } }),
-    ]);
+    await db.$transaction(async (tx) => {
+      // Guarded transition: never overwrite a status the worker changed in the meantime.
+      const updated = await tx.run.updateMany({
+        where: { id: run.id, status: { in: ['DRAFT', 'COMPILED', 'AWAITING_APPROVAL', 'QUEUED'] } },
+        data: { status: 'CANCELLED', cancelRequestedAt: now, endedAt: now },
+      });
+      if (updated.count === 1) {
+        await tx.job.updateMany({ where: { runId: run.id, status: 'PENDING' }, data: { status: 'DONE', lastError: 'cancelado antes de procesarse' } });
+      } else {
+        await tx.run.updateMany({ where: { id: run.id, status: { notIn: ['SUCCEEDED', 'FAILED', 'CANCELLED'] } }, data: { cancelRequestedAt: now } });
+      }
+    });
   } else {
-    await db.run.update({ where: { id: run.id }, data: { cancelRequestedAt: new Date() } });
+    await db.run.updateMany({ where: { id: run.id, status: { notIn: ['SUCCEEDED', 'FAILED', 'CANCELLED'] } }, data: { cancelRequestedAt: now } });
   }
   await audit('RUN_CANCEL_REQUESTED', { workspaceId: session.workspaceId, actorId: session.userId, entityId: run.id, requestId });
   return { runId: run.id, cancelRequested: true };
@@ -119,7 +134,7 @@ export async function getRunDetail(session: SessionContext, runId: string) {
       events: { orderBy: [{ phase: 'asc' }, { attempt: 'asc' }, { seq: 'asc' }] },
       artifacts: { orderBy: { createdAt: 'asc' } },
       reviewTasks: { orderBy: { createdAt: 'asc' } },
-      jobs: { orderBy: { createdAt: 'asc' }, select: { kind: true, status: true, attempts: true, maxAttempts: true, lastError: true, createdAt: true, updatedAt: true } },
+      jobs: { orderBy: { createdAt: 'asc' }, select: { kind: true, status: true, attempts: true, maxAttempts: true, createdAt: true, updatedAt: true } },
     },
   });
   if (!run) throw new HttpError(404, 'NOT_FOUND', 'Ejecución no encontrada en tu workspace.');

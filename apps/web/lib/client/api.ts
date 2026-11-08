@@ -141,7 +141,7 @@ export interface RunDetail {
   events: RunEvent[];
   artifacts: { id: string; nodeId: string; type: 'REPORT_MARKDOWN' | 'REPORT_JSON'; safeName: string; size: number; sha256: string; createdAt: string }[];
   reviewTasks: { id: string; nodeId: string; label: string; missingFields: string[]; invalidFields: string[]; status: string; createdAt: string }[];
-  jobs: { kind: string; status: string; attempts: number; maxAttempts: number; lastError: string | null }[];
+  jobs: { kind: string; status: string; attempts: number; maxAttempts: number }[];
   worker: { alive: boolean; lastSeenAt: string | null };
 }
 

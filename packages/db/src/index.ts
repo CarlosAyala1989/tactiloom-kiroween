@@ -2,6 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from './generated/prisma/client';
 
 export * from './generated/prisma/client';
+export { advisoryLock, consumeQuota, lockWorkspace, type QuotaKind } from './quota';
 
 const globalForPrisma = globalThis as unknown as { __ritualosPrisma?: PrismaClient };
 

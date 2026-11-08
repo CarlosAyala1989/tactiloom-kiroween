@@ -7,6 +7,11 @@ import { prisma } from './prisma';
 
 export const SESSION_COOKIE = 'ritualos_session';
 
+/** `__Host-` prefix (Secure, Path=/, no Domain) whenever the public origin is HTTPS. */
+export function sessionCookieName(): string {
+  return new URL(env().PUBLIC_ORIGIN).protocol === 'https:' ? `__Host-${SESSION_COOKIE}` : SESSION_COOKIE;
+}
+
 export interface SessionContext {
   readonly sessionId: string;
   readonly userId: string;
@@ -36,7 +41,7 @@ export function cookieOptions(expiresAt: Date) {
 
 export async function readSession(): Promise<SessionContext | null> {
   const store = await cookies();
-  const token = store.get(SESSION_COOKIE)?.value;
+  const token = store.get(sessionCookieName())?.value;
   if (!token || token.length > 128) return null;
   const session = await prisma().session.findUnique({
     where: { tokenHash: hashToken(token) },

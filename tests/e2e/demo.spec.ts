@@ -59,8 +59,20 @@ test.describe('remote demo without camera (judges path)', () => {
     await expect(page.getByTestId('artifacts')).toHaveCount(0);
 
     await page.goto('/history');
-    await expect(page.getByTestId('history-runs').locator('li')).toHaveCount(2);
+    const runs = page.getByTestId('history-runs').locator('li');
+    await expect(runs.filter({ hasText: 'rama SÍ' }).first()).toBeVisible();
+    await expect(runs.filter({ hasText: 'rama NO' }).first()).toBeVisible();
     await page.screenshot({ path: shots('05-history'), fullPage: true });
+  });
+
+  test('re-scanning after physically moving a card shows what changed and another result', async ({ page }) => {
+    await page.goto('/studio?scenario=valid-board');
+    await expect(page.getByTestId('compile-status')).toHaveText(/Programa válido/, { timeout: 30_000 });
+    await page.getByLabel('o analiza un ejemplo de la galería (imagen sintética)').selectOption('invalid-board-moved-card');
+    await page.getByTestId('analyze-scenario').click();
+    await expect(page.getByText('#15 movida de (0,5) a (1,5)')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId('compile-status')).toHaveText(/no compila/);
+    await expect(page.locator('[data-code="DANGLING_OUTPUT"]').first()).toContainText('#14');
   });
 
   test('a board with a card between cells cannot run and says where', async ({ page }) => {

@@ -40,7 +40,7 @@ export default defineConfig([
   },
   ...scopeToWeb(nextVitals),
   {
-    files: ['apps/web/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx,js,jsx,mjs}'],
     settings: { next: { rootDir: 'apps/web/' } },
     // App Router only: the pages-directory rule does not apply.
     rules: { '@next/next/no-html-link-for-pages': 'off' },
