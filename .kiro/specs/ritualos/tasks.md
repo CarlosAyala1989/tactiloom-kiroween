@@ -21,7 +21,7 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
   - [x] 3.3 Filtro de falsos positivos por forma (imagen y mm)
   - [x] 3.4 Fixtures sintéticos renderizados desde el kit + `expected-results.json` como oráculo
   - [x] 3.5 Segunda pasada con nitidez cuando falta un fiducial (hallazgo del benchmark)
-  - _Requirements: 2.1–2.7_ · Verificación: `pnpm vision:test` (73 passed) · Commits `9fc4afb`, `f2687d2`
+  - _Requirements: 2.1–2.7_ · Verificación: `pnpm vision:test` (75 passed) · Commits `9fc4afb`, `f2687d2`, `885c463`
 
 - [x] 4. Compilador (B)
   - [x] 4.1 Puertos geométricos F / R(F) / B(F), colisiones, duplicados, catálogo cerrado
@@ -34,13 +34,13 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
   - [x] 5.1 Sandbox (segmentos, lstat, `O_NOFOLLOW`, escritura create-only idempotente)
   - [x] 5.2 Extracción PDF en worker aislado con límites; TXT; error claro sin capa de texto
   - [x] 5.3 Handlers cerrados, dry-run con plan/planHash, postcondiciones de `SUCCEEDED`
-  - _Requirements: 7.1–7.5, 12.1–12.2_ · Verificación: `pnpm --filter @ritualos/workflow-engine test` (45 passed) · Commit `2904162`
+  - _Requirements: 7.1–7.5, 12.1–12.2_ · Verificación: `pnpm --filter @ritualos/workflow-engine test` (46 passed) · Commits `2904162`, `885c463`
 
 - [x] 6. Persistencia y runner (B)
   - [x] 6.1 Esquema Prisma, migraciones, seed del catálogo
   - [x] 6.2 Cola Postgres con lease/heartbeat, reintentos, `DEAD`
   - [x] 6.3 PREVIEW/EXECUTE, idempotencia de artefactos y revisiones, limpieza TTL
-  - _Requirements: 6.1, 8.1–8.3, 9.1_ · Verificación: `pnpm test:integration` (16 passed) · Commit `c95f15a`
+  - _Requirements: 6.1, 8.1–8.3, 9.1_ · Verificación: `pnpm test:integration` (21 passed) · Commits `c95f15a`, `885c463`
 
 - [x] 7. Web y API (C)
   - [x] 7.1 Sesiones demo (token aleatorio + HMAC, TTL, cuotas), verificación de Origin, sobre de errores
@@ -52,7 +52,7 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
 
 - [x] 8. Pruebas E2E y accesibilidad (C)
   - Playwright con Chrome del sistema: flujo de jueces, tableros inválidos, uploads, simulador, cámara falsa, axe en 8 páginas
-  - _Requirements: 4.3, 10.2, 13.1_ · Verificación: `pnpm test:e2e` (15 passed contra el stack Docker) · Commit `02c058f`
+  - _Requirements: 4.3, 10.2, 13.1_ · Verificación: `pnpm test:e2e` (16 passed contra el stack Docker) · Commits `02c058f`, `885c463`
 
 - [x] 9. Contenedores (C)
   - Dockerfiles (visión `python:3.14-slim`, Node `node:24-alpine`), compose con health checks, usuarios sin root
@@ -64,8 +64,13 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
 
 - [x] 11. Documentación y Kiro (todos)
   - README bilingüe, ADRs, gramática, IR, modelo de amenazas, guía de jueces, guion de vídeo, diferenciación, uso de Kiro
-  - Hooks y agentes en `.kiro/` validados contra la versión instalada
+  - Hooks y agentes en `.kiro/` validados contra la versión instalada (`kiro-cli agent validate`)
   - _Requirements: 14.1–14.2_
+
+- [x] 11b. Revisión de seguridad con el agente `ritualos-security-reviewer` y correcciones (B)
+  - Cuerpos chunked limitados, cuotas atómicas (`QuotaUsage`), locks de workspace, claves de cliente con proxy de confianza,
+    Origin obligatorio, plan fail-closed en el worker, fecha de reporte determinista, errores genéricos, token antes del multipart
+  - _Requirements: 8.3, 12.1–12.5, 13.3_ · Verificación: `pnpm test:integration` (21 passed), `node scripts/abuse-check.mjs` · Commit `885c463`
 
 - [ ] 12. Pruebas físicas con impresiones y cámara real (A) — requiere al equipo
   - Imprimir A3 o mosaico, fotografiar ≥10 veces por condición, registrar en `docs/benchmarking.md` (tabla preparada)
