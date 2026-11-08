@@ -4,8 +4,7 @@ import { CARD_KIND_SPECS, type CardKind, type IrEdge } from '@tactiloom/contract
 import { Background, Handle, Position, ReactFlow, type Edge, type Node, type NodeProps } from '@xyflow/react';
 import { useMemo } from 'react';
 import { textOn } from '@/lib/client/contrast';
-import { es } from '@/lib/i18n/es';
-import { SHORT_TITLE } from './BoardGrid';
+import { useI18n } from '@/lib/i18n/provider';
 
 export type NodeRunState = 'idle' | 'predicted' | 'running' | 'succeeded' | 'failed' | 'skipped';
 
@@ -19,23 +18,25 @@ export interface DiagramNode {
 
 type CardNodeData = { node: DiagramNode; state: NodeRunState; hasError: boolean; selected: boolean };
 
-const STATE_STYLE: Record<NodeRunState, { ring: string; label: string }> = {
-  idle: { ring: 'transparent', label: '' },
-  predicted: { ring: '#6fb4f2', label: 'previsto' },
-  running: { ring: '#f2c14e', label: 'en curso' },
-  succeeded: { ring: '#52c47e', label: 'ok' },
-  failed: { ring: '#f0705f', label: 'falló' },
-  skipped: { ring: '#6b5d4b', label: 'no ejecutado' },
+const STATE_RING: Record<NodeRunState, string> = {
+  idle: 'transparent',
+  predicted: '#6fb4f2',
+  running: '#f2c14e',
+  succeeded: '#52c47e',
+  failed: '#f0705f',
+  skipped: '#6b5d4b',
 };
 
 function CardNode({ data }: NodeProps<Node<CardNodeData>>) {
+  const { t } = useI18n();
   const spec = CARD_KIND_SPECS[data.node.kind];
-  const state = STATE_STYLE[data.state];
+  const ring = STATE_RING[data.state];
+  const stateLabel = data.state === 'idle' ? '' : t.workflow.diagram.states[data.state];
   const handle = '!h-1.5 !w-1.5 !min-h-0 !min-w-0 !border-0 !bg-ink-500';
   return (
     <div
       className="w-[136px] rounded-xl border-2 bg-ink-950 px-2 py-1.5 text-paper shadow-lg"
-      style={{ borderColor: data.hasError ? '#f0705f' : spec.color, boxShadow: data.state !== 'idle' ? `0 0 0 3px ${state.ring}` : undefined, outline: data.selected ? '2px solid #ffbd5c' : undefined }}
+      style={{ borderColor: data.hasError ? '#f0705f' : spec.color, boxShadow: data.state !== 'idle' ? `0 0 0 3px ${ring}` : undefined, outline: data.selected ? '2px solid #ffbd5c' : undefined }}
     >
       <Handle id="t-l" type="target" position={Position.Left} className={handle} isConnectable={false} />
       <Handle id="t-t" type="target" position={Position.Top} className={handle} isConnectable={false} />
@@ -43,7 +44,7 @@ function CardNode({ data }: NodeProps<Node<CardNodeData>>) {
       <Handle id="t-b" type="target" position={Position.Bottom} className={handle} isConnectable={false} />
       <div className="flex items-center justify-between gap-1">
         <span className="rounded px-1 text-[0.65rem] font-bold" style={{ background: spec.color, color: textOn(spec.color) }}>
-          {SHORT_TITLE[data.node.kind]}
+          {t.catalog.short[data.node.kind]}
         </span>
         <span className="mono text-[0.65rem] text-muted">#{data.node.markerId}</span>
       </div>
@@ -51,7 +52,7 @@ function CardNode({ data }: NodeProps<Node<CardNodeData>>) {
         <span>
           ({data.node.row},{data.node.col})
         </span>
-        {state.label && <span style={{ color: state.ring }}>{state.label}</span>}
+        {stateLabel && <span style={{ color: ring }}>{stateLabel}</span>}
       </div>
       <Handle id="s-r" type="source" position={Position.Right} className={handle} isConnectable={false} />
       <Handle id="s-b" type="source" position={Position.Bottom} className={handle} isConnectable={false} />
@@ -93,6 +94,7 @@ export function WorkflowDiagram({
   onSelect?: (id: string) => void;
   height?: number;
 }) {
+  const { t } = useI18n();
   const flowNodes = useMemo<Node<CardNodeData>[]>(
     () =>
       nodes.map((node) => ({
@@ -113,13 +115,13 @@ export function WorkflowDiagram({
       target: edge.to,
       ...handlesFor(byId.get(edge.from), byId.get(edge.to)),
       type: 'smoothstep',
-      label: edge.port === 'NEXT' ? undefined : edge.port === 'TRUE' ? 'SÍ' : 'NO',
+      label: edge.port === 'NEXT' ? undefined : t.branch[edge.port],
       animated: states[edge.from] === 'succeeded' && (states[edge.to] === 'running' || states[edge.to] === 'succeeded'),
       style: { stroke: edge.port === 'FALSE' ? '#f08c00' : edge.port === 'TRUE' ? '#52c47e' : '#bcae9a', strokeWidth: 2 },
       labelStyle: { fill: '#f5efe6', fontWeight: 700 },
       labelBgStyle: { fill: '#19150f' },
     }));
-  }, [edges, nodes, states]);
+  }, [edges, nodes, states, t]);
   return (
     <div style={{ height }} className="rounded-xl border border-ink-700 bg-ink-950" aria-hidden="true">
       <ReactFlow
@@ -145,11 +147,13 @@ export function WorkflowDiagram({
 }
 
 /** Textual alternative of the diagram for screen readers and keyboard users. */
-export function StepList({ steps, title = 'Programa en texto' }: { steps: readonly { depth: number; text: string; nodeId: string }[]; title?: string }) {
+export function StepList({ steps, title }: { steps: readonly { depth: number; text: string; nodeId: string }[]; title?: string }) {
+  const { t } = useI18n();
   if (steps.length === 0) return null;
+  const words = t.workflow.steps;
   return (
     <details className="mt-3 rounded-lg border border-ink-700 px-3 py-2 text-sm" open>
-      <summary className="cursor-pointer font-semibold">{title} (alternativa accesible al diagrama)</summary>
+      <summary className="cursor-pointer font-semibold">{words.summary(title ?? words.title)}</summary>
       <ol className="mt-2 list-decimal space-y-1 pl-6">
         {steps.map((step) => (
           <li key={step.nodeId} style={{ marginLeft: `${step.depth * 1.25}rem` }}>
@@ -157,7 +161,7 @@ export function StepList({ steps, title = 'Programa en texto' }: { steps: readon
           </li>
         ))}
       </ol>
-      <p className="mt-2 text-xs text-muted">Leyenda: «Si SÍ» = rama TRUE (sigue la flecha); «Si NO» = rama FALSE (gira a la derecha). {es.kinds.CONDITION} solo ejecuta una rama.</p>
+      <p className="mt-2 text-xs text-muted">{words.legend(t.catalog.kinds.CONDITION)}</p>
     </details>
   );
 }

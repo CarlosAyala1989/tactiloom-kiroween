@@ -144,6 +144,9 @@ class PdfPainter {
 export interface PdfMetadata {
   readonly title: string;
   readonly subject: string;
+  readonly keywords: readonly string[];
+  /** Language tag written to the document catalog (/Lang); omitted when undefined. */
+  readonly language?: string;
 }
 
 export async function createKitDocument(meta: PdfMetadata): Promise<{ doc: PDFDocument; fonts: Fonts }> {
@@ -153,9 +156,10 @@ export async function createKitDocument(meta: PdfMetadata): Promise<{ doc: PDFDo
   doc.setAuthor('Tactiloom contributors');
   doc.setCreator('Tactiloom board-kit');
   doc.setProducer('Tactiloom board-kit (pdf-lib 1.17.1)');
-  doc.setKeywords(['Tactiloom', 'ArUco', 'DICT_4X4_100', 'board-v1', 'cards-v1']);
+  doc.setKeywords([...meta.keywords]);
   doc.setCreationDate(KIT_METADATA_DATE);
   doc.setModificationDate(KIT_METADATA_DATE);
+  if (meta.language !== undefined) doc.setLanguage(meta.language);
   const fonts = {
     regular: await doc.embedFont(StandardFonts.Helvetica),
     bold: await doc.embedFont(StandardFonts.HelveticaBold),

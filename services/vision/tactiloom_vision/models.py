@@ -6,9 +6,9 @@ response at runtime and tests/test_contracts.py checks both against each other.
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 Orientation = Literal["N", "E", "S", "W"]
 CardKind = Literal[
@@ -38,6 +38,19 @@ class Cell(Strict):
     col: int = Field(ge=0, le=63)
 
 
+# Structured values behind a message (MessageParamsSchema in packages/contracts/src/diagnostics.ts).
+ParamKey = Annotated[str, StringConstraints(pattern=r"^[A-Za-z][A-Za-z0-9]{0,40}$")]
+ParamListItem = Annotated[str, StringConstraints(max_length=200)] | int | float
+ParamValue = (
+    Annotated[str, StringConstraints(max_length=500)]
+    | bool
+    | int
+    | float
+    | None
+    | Annotated[list[ParamListItem], Field(max_length=64)]
+)
+
+
 class Diagnostic(Strict):
     code: str
     severity: Literal["error", "warning", "info"]
@@ -47,6 +60,7 @@ class Diagnostic(Strict):
     cells: list[Cell] | None = None
     nodeIds: list[str] | None = None
     suggestion: str | None = Field(default=None, max_length=500)
+    params: dict[ParamKey, ParamValue] | None = None
 
 
 class ImageInfo(Strict):

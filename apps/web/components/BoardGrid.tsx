@@ -3,7 +3,8 @@
 import { CARD_KIND_SPECS, type CardKind, type Orientation } from '@tactiloom/contracts';
 import type { DragEvent, KeyboardEvent } from 'react';
 import { textOn } from '@/lib/client/contrast';
-import { es } from '@/lib/i18n/es';
+import type { Dictionary } from '@/lib/i18n';
+import { useI18n } from '@/lib/i18n/provider';
 
 export interface BoardCardView {
   readonly markerId: number;
@@ -14,17 +15,6 @@ export interface BoardCardView {
 }
 
 const ROTATION: Record<Orientation, number> = { E: 0, S: 90, W: 180, N: 270 };
-export const SHORT_TITLE: Record<CardKind, string> = {
-  START: 'INICIO',
-  INPUT_FILE: 'ARCHIVO',
-  EXTRACT_TEXT: 'EXTRAER',
-  VALIDATE_FIELDS: 'VALIDAR',
-  CONDITION: 'CONDICIÓN',
-  CREATE_REPORT: 'REPORTE',
-  SAVE_REPORT: 'GUARDAR',
-  REQUEST_REVIEW: 'REVISIÓN',
-  END: 'FIN',
-};
 
 function Arrow({ degrees, color, label }: { degrees: number; color: string; label?: string }) {
   return (
@@ -40,11 +30,12 @@ function Arrow({ degrees, color, label }: { degrees: number; color: string; labe
 }
 
 export function CardTile({ card, compact = false }: { card: Pick<BoardCardView, 'markerId' | 'kind' | 'orientation'>; compact?: boolean }) {
+  const { t } = useI18n();
   const spec = CARD_KIND_SPECS[card.kind];
   return (
     <span className="flex h-full w-full flex-col items-center justify-between rounded-md border-2 bg-ink-950/80 p-1" style={{ borderColor: spec.color }}>
       <span className="w-full truncate rounded-sm px-1 text-center text-[0.62rem] font-bold leading-4" style={{ background: spec.color, color: textOn(spec.color) }}>
-        {SHORT_TITLE[card.kind]}
+        {t.catalog.short[card.kind]}
       </span>
       {!compact && (
         <span className="flex items-center gap-0.5">
@@ -57,10 +48,12 @@ export function CardTile({ card, compact = false }: { card: Pick<BoardCardView, 
   );
 }
 
-export function describeCell(row: number, col: number, card: BoardCardView | undefined): string {
-  if (!card) return `Casilla fila ${row}, columna ${col}: vacía`;
-  const extra = card.kind === 'CONDITION' ? '; SÍ sigue la flecha, NO gira a la derecha' : '';
-  return `Casilla fila ${row}, columna ${col}: tarjeta #${card.markerId} ${es.kinds[card.kind]}, apunta al ${es.orientation[card.orientation]}${extra}`;
+/** Accessible name of a board cell in the UI language of `t`. */
+export function describeCell(t: Dictionary, row: number, col: number, card: BoardCardView | undefined): string {
+  const words = t.studio.board;
+  if (!card) return words.emptyCell(row, col);
+  const extra = card.kind === 'CONDITION' ? words.conditionHint : '';
+  return `${words.cardCell(row, col, card.markerId, t.catalog.kinds[card.kind], card.orientation)}${extra}`;
 }
 
 interface BoardGridProps {
@@ -76,6 +69,8 @@ interface BoardGridProps {
 
 /** 8×4 board as a keyboard-accessible grid of buttons (the same grammar as the printed board). */
 export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCellActivate, onCellKeyDown, onDropCard, interactive = false }: BoardGridProps) {
+  const { t } = useI18n();
+  const words = t.studio.board;
   const byCell = new Map<string, BoardCardView>();
   for (const card of cards) if (!byCell.has(`${card.row},${card.col}`)) byCell.set(`${card.row},${card.col}`, card);
   const rows = [0, 1, 2, 3];
@@ -91,13 +86,13 @@ export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCell
         <div aria-hidden="true" />
         {cols.map((col) => (
           <div key={`h${col}`} aria-hidden="true" className="text-center text-[0.65rem] text-muted">
-            col {col}
+            {words.colHeader(col)}
           </div>
         ))}
         {rows.map((row) => (
           <div key={`r${row}`} role="row" className="contents">
             <div aria-hidden="true" className="flex items-center text-[0.65rem] text-muted">
-              F{row}
+              {words.rowHeader(row)}
             </div>
             {cols.map((col) => {
               const key = `${row},${col}`;
@@ -109,7 +104,7 @@ export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCell
                   <button
                     type="button"
                     data-cell={key}
-                    aria-label={describeCell(row, col, card) + (hasError ? ' (con error)' : '')}
+                    aria-label={describeCell(t, row, col, card) + (hasError ? words.withError : '')}
                     aria-pressed={interactive ? selected : undefined}
                     disabled={!interactive}
                     onClick={() => onCellActivate?.(row, col, card)}

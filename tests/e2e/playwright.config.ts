@@ -32,7 +32,7 @@ export default defineConfig({
     acceptDownloads: true,
   },
   projects: [
-    { name: 'remote-demo', testMatch: /demo\.spec\.ts|simulator\.spec\.ts|a11y\.spec\.ts/ },
+    { name: 'remote-demo', testMatch: /demo\.spec\.ts|simulator\.spec\.ts|a11y\.spec\.ts|i18n\.spec\.ts/ },
     {
       name: 'fake-camera',
       testMatch: /camera\.spec\.ts/,

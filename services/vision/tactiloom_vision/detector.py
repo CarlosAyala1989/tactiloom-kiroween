@@ -20,6 +20,7 @@ import numpy as np
 from . import DETECTOR_VERSION, config
 from .aruco import create_detector
 from .catalog import CORNER_NAMES_ES, FIDUCIAL_IDS, BoardTemplate, CatalogEntry, load_catalog, load_template
+from .i18n import DEFAULT_LOCALE, overlay_header, overlay_strings
 from .overlay import OverlayShape, render_overlay
 
 ORIENTATION_BY_QUADRANT = {0: "E", 1: "S", 2: "W", 3: "N"}
@@ -133,7 +134,9 @@ def _diag(
     marker_ids: list[int] | None = None,
     cells: list[dict] | None = None,
     suggestion: str | None = None,
+    params: dict | None = None,
 ) -> dict:
+    """Spanish ``message`` (canonical) + structured ``params`` from which clients render any locale."""
     diagnostic: dict = {"code": code, "severity": severity, "stage": "vision", "message": message}
     if marker_ids:
         diagnostic["markerIds"] = sorted(set(marker_ids))
@@ -141,6 +144,7 @@ def _diag(
         diagnostic["cells"] = cells
     if suggestion:
         diagnostic["suggestion"] = suggestion
+    diagnostic["params"] = dict(params or {})
     return diagnostic
 
 
@@ -164,28 +168,33 @@ def _transform(points: np.ndarray, matrix: np.ndarray) -> np.ndarray:
 
 def calibrate(
     fiducials: dict[int, RawMarker], template: BoardTemplate, image_area: float
-) -> tuple[np.ndarray | None, float | None, str | None]:
-    """Homography image → board mm from the 16 fiducial corners. Returns (H, rms_mm, problem)."""
+) -> tuple[np.ndarray | None, float | None, tuple[str, str] | None]:
+    """Homography image → board mm from the 16 fiducial corners.
+
+    Returns (H, rms_mm, problem) where problem is (reason, Spanish detail) and reason is one of
+    mirrored | nonconvex | small | failed | degenerate | reprojection.
+    """
     centers = np.array([fiducials[fid].center for fid in FIDUCIAL_IDS])
     area = _shoelace(centers)
     if area <= 0:
-        return None, None, "Las esquinas aparecen en orden invertido (¿imagen espejada?)."
+        return None, None, ("mirrored", "Las esquinas aparecen en orden invertido (¿imagen espejada?).")
     if not _is_convex(centers):
-        return None, None, "Las cuatro esquinas no forman un cuadrilátero convexo."
+        return None, None, ("nonconvex", "Las cuatro esquinas no forman un cuadrilátero convexo.")
     if area < 0.01 * image_area:
-        return None, None, "El tablero ocupa una superficie demasiado pequeña de la imagen."
+        return None, None, ("small", "El tablero ocupa una superficie demasiado pequeña de la imagen.")
     src = np.vstack([fiducials[fid].corners for fid in FIDUCIAL_IDS])
     dst = np.vstack([template.fiducial(fid).corners_mm() for fid in FIDUCIAL_IDS])
     matrix, _mask = cv2.findHomography(src, dst, 0)
     if matrix is None or not np.all(np.isfinite(matrix)) or abs(matrix[2, 2]) < 1e-12:
-        return None, None, "No se pudo calcular la homografía."
+        return None, None, ("failed", "No se pudo calcular la homografía.")
     matrix = matrix / matrix[2, 2]
     if abs(np.linalg.det(matrix)) < 1e-15 or np.linalg.cond(matrix) > 1e12:
-        return None, None, "La homografía es degenerada."
+        return None, None, ("degenerate", "La homografía es degenerada.")
     projected = _transform(src, matrix)
     rms = float(np.sqrt(np.mean(np.sum((projected - dst) ** 2, axis=1))))
     if rms > template.max_reprojection_mm:
-        return None, rms, f"Error de reproyección de {rms:.1f} mm (máximo {template.max_reprojection_mm:.1f} mm)."
+        detail = f"Error de reproyección de {rms:.1f} mm (máximo {template.max_reprojection_mm:.1f} mm)."
+        return None, rms, ("reprojection", detail)
     return matrix, rms, None
 
 
@@ -246,9 +255,14 @@ def analyze_image(
     source_mode: str = "image",
     decode_ms: float = 0.0,
     render: bool = True,
+    locale: str = DEFAULT_LOCALE,
 ) -> dict:
-    """Run the full pipeline on decoded pixels and return a DetectionResult dict."""
+    """Run the full pipeline on decoded pixels and return a DetectionResult dict.
+
+    ``locale`` only changes the overlay texts; the detection data is identical for every locale.
+    """
     started = time.perf_counter()
+    texts = overlay_strings(locale)
     request_id = request_id or new_request_id()
     template = load_template()
     catalog = load_catalog()
@@ -282,6 +296,7 @@ def analyze_image(
                 "error",
                 f"Se detectaron {raw_count} marcadores (máximo {config.MAX_MARKERS}). La imagen no se procesa.",
                 suggestion="Fotografía solo un tablero Tactiloom.",
+                params={"count": raw_count, "max": config.MAX_MARKERS},
             )
         )
         markers = []
@@ -318,6 +333,7 @@ def analyze_image(
                 "Hay más de un marcador de esquina con el mismo ID: " + ", ".join(str(f) for f in duplicated) + ".",
                 marker_ids=duplicated,
                 suggestion="Usa un único tablero impreso en la foto.",
+                params={"fiducials": duplicated},
             )
         )
     elif markers and missing:
@@ -333,6 +349,7 @@ def analyze_image(
                     "Asegúrate de que las cuatro esquinas del tablero (ID 0–3) se vean completas, "
                     "sin sombras ni reflejos."
                 ),
+                params={"fiducials": missing},
             )
         )
     elif markers:
@@ -341,12 +358,18 @@ def analyze_image(
         )
         if problem is not None or homography is None:
             blocking_code = "HOMOGRAPHY_DEGENERATE"
+            reason, detail = problem or ("failed", "No se pudo calcular la homografía.")
+            calibration_params: dict = {"reason": reason}
+            if reason == "reprojection" and rms is not None:
+                calibration_params["rmsMm"] = round(float(rms), 1)
+                calibration_params["maxMm"] = round(float(template.max_reprojection_mm), 1)
             diagnostics.append(
                 _diag(
                     "HOMOGRAPHY_DEGENERATE",
                     "error",
-                    f"No se pudo calibrar el tablero: {problem}",
+                    f"No se pudo calibrar el tablero: {detail}",
                     suggestion="Fotografía el tablero completo, plano y desde un ángulo más frontal.",
+                    params=calibration_params,
                 )
             )
             homography = None
@@ -403,17 +426,20 @@ def analyze_image(
                     f"El marcador #{marker.marker_id} no pertenece al catálogo cards-v1.",
                     marker_ids=[marker.marker_id],
                     suggestion="Retira esa tarjeta o usa una impresa con el kit oficial (IDs 10–35).",
+                    params={"markerId": marker.marker_id},
                 )
             )
             center_mm = None
             if homography is not None:
                 c = _transform(marker.corners, homography).mean(axis=0)
                 center_mm = {"x": round(float(c[0]), 2), "y": round(float(c[1]), 2)}
-            reject("UNKNOWN_CARD", center_mm, [], f"#{marker.marker_id} desconocida")
+            reject("UNKNOWN_CARD", center_mm, [], f"#{marker.marker_id} {texts.unknown}")
             continue
 
         if homography is None or inverse is None:
-            reject(blocking_code or "BOARD_FIDUCIAL_MISSING", None, [], f"#{marker.marker_id} sin calibrar")
+            reject(
+                blocking_code or "BOARD_FIDUCIAL_MISSING", None, [], f"#{marker.marker_id} {texts.not_calibrated_card}"
+            )
             continue
 
         corners_mm = _transform(marker.corners, homography)
@@ -425,9 +451,10 @@ def analyze_image(
                     f"Se descartó una detección no cuadrada del marcador #{marker.marker_id} "
                     "(probable falso positivo).",
                     marker_ids=[marker.marker_id],
+                    params={"variant": "sliverBoard", "markerId": marker.marker_id},
                 )
             )
-            reject("MARKER_SIZE_MISMATCH", None, [], f"#{marker.marker_id} descartado")
+            reject("MARKER_SIZE_MISMATCH", None, [], f"#{marker.marker_id} {texts.discarded}")
             continue
         geometry = _marker_geometry(corners_mm, template)
         cx, cy = (float(v) for v in geometry["card_center"])
@@ -447,9 +474,10 @@ def analyze_image(
                     marker_ids=[marker.marker_id],
                     cells=[{"row": near_row, "col": near_col}],
                     suggestion="Colócala completamente dentro de una casilla del tablero.",
+                    params={"markerId": marker.marker_id, "kind": entry.kind},
                 )
             )
-            reject("CARD_NOT_IN_CELL", center_mm, [{"row": near_row, "col": near_col}], f"{label_base} fuera")
+            reject("CARD_NOT_IN_CELL", center_mm, [{"row": near_row, "col": near_col}], f"{label_base} {texts.outside}")
             continue
 
         col = int(math.floor(col_f))
@@ -467,9 +495,10 @@ def analyze_image(
                     marker_ids=[marker.marker_id],
                     cells=candidates,
                     suggestion="Céntrala dentro de una sola casilla y vuelve a capturar.",
+                    params={"markerId": marker.marker_id, "kind": entry.kind},
                 )
             )
-            reject("AMBIGUOUS_POSITION", center_mm, candidates, f"{label_base} entre casillas")
+            reject("AMBIGUOUS_POSITION", center_mm, candidates, f"{label_base} {texts.between_cells}")
             continue
 
         if geometry["deviation"] > template.tol_orientation_deg:
@@ -488,9 +517,18 @@ def analyze_image(
                     marker_ids=[marker.marker_id],
                     cells=[{"row": row, "col": col}],
                     suggestion="Gírala para que su flecha quede paralela a los bordes del tablero.",
+                    params={
+                        "markerId": marker.marker_id,
+                        "kind": entry.kind,
+                        "row": row,
+                        "col": col,
+                        "deviation": round(float(geometry["deviation"])),
+                        "lower": lower,
+                        "upper": upper,
+                    },
                 )
             )
-            reject("AMBIGUOUS_ORIENTATION", center_mm, [{"row": row, "col": col}], f"{label_base} girada")
+            reject("AMBIGUOUS_ORIENTATION", center_mm, [{"row": row, "col": col}], f"{label_base} {texts.rotated}")
             continue
 
         relative_size = abs(geometry["side"] - template.card_marker_size) / template.card_marker_size
@@ -508,6 +546,12 @@ def analyze_image(
                     marker_ids=[marker.marker_id],
                     cells=[{"row": row, "col": col}],
                     suggestion="Imprime tablero y tarjetas a la misma escala.",
+                    params={
+                        "variant": "size",
+                        "markerId": marker.marker_id,
+                        "sideMm": round(float(geometry["side"]), 1),
+                        "expectedMm": round(float(template.card_marker_size), 1),
+                    },
                 )
             )
         position_score = 1.0 - min(max(abs(dx), abs(dy)) / 0.5, 1.0)
@@ -560,6 +604,7 @@ def analyze_image(
                 "info",
                 f"Se descartó una detección deformada del marcador #{sliver.marker_id} (probable falso positivo).",
                 marker_ids=[sliver.marker_id],
+                params={"variant": "sliverImage", "markerId": sliver.marker_id},
             )
         )
     rejected.sort(key=lambda r: (r["markerId"], r["centerImage"]["y"], r["centerImage"]["x"]))
@@ -572,10 +617,7 @@ def analyze_image(
     overlay = None
     if render:
         errors = sum(1 for d in diagnostics if d["severity"] == "error")
-        status = "calibrado" if board["calibrated"] else "SIN CALIBRAR"
-        header = f"Tactiloom vision | {len(cards)} tarjetas | {status} | errores: {errors}"
-        if missing and markers:
-            header += " | faltan esquinas: " + ",".join(str(f) for f in missing)
+        header = overlay_header(locale, len(cards), bool(board["calibrated"]), errors, missing if markers else [])
         jpeg, overlay_w, overlay_h = render_overlay(image_bgr, shapes, header)
         overlay = {"mime": "image/jpeg", "width": overlay_w, "height": overlay_h, "dataBase64": jpeg}
     overlay_ms = (time.perf_counter() - t3) * 1000

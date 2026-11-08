@@ -1,7 +1,7 @@
 'use client';
 
 import { CARD_KIND_SPECS, PARAM_UI, type CardKind } from '@tactiloom/contracts';
-import { es } from '@/lib/i18n/es';
+import { useI18n } from '@/lib/i18n/provider';
 import { DocumentSelect } from './DocumentSelect';
 
 export interface ParamNode {
@@ -26,6 +26,7 @@ export function ParamsPanel({
   selectedId: string | null;
   onSelect: (id: string) => void;
 }) {
+  const { t } = useI18n();
   const configurable = nodes.filter((node) => PARAM_UI[node.kind].length > 0);
   return (
     <div className="space-y-3">
@@ -36,34 +37,41 @@ export function ParamsPanel({
         return (
           <fieldset key={node.id} className={`rounded-lg border p-3 ${open ? 'border-amber/70' : 'border-ink-700'}`} onFocus={() => onSelect(node.id)}>
             <legend className="px-1 text-sm font-semibold">
-              <span className="mr-1 inline-block h-2.5 w-2.5 rounded-full" style={{ background: spec.color }} aria-hidden="true" />#{node.markerId} {es.kinds[node.kind]} · ({node.row},{node.col})
+              <span className="mr-1 inline-block h-2.5 w-2.5 rounded-full" style={{ background: spec.color }} aria-hidden="true" />#{node.markerId} {t.catalog.kinds[node.kind]} · ({node.row},{node.col})
             </legend>
-            <p className="mb-2 text-xs text-muted">{spec.effectEs}</p>
+            <p className="mb-2 text-xs text-muted">{t.catalog.effect[node.kind]}</p>
             <div className="space-y-2">
               {PARAM_UI[node.kind].map((field) => {
                 const inputId = `${node.id}-${field.key}`;
                 const value = values[field.key];
+                // Localized wording of the closed catalog; the Spanish contract text is the fallback.
+                const text = t.catalog.params[node.kind][field.key];
+                const label = text?.label ?? field.labelEs;
+                const help = text?.help ?? field.helpEs;
+                const optionLabel = (option: { readonly value: string; readonly labelEs: string }) => text?.options?.[option.value] ?? option.labelEs;
                 if (field.control === 'document') {
-                  return <DocumentSelect key={field.key} value={(value as string | null) ?? null} onChange={(id) => onChange(node.id, field.key, id)} label={field.labelEs} />;
+                  return <DocumentSelect key={field.key} value={(value as string | null) ?? null} onChange={(id) => onChange(node.id, field.key, id)} label={label} />;
                 }
                 if (field.control === 'readonly') {
                   return (
                     <p key={field.key} className="text-sm">
-                      <span className="font-semibold">{field.labelEs}:</span> <code className="mono">{String(value ?? '')}</code>
-                      {field.helpEs && <span className="block text-xs text-muted">{field.helpEs}</span>}
+                      <span className="font-semibold">{t.workflow.params.readonlyLabel(label)}</span> <code className="mono">{String(value ?? '')}</code>
+                      {help && <span className="block text-xs text-muted">{help}</span>}
                     </p>
                   );
                 }
                 if (field.control === 'select') {
+                  // An absent optional value shows the engine default without writing it (keeps the canonical params/hash).
+                  const shown = value === undefined ? field.defaultValue : value;
                   return (
                     <div key={field.key}>
                       <label htmlFor={inputId} className="block text-xs font-semibold">
-                        {field.labelEs}
+                        {label}
                       </label>
-                      <select id={inputId} className="field mt-1" value={String(value ?? '')} onChange={(event) => onChange(node.id, field.key, event.target.value)}>
+                      <select id={inputId} className="field mt-1" value={String(shown ?? '')} onChange={(event) => onChange(node.id, field.key, event.target.value)}>
                         {field.options?.map((option) => (
                           <option key={option.value} value={option.value}>
-                            {option.labelEs}
+                            {optionLabel(option)}
                           </option>
                         ))}
                       </select>
@@ -74,7 +82,7 @@ export function ParamsPanel({
                   const selected = new Set(Array.isArray(value) ? (value as string[]) : []);
                   return (
                     <fieldset key={field.key}>
-                      <legend className="text-xs font-semibold">{field.labelEs}</legend>
+                      <legend className="text-xs font-semibold">{label}</legend>
                       <div className="mt-1 flex flex-wrap gap-3">
                         {field.options?.map((option) => (
                           <label key={option.value} className="flex items-center gap-1.5 text-sm">
@@ -88,7 +96,7 @@ export function ParamsPanel({
                                 onChange(node.id, field.key, [...next]);
                               }}
                             />
-                            {option.labelEs}
+                            {optionLabel(option)}
                           </label>
                         ))}
                       </div>
@@ -98,10 +106,10 @@ export function ParamsPanel({
                 return (
                   <div key={field.key}>
                     <label htmlFor={inputId} className="block text-xs font-semibold">
-                      {field.labelEs}
+                      {label}
                     </label>
                     <input id={inputId} className="field mt-1" value={String(value ?? '')} maxLength={80} onChange={(event) => onChange(node.id, field.key, event.target.value)} />
-                    {field.helpEs && <p className="mt-0.5 text-xs text-muted">{field.helpEs}</p>}
+                    {help && <p className="mt-0.5 text-xs text-muted">{help}</p>}
                   </div>
                 );
               })}

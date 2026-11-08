@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import unicodedata
 from dataclasses import dataclass
 
 import cv2
@@ -22,9 +23,14 @@ class OverlayShape:
     arrow: tuple[tuple[float, float], tuple[float, float]] | None = None
 
 
-def _ascii(text: str) -> str:
-    replacements = str.maketrans("áéíóúÁÉÍÓÚñÑ", "aeiouAEIOUnN")
-    return text.translate(replacements).encode("ascii", "replace").decode("ascii")
+_EXPANSIONS = str.maketrans({"œ": "oe", "Œ": "OE", "æ": "ae", "Æ": "AE", "ß": "ss", "’": "'", "–": "-", "—": "-"})
+
+
+def ascii_text(text: str) -> str:
+    """Hershey fonts only draw ASCII: strip accents (é → e, ç → c, ñ → n), expand ligatures, '?' otherwise."""
+    decomposed = unicodedata.normalize("NFKD", text.translate(_EXPANSIONS))
+    stripped = "".join(char for char in decomposed if not unicodedata.combining(char))
+    return stripped.encode("ascii", "replace").decode("ascii")
 
 
 def _label(image: np.ndarray, text: str, origin: tuple[int, int], color: tuple[int, int, int], scale: float) -> None:
@@ -58,8 +64,8 @@ def render_overlay(image_bgr: np.ndarray, shapes: list[OverlayShape], header: st
             cv2.circle(canvas, start, max(3, shape.thickness + 1), shape.color, -1, cv2.LINE_AA)
         if shape.label and shape.label_at is not None:
             origin = (int(shape.label_at[0] * scale), int(shape.label_at[1] * scale))
-            _label(canvas, _ascii(shape.label), origin, shape.color, text_scale)
-    _label(canvas, _ascii(header), (8, int(30 * max(1.0, text_scale * 2))), (255, 255, 255), text_scale * 1.2)
+            _label(canvas, ascii_text(shape.label), origin, shape.color, text_scale)
+    _label(canvas, ascii_text(header), (8, int(30 * max(1.0, text_scale * 2))), (255, 255, 255), text_scale * 1.2)
     ok, buffer = cv2.imencode(".jpg", canvas, [cv2.IMWRITE_JPEG_QUALITY, 82])
     if not ok:
         raise RuntimeError("No se pudo codificar el overlay")

@@ -1,26 +1,32 @@
-import { kitManifest } from '@/lib/server/assets';
+import { kitTexts } from '@tactiloom/board-kit/browser';
+import { kitZipName } from '@tactiloom/board-kit/manifest';
+import { DEFAULT_LOCALE } from '@tactiloom/contracts';
+import { localeFromRequest } from '@/lib/i18n/server';
+import { kitDownloadUrl, kitFiles, kitIndex, type KitIndexEntry } from '@/lib/server/assets';
 import { handler, ok } from '@/lib/server/http';
 
-export const GET = handler(async (_request, _context: unknown, requestId) => {
-  const manifest = await kitManifest();
+/** The kit in the language of the request (cookie, then Accept-Language): files, ZIP and instructions. */
+export const GET = handler(async (request, _context: unknown, requestId) => {
+  const locale = localeFromRequest(request);
+  const [{ kitVersion }, files] = await Promise.all([kitIndex(), kitFiles(locale)]);
+  const view = (file: KitIndexEntry) => ({
+    path: file.name,
+    locale: file.locale,
+    description: file.description,
+    bytes: file.bytes,
+    sha256: file.sha256,
+    url: kitDownloadUrl(locale, file.name),
+  });
   return ok(
     {
-      kitVersion: manifest.kitVersion,
-      files: manifest.files.filter((file) => !file.path.startsWith('cards/')).map((file) => ({
-        ...file,
-        url: `/api/board/kit/download?file=${encodeURIComponent(file.path)}`,
-      })),
-      cards: manifest.files.filter((file) => file.path.startsWith('cards/')).map((file) => ({
-        ...file,
-        url: `/api/board/kit/download?file=${encodeURIComponent(file.path)}`,
-      })),
-      zipUrl: '/api/board/kit/download?file=tactiloom-board-kit.zip',
-      instructionsEs: [
-        'Imprime board-v1-a3.pdf en A3 horizontal al 100 % (o el mosaico de 4 hojas A4, o la versión reducida A4).',
-        'Imprime cards-v1-a4.pdf al 100 % y recorta por el borde gris (usa cards-v1-small-a4.pdf con el tablero reducido).',
-        'Comprueba la barra de verificación: 100 mm en el tablero A3 / mosaico, 70,7 mm en el reducido.',
-        'Coloca una tarjeta por casilla; la flecha impresa indica el flujo. Los 4 marcadores de esquina deben verse en la foto.',
-      ],
+      kitVersion,
+      locale,
+      files: files.filter((file) => !file.name.startsWith('cards/')).map(view),
+      cards: files.filter((file) => file.name.startsWith('cards/')).map(view),
+      zipUrl: kitDownloadUrl(locale, kitZipName(locale)),
+      instructions: kitTexts(locale).instructions,
+      // Deprecated: Spanish copy kept for clients typed against the previous response; use `instructions`.
+      instructionsEs: kitTexts(DEFAULT_LOCALE).instructions,
     },
     requestId,
   );

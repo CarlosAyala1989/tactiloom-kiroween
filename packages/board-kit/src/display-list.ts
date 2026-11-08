@@ -75,3 +75,8 @@ export interface Drawing {
 export function translate(items: readonly Primitive[], x: number, y: number, scale = 1, id?: string): Primitive {
   return id === undefined ? { type: 'group', x, y, scale, items } : { type: 'group', x, y, scale, items, id };
 }
+
+/** Every text string of a display list, groups included (in drawing order). */
+export function collectTexts(items: readonly Primitive[]): string[] {
+  return items.flatMap((item) => (item.type === 'text' ? [item.text] : item.type === 'group' ? collectTexts(item.items) : []));
+}

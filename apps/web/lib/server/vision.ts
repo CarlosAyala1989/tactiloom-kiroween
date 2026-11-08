@@ -1,19 +1,24 @@
 import 'server-only';
-import { DetectionResultSchema, type DetectionResult } from '@tactiloom/contracts';
+import { DetectionResultSchema, type DetectionResult, type Locale } from '@tactiloom/contracts';
 import { env } from './env';
 import { HttpError } from './http';
 
-/** Calls the private vision service. The Node side validates the response against the contract too. */
+/**
+ * Calls the private vision service. The Node side validates the response against the contract too.
+ * `locale` only changes the overlay texts; diagnostics stay canonical (Spanish message + params).
+ */
 export async function analyzeWithVision(
   bytes: Uint8Array,
   filename: string,
   mime: string,
   sourceMode: 'physical' | 'image',
   requestId: string,
+  locale: Locale = 'es',
 ): Promise<DetectionResult> {
   const form = new FormData();
   form.append('image', new Blob([new Uint8Array(bytes)], { type: mime }), filename);
   form.append('sourceMode', sourceMode);
+  form.append('locale', locale);
   const token = env().VISION_INTERNAL_TOKEN;
   let response: Response;
   try {

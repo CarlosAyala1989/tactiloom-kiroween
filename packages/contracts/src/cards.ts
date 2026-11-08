@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Locale } from './locales';
 
 export const CARD_KINDS = [
   'START',
@@ -197,4 +198,63 @@ export const FIELD_LABELS_ES: Readonly<Record<FieldId, string>> = {
   name: 'Nombre',
   email: 'Correo',
   workshop: 'Taller',
+};
+
+/**
+ * Titles printed on the physical cards, per language (uppercase; every character must be encodable
+ * in WinAnsi, the encoding of the standard PDF fonts). The board kit and the UI share them.
+ */
+export const CARD_PRINTED_TITLES: Readonly<Record<Locale, Readonly<Record<CardKind, string>>>> = {
+  es: {
+    START: 'INICIO',
+    INPUT_FILE: 'ARCHIVO',
+    EXTRACT_TEXT: 'EXTRAER TEXTO',
+    VALIDATE_FIELDS: 'VALIDAR CAMPOS',
+    CONDITION: 'CONDICIÓN',
+    CREATE_REPORT: 'CREAR REPORTE',
+    SAVE_REPORT: 'GUARDAR REPORTE',
+    REQUEST_REVIEW: 'PEDIR REVISIÓN',
+    END: 'FIN',
+  },
+  en: {
+    START: 'START',
+    INPUT_FILE: 'FILE',
+    EXTRACT_TEXT: 'EXTRACT TEXT',
+    VALIDATE_FIELDS: 'VALIDATE FIELDS',
+    CONDITION: 'CONDITION',
+    CREATE_REPORT: 'CREATE REPORT',
+    SAVE_REPORT: 'SAVE REPORT',
+    REQUEST_REVIEW: 'REQUEST REVIEW',
+    END: 'END',
+  },
+  it: {
+    START: 'INIZIO',
+    INPUT_FILE: 'FILE',
+    EXTRACT_TEXT: 'ESTRAI TESTO',
+    VALIDATE_FIELDS: 'CONVALIDA CAMPI',
+    CONDITION: 'CONDIZIONE',
+    CREATE_REPORT: 'CREA REPORT',
+    SAVE_REPORT: 'SALVA REPORT',
+    REQUEST_REVIEW: 'CHIEDI REVISIONE',
+    END: 'FINE',
+  },
+  fr: {
+    START: 'DÉBUT',
+    INPUT_FILE: 'FICHIER',
+    EXTRACT_TEXT: 'EXTRAIRE TEXTE',
+    VALIDATE_FIELDS: 'VALIDER CHAMPS',
+    CONDITION: 'CONDITION',
+    CREATE_REPORT: 'CRÉER RAPPORT',
+    SAVE_REPORT: 'ENREGISTRER RAPPORT',
+    REQUEST_REVIEW: 'DEMANDER RÉVISION',
+    END: 'FIN',
+  },
+};
+
+/** Branch labels printed on CONDITION cards (TRUE follows the arrow, FALSE turns right). */
+export const BRANCH_LABELS: Readonly<Record<Locale, Readonly<{ TRUE: string; FALSE: string }>>> = {
+  es: { TRUE: 'SÍ', FALSE: 'NO' },
+  en: { TRUE: 'YES', FALSE: 'NO' },
+  it: { TRUE: 'SÌ', FALSE: 'NO' },
+  fr: { TRUE: 'OUI', FALSE: 'NON' },
 };

@@ -1,7 +1,7 @@
 'use client';
 
-import { DIAGNOSTIC_TITLES_ES, type Diagnostic } from '@tactiloom/contracts';
-import { es } from '@/lib/i18n/es';
+import type { Diagnostic } from '@tactiloom/contracts';
+import { useI18n } from '@/lib/i18n/provider';
 
 const ICON: Record<Diagnostic['severity'], string> = { error: '✕', warning: '!', info: 'i' };
 const STYLE: Record<Diagnostic['severity'], string> = {
@@ -27,42 +27,65 @@ const PRIORITY: Partial<Record<Diagnostic['code'], number>> = {
 };
 const priority = (d: Diagnostic) => (d.stage === 'vision' ? 0 : (PRIORITY[d.code] ?? 2));
 
-function DiagnosticBody({ diagnostic }: { diagnostic: Diagnostic }) {
+/** Marks Spanish fallback texts (stored before structured params existed) with the right `lang`. */
+function Localized({ text, fallback }: { text: string; fallback: boolean }) {
+  const { t } = useI18n();
+  if (!fallback) return <>{text}</>;
   return (
     <>
-      <p className="mt-1">{diagnostic.message}</p>
+      <span lang="es">{text}</span> <span className="text-xs text-muted">({t.diagnostics.ui.originalSpanish})</span>
+    </>
+  );
+}
+
+function DiagnosticBody({ diagnostic }: { diagnostic: Diagnostic }) {
+  const { t, diagnostic: localize } = useI18n();
+  const text = localize(diagnostic);
+  const ui = t.diagnostics.ui;
+  return (
+    <>
+      <p className="mt-1">
+        <Localized text={text.message} fallback={text.fallback} />
+      </p>
       {(diagnostic.markerIds?.length || diagnostic.cells?.length) && (
         <p className="mt-1 text-xs text-muted">
-          {diagnostic.markerIds?.length ? `Tarjetas: ${diagnostic.markerIds.map((id) => `#${id}`).join(', ')}` : ''}
+          {diagnostic.markerIds?.length ? `${ui.cards}: ${diagnostic.markerIds.map((id) => `#${id}`).join(', ')}` : ''}
           {diagnostic.markerIds?.length && diagnostic.cells?.length ? ' · ' : ''}
-          {diagnostic.cells?.length ? `Casillas (fila,col): ${diagnostic.cells.map((c) => `(${c.row},${c.col})`).join(', ')}` : ''}
+          {diagnostic.cells?.length ? `${ui.cells}: ${diagnostic.cells.map((c) => `(${c.row},${c.col})`).join(', ')}` : ''}
         </p>
       )}
-      {diagnostic.suggestion && <p className="mt-1 text-xs">→ {diagnostic.suggestion}</p>}
+      {text.suggestion && (
+        <p className="mt-1 text-xs">
+          → <Localized text={text.suggestion} fallback={text.fallback} />
+        </p>
+      )}
     </>
   );
 }
 
 function Header({ diagnostic, count }: { diagnostic: Diagnostic; count: number }) {
+  const { t, diagnostic: localize } = useI18n();
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span aria-hidden="true" className="font-bold">
         {ICON[diagnostic.severity]}
       </span>
-      <span className="font-semibold">{es.severity[diagnostic.severity]}:</span>
+      <span className="font-semibold">{t.severity[diagnostic.severity]}:</span>
       <span>
-        {DIAGNOSTIC_TITLES_ES[diagnostic.code] ?? diagnostic.code}
+        {localize(diagnostic).title}
         {count > 1 ? ` (×${count})` : ''}
       </span>
       <code className="mono text-xs text-muted">{diagnostic.code}</code>
-      <span className="text-xs text-muted">({diagnostic.stage === 'vision' ? 'visión' : diagnostic.stage === 'compiler' ? 'compilador' : 'ejecución'})</span>
+      <span className="text-xs text-muted">({t.stage[diagnostic.stage]})</span>
     </div>
   );
 }
 
 /** Explains what happened, where (card #id, row/col) and how to fix it — never colour only. */
-export function DiagnosticsList({ diagnostics, emptyText = 'Sin diagnósticos.' }: { diagnostics: readonly Diagnostic[]; emptyText?: string }) {
-  if (diagnostics.length === 0) return <p className="text-sm text-ok">✓ {emptyText}</p>;
+export function DiagnosticsList({ diagnostics, emptyText }: { diagnostics: readonly Diagnostic[]; emptyText?: string }) {
+  const { t, diagnostic: localize } = useI18n();
+  const ui = t.diagnostics.ui;
+  if (diagnostics.length === 0) return <p className="text-sm text-ok">✓ {emptyText ?? ui.empty}</p>;
   const ordered = diagnostics
     .map((diagnostic, index) => ({ diagnostic, index }))
     .sort((a, b) => SEVERITY_RANK[a.diagnostic.severity] - SEVERITY_RANK[b.diagnostic.severity] || priority(a.diagnostic) - priority(b.diagnostic) || a.index - b.index)
@@ -74,7 +97,7 @@ export function DiagnosticsList({ diagnostics, emptyText = 'Sin diagnósticos.' 
     else groups.push([diagnostic]);
   }
   return (
-    <ul className="space-y-2" aria-label="Diagnósticos">
+    <ul className="space-y-2" aria-label={ui.listLabel}>
       {groups.map((group, index) => {
         const first = group[0] as Diagnostic;
         if (group.length < 3) {
@@ -86,17 +109,27 @@ export function DiagnosticsList({ diagnostics, emptyText = 'Sin diagnósticos.' 
           ));
         }
         const markers = [...new Set(group.flatMap((d) => d.markerIds ?? []))];
+        const firstText = localize(first);
         return (
           <li key={`${first.code}-${index}`} className={`rounded-lg border px-3 py-2 text-sm ${STYLE[first.severity]}`} data-code={first.code}>
             <Header diagnostic={first} count={group.length} />
-            <p className="mt-1">Afecta a {markers.length > 0 ? markers.map((id) => `#${id}`).join(', ') : `${group.length} elementos`}. Suele ser consecuencia de los errores anteriores.</p>
-            {first.suggestion && <p className="mt-1 text-xs">→ {first.suggestion}</p>}
+            <p className="mt-1">{ui.affects(markers.length > 0 ? markers.map((id) => `#${id}`).join(', ') : ui.elements(group.length))}</p>
+            {firstText.suggestion && (
+              <p className="mt-1 text-xs">
+                → <Localized text={firstText.suggestion} fallback={firstText.fallback} />
+              </p>
+            )}
             <details className="mt-1">
-              <summary className="cursor-pointer text-xs text-muted">Ver los {group.length} mensajes</summary>
+              <summary className="cursor-pointer text-xs text-muted">{ui.showAll(group.length)}</summary>
               <ul className="mt-1 list-disc space-y-1 pl-5 text-xs">
-                {group.map((diagnostic, inner) => (
-                  <li key={inner}>{diagnostic.message}</li>
-                ))}
+                {group.map((diagnostic, inner) => {
+                  const text = localize(diagnostic);
+                  return (
+                    <li key={inner}>
+                      <Localized text={text.message} fallback={text.fallback} />
+                    </li>
+                  );
+                })}
               </ul>
             </details>
           </li>

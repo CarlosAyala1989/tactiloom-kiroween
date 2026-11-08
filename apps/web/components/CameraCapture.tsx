@@ -1,23 +1,28 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { es } from '@/lib/i18n/es';
+import { useI18n } from '@/lib/i18n/provider';
+
+/** Why the camera could not start (the text is looked up at render time, in the UI language). */
+type CameraError = 'unsupported' | 'denied' | 'notFound' | 'failed';
 
 /**
  * Explicit camera flow: nothing is accessed until the user presses "Activar cámara". Frames stay
  * in the browser until "Capturar" sends a single JPEG snapshot for analysis.
  */
 export function CameraCapture({ onCapture, busy }: { onCapture: (blob: Blob) => void; busy: boolean }) {
+  const { t } = useI18n();
+  const words = t.studio.camera;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<CameraError | null>(null);
 
   useEffect(() => () => stream?.getTracks().forEach((track) => track.stop()), [stream]);
 
   const start = async () => {
     setError(null);
     if (!navigator.mediaDevices?.getUserMedia) {
-      setError('Este navegador no permite usar la cámara (se requiere HTTPS o localhost). Sube una foto en la pestaña Imagen.');
+      setError('unsupported');
       return;
     }
     try {
@@ -32,13 +37,7 @@ export function CameraCapture({ onCapture, busy }: { onCapture: (blob: Blob) => 
       }
     } catch (cause) {
       const name = cause instanceof DOMException ? cause.name : '';
-      setError(
-        name === 'NotAllowedError'
-          ? 'Permiso de cámara denegado. Puedes concederlo en el navegador o subir una foto del tablero.'
-          : name === 'NotFoundError'
-            ? 'No se encontró ninguna cámara. Sube una foto del tablero o usa la galería.'
-            : 'No se pudo abrir la cámara. Sube una foto del tablero.',
-      );
+      setError(name === 'NotAllowedError' ? 'denied' : name === 'NotFoundError' ? 'notFound' : 'failed');
     }
   };
 
@@ -60,32 +59,32 @@ export function CameraCapture({ onCapture, busy }: { onCapture: (blob: Blob) => 
   return (
     <div className="space-y-3">
       <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
-        <li>Coloca la cámara lo más perpendicular posible al tablero, con todo el tablero en el encuadre.</li>
-        <li>Luz difusa, sin reflejos sobre los marcadores; las 4 esquinas (ID 0–3) deben verse completas.</li>
-        <li>Mover tarjetas nunca ejecuta nada: después de capturar, compilas, revisas y apruebas.</li>
+        <li>{words.tips.framing}</li>
+        <li>{words.tips.light}</li>
+        <li>{words.tips.safety}</li>
       </ul>
       <div className="relative overflow-hidden rounded-xl border border-ink-700 bg-ink-950">
-        <video ref={videoRef} playsInline muted className={`w-full ${stream ? '' : 'hidden'}`} aria-label="Vista previa de la cámara" />
+        <video ref={videoRef} playsInline muted className={`w-full ${stream ? '' : 'hidden'}`} aria-label={words.previewLabel} />
         {stream && <div aria-hidden="true" className="pointer-events-none absolute inset-[7%] rounded-lg border-2 border-dashed border-amber/70" />}
-        {!stream && <p className="p-8 text-center text-sm text-muted">La cámara está apagada.</p>}
+        {!stream && <p className="p-8 text-center text-sm text-muted">{words.off}</p>}
       </div>
       {error && (
         <p role="alert" className="text-sm text-err">
-          {error}
+          {words.errors[error]}
         </p>
       )}
       <div className="flex flex-wrap gap-2">
         {!stream ? (
           <button type="button" className="btn btn-primary" onClick={start}>
-            {es.actions.enableCamera}
+            {t.actions.enableCamera}
           </button>
         ) : (
           <>
             <button type="button" className="btn btn-primary" onClick={capture} disabled={busy}>
-              {busy ? 'Analizando…' : es.actions.capture}
+              {busy ? t.actions.analyzing : t.actions.capture}
             </button>
             <button type="button" className="btn" onClick={stop}>
-              {es.actions.stopCamera}
+              {t.actions.stopCamera}
             </button>
           </>
         )}

@@ -1,29 +1,34 @@
 import {
+  BRANCH_LABELS,
   CARD_KIND_SPECS,
+  CARD_PRINTED_TITLES,
+  DEFAULT_LOCALE,
   getBoardTemplate,
   type BoardTemplate,
   type CardCatalogEntry,
   type CardKind,
+  type Locale,
 } from '@tactiloom/contracts';
 import { markerModules } from './aruco';
 import type { Primitive } from './display-list';
 import { translate } from './display-list';
 import { CARD_ICONS } from './icons';
+import { fitTextSize, textWidthMm } from './metrics';
+import { kitTexts } from './texts';
 
-/** Printed titles (Spanish, WinAnsi-safe). Sizes are verified to fit by test/board-kit.test.ts. */
-export const CARD_TITLES: Readonly<Record<CardKind, string>> = {
-  START: 'INICIO',
-  INPUT_FILE: 'ARCHIVO',
-  EXTRACT_TEXT: 'EXTRAER TEXTO',
-  VALIDATE_FIELDS: 'VALIDAR CAMPOS',
-  CONDITION: 'CONDICIÓN',
-  CREATE_REPORT: 'CREAR REPORTE',
-  SAVE_REPORT: 'GUARDAR REPORTE',
-  REQUEST_REVIEW: 'PEDIR REVISIÓN',
-  END: 'FIN',
-};
+/** @deprecated Spanish only: use CARD_PRINTED_TITLES[locale] from @tactiloom/contracts. */
+export const CARD_TITLES: Readonly<Record<CardKind, string>> = CARD_PRINTED_TITLES.es;
 
+/** Preferred size of the card title; every Spanish title fits at this size. */
 export const TITLE_SIZE_MM = 2.4;
+/** Titles that do not fit shrink down to this size (75 %); a longer title is a build error. */
+export const TITLE_MIN_SIZE_MM = 1.8;
+/** Size of the "#NN" marker label in the card header. */
+export const ID_LABEL_SIZE_MM = 2.4;
+/** Distance from the card edges to the title (left) and to the "#NN" label (right). */
+export const HEADER_PADDING_MM = 2.2;
+/** Minimum free space between the end of the title and the "#NN" label. */
+export const TITLE_ID_GAP_MM = 1.8;
 export const INK = '#202124';
 export const MUTED = '#5f6368';
 
@@ -68,24 +73,59 @@ function sideLabel(text: string, x: number, y: number): Primitive {
   return { type: 'text', x, y, text, size: 1.9, weight: 'bold', anchor: 'middle', fill: MUTED };
 }
 
+/** Width available to the title of card `markerId`: from the left padding to the "#NN" label minus the gap. */
+export function cardTitleMaxWidth(markerId: number, template: BoardTemplate = getBoardTemplate()): number {
+  const idLabel = textWidthMm(`#${markerId}`, ID_LABEL_SIZE_MM, 'bold');
+  return template.card.width - 2 * HEADER_PADDING_MM - idLabel - TITLE_ID_GAP_MM;
+}
+
+/**
+ * Font size of a card title measured with the real Helvetica-Bold metrics: TITLE_SIZE_MM when it fits,
+ * otherwise shrunk (never below TITLE_MIN_SIZE_MM). The PDF and the SVG draw the same display list,
+ * so both use this size.
+ */
+export function cardTitleSize(title: string, markerId: number, template: BoardTemplate = getBoardTemplate()): number {
+  return fitTextSize(title, 'bold', cardTitleMaxWidth(markerId, template), TITLE_SIZE_MM, TITLE_MIN_SIZE_MM);
+}
+
 /**
  * Card face in its own frame (mm, upright). The printed arrow points right: when the card is
  * upright on the board its forward direction F is East. The marker is drawn upright, so the
  * marker's +x axis (corner0 → corner1) equals F — this is what the vision service measures.
  */
-export function cardItems(entry: CardCatalogEntry, template: BoardTemplate = getBoardTemplate()): Primitive[] {
+export function cardItems(entry: CardCatalogEntry, locale: Locale = DEFAULT_LOCALE, template: BoardTemplate = getBoardTemplate()): Primitive[] {
   const { width: W, height: H, cornerRadius, markerSize, markerCenter } = template.card;
   const spec = CARD_KIND_SPECS[entry.kind];
   const color = spec.color;
+  const title = CARD_PRINTED_TITLES[locale][entry.kind];
+  const branch = BRANCH_LABELS[locale];
   const markerX = markerCenter.x - markerSize / 2;
   const markerY = markerCenter.y - markerSize / 2;
   const sideY = markerCenter.y + 0.7;
   const items: Primitive[] = [
     { type: 'rect', x: 0, y: 0, width: W, height: H, fill: '#ffffff', stroke: '#9aa0a6', strokeWidth: 0.25, radius: cornerRadius },
     { type: 'rect', x: 0.8, y: 0.8, width: W - 1.6, height: 8.4, fill: color, radius: Math.max(cornerRadius - 0.8, 0.5) },
-    { type: 'text', x: 2.2, y: 5.0, text: CARD_TITLES[entry.kind], size: TITLE_SIZE_MM, weight: 'bold', anchor: 'start', fill: '#ffffff' },
-    { type: 'text', x: 2.2, y: 8.0, text: entry.kind, size: 1.5, weight: 'regular', anchor: 'start', fill: '#ffffff' },
-    { type: 'text', x: W - 2.2, y: 5.0, text: `#${entry.markerId}`, size: 2.4, weight: 'bold', anchor: 'end', fill: '#ffffff' },
+    {
+      type: 'text',
+      x: HEADER_PADDING_MM,
+      y: 5.0,
+      text: title,
+      size: cardTitleSize(title, entry.markerId, template),
+      weight: 'bold',
+      anchor: 'start',
+      fill: '#ffffff',
+    },
+    { type: 'text', x: HEADER_PADDING_MM, y: 8.0, text: entry.kind, size: 1.5, weight: 'regular', anchor: 'start', fill: '#ffffff' },
+    {
+      type: 'text',
+      x: W - HEADER_PADDING_MM,
+      y: 5.0,
+      text: `#${entry.markerId}`,
+      size: ID_LABEL_SIZE_MM,
+      weight: 'bold',
+      anchor: 'end',
+      fill: '#ffffff',
+    },
     { type: 'marker', x: markerX, y: markerY, size: markerSize, modules: markerModules(entry.markerId), markerId: entry.markerId },
   ];
 
@@ -98,9 +138,9 @@ export function cardItems(entry: CardCatalogEntry, template: BoardTemplate = get
 
   switch (entry.kind) {
     case 'CONDITION': {
-      items.push(sideLabel('SÍ', W - 3.0, sideY - 1.6), arrowRight(W - 4.7, sideY + 1.4, 3.4, color, 0.35, 1.0));
+      items.push(sideLabel(branch.TRUE, W - 3.0, sideY - 1.6), arrowRight(W - 4.7, sideY + 1.4, 3.4, color, 0.35, 1.0));
       items.push(
-        { type: 'text', x: 25.2, y: 46.6, text: 'NO', size: 2.8, weight: 'bold', anchor: 'end', fill: color },
+        { type: 'text', x: 25.2, y: 46.6, text: branch.FALSE, size: 2.8, weight: 'bold', anchor: 'end', fill: color },
         arrowDown(28.8, 39.4, 10.8, color, 0.75, 2.2),
       );
       break;
@@ -126,19 +166,20 @@ export function cardItems(entry: CardCatalogEntry, template: BoardTemplate = get
 export type BoardVariant = 'full' | 'small';
 
 /** Full board page in A3 millimetres (variant only changes the scale verification label). */
-export function boardItems(variant: BoardVariant = 'full', template: BoardTemplate = getBoardTemplate()): Primitive[] {
+export function boardItems(variant: BoardVariant = 'full', locale: Locale = DEFAULT_LOCALE, template: BoardTemplate = getBoardTemplate()): Primitive[] {
   const { grid, columns, rows, page } = template;
+  const texts = kitTexts(locale).board;
   const gridWidth = columns * grid.cellWidth;
   const gridHeight = rows * grid.cellHeight;
   const items: Primitive[] = [{ type: 'rect', x: 0, y: 0, width: page.width, height: page.height, fill: '#ffffff' }];
 
   items.push(
-    { type: 'text', x: page.width / 2, y: 17.5, text: 'Tactiloom · Board v1', size: 6, weight: 'bold', anchor: 'middle', fill: INK },
+    { type: 'text', x: page.width / 2, y: 17.5, text: texts.title, size: 6, weight: 'bold', anchor: 'middle', fill: INK },
     {
       type: 'text',
       x: page.width / 2,
       y: 24,
-      text: '8 × 4 casillas · ArUco DICT_4X4_100 · fiduciales 0, 1, 2, 3 · tarjetas #10–#89',
+      text: texts.subtitle,
       size: 2.8,
       weight: 'regular',
       anchor: 'middle',
@@ -169,10 +210,10 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
     items.push({ type: 'line', x1: grid.x, y1: y, x2: grid.x + gridWidth, y2: y, stroke: '#8a8f94', strokeWidth: row === 0 || row === rows ? 0.6 : 0.35 });
   }
   for (let col = 0; col < columns; col += 1) {
-    items.push({ type: 'text', x: grid.x + (col + 0.5) * grid.cellWidth, y: grid.y - 1.6, text: `col ${col}`, size: 2.4, weight: 'bold', anchor: 'middle', fill: MUTED });
+    items.push({ type: 'text', x: grid.x + (col + 0.5) * grid.cellWidth, y: grid.y - 1.6, text: texts.column(col), size: 2.4, weight: 'bold', anchor: 'middle', fill: MUTED });
   }
   for (let row = 0; row < rows; row += 1) {
-    items.push({ type: 'text', x: grid.x - 4.8, y: grid.y + (row + 0.5) * grid.cellHeight + 0.9, text: `F${row}`, size: 2.6, weight: 'bold', anchor: 'middle', fill: MUTED });
+    items.push({ type: 'text', x: grid.x - 4.8, y: grid.y + (row + 0.5) * grid.cellHeight + 0.9, text: `${texts.rowPrefix}${row}`, size: 2.6, weight: 'bold', anchor: 'middle', fill: MUTED });
   }
 
   // Fiducials (IDs 0..3, outside the cells) with labels outside their quiet zone.
@@ -203,6 +244,8 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
   // Scale verification bar (100 mm at 100 % print scale).
   const barY = 268.5;
   const barX = page.width / 2 - 50;
+  const condition = CARD_PRINTED_TITLES[locale].CONDITION;
+  const branch = BRANCH_LABELS[locale];
   items.push(
     { type: 'line', x1: barX, y1: barY, x2: barX + 100, y2: barY, stroke: INK, strokeWidth: 0.5 },
     { type: 'line', x1: barX, y1: barY - 1.5, x2: barX, y2: barY + 1.5, stroke: INK, strokeWidth: 0.5 },
@@ -211,10 +254,7 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
       type: 'text',
       x: page.width / 2,
       y: barY + 5,
-      text:
-        variant === 'full'
-          ? 'Verificación: esta barra mide 100 mm si imprimiste al 100 % (A3 horizontal).'
-          : 'Versión reducida A4 (escala 0,707): esta barra mide 70,7 mm. Usa las tarjetas reducidas.',
+      text: variant === 'full' ? texts.scaleFull : texts.scaleSmall,
       size: 2.4,
       weight: 'regular',
       anchor: 'middle',
@@ -224,7 +264,7 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
       type: 'text',
       x: page.width / 2,
       y: 281,
-      text: 'Una tarjeta por casilla. La flecha impresa indica el flujo; cada tarjeta recibe por su lado trasero (IN).',
+      text: texts.placementRule,
       size: 2.8,
       weight: 'regular',
       anchor: 'middle',
@@ -234,7 +274,7 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
       type: 'text',
       x: page.width / 2,
       y: 286.5,
-      text: 'CONDICIÓN: SÍ sigue la flecha, NO gira 90° a la derecha. Los 4 marcadores de esquina deben verse en la foto.',
+      text: texts.conditionRule(condition, branch.TRUE, branch.FALSE),
       size: 2.8,
       weight: 'regular',
       anchor: 'middle',
@@ -242,6 +282,66 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
     },
   );
   return items;
+}
+
+/** Placement of the A3 board quadrants on four A4 landscape tiles (mm, 1:1 scale). */
+export interface TileGeometry {
+  readonly pageWidth: number;
+  readonly pageHeight: number;
+  readonly quadWidth: number;
+  readonly quadHeight: number;
+  /** Top-left corner of the quadrant on the tile page. */
+  readonly offsetX: number;
+  readonly offsetY: number;
+}
+
+export function boardTileGeometry(template: BoardTemplate = getBoardTemplate()): TileGeometry {
+  const pageWidth = 297;
+  const pageHeight = 210;
+  const quadWidth = template.page.width / 2;
+  const quadHeight = template.page.height / 2;
+  return {
+    pageWidth,
+    pageHeight,
+    quadWidth,
+    quadHeight,
+    offsetX: (pageWidth - quadWidth) / 2,
+    offsetY: (pageHeight - quadHeight) / 2 + 4,
+  };
+}
+
+/** Crop marks and label drawn over tile `index` (0-based, print order). */
+export function tileOverlayItems(index: number, locale: Locale = DEFAULT_LOCALE, template: BoardTemplate = getBoardTemplate()): Primitive[] {
+  const { pageWidth, offsetX, offsetY, quadWidth, quadHeight } = boardTileGeometry(template);
+  const tiles = kitTexts(locale).tiles;
+  const marks: Primitive[] = [];
+  const corners = [
+    [offsetX, offsetY],
+    [offsetX + quadWidth, offsetY],
+    [offsetX, offsetY + quadHeight],
+    [offsetX + quadWidth, offsetY + quadHeight],
+  ] as const;
+  for (const [cx, cy] of corners) {
+    const dirX = cx === offsetX ? -1 : 1;
+    const dirY = cy === offsetY ? -1 : 1;
+    marks.push(
+      { type: 'line', x1: cx + dirX * 2, y1: cy, x2: cx + dirX * 8, y2: cy, stroke: '#000000', strokeWidth: 0.25 },
+      { type: 'line', x1: cx, y1: cy + dirY * 2, x2: cx, y2: cy + dirY * 8, stroke: '#000000', strokeWidth: 0.25 },
+    );
+  }
+  const name = tiles.names[index];
+  if (name === undefined) throw new RangeError(`El mosaico solo tiene 4 hojas (índice ${index})`);
+  marks.push({
+    type: 'text',
+    x: pageWidth / 2,
+    y: 8,
+    text: tiles.label(index + 1, name),
+    size: 2.6,
+    weight: 'regular',
+    anchor: 'middle',
+    fill: MUTED,
+  });
+  return marks;
 }
 
 export interface CardSheetSlot {
@@ -261,7 +361,7 @@ export interface CardSheetLayout {
   readonly slots: readonly CardSheetSlot[];
 }
 
-/** Lays out cards on A4 portrait pages (mm). `scale` < 1 produces the reduced kit. */
+/** Lays out cards on A4 portrait pages (mm). `scale` < 1 produces the reduced kit. Same in every language. */
 export function layoutCardSheets(entries: readonly CardCatalogEntry[], scale = 1, template: BoardTemplate = getBoardTemplate()): CardSheetLayout {
   const pageWidth = 210;
   const pageHeight = 297;
@@ -297,6 +397,7 @@ export function cardSheetPageItems(
   layout: CardSheetLayout,
   page: number,
   entries: readonly CardCatalogEntry[],
+  locale: Locale = DEFAULT_LOCALE,
   template: BoardTemplate = getBoardTemplate(),
 ): Primitive[] {
   const byMarker = new Map(entries.map((entry) => [entry.markerId, entry]));
@@ -306,7 +407,7 @@ export function cardSheetPageItems(
       type: 'text',
       x: layout.pageWidth / 2,
       y: 8.5,
-      text: `Tactiloom · tarjetas cards-v1 · hoja ${page + 1}/${layout.pages}${layout.scale < 1 ? ' · versión reducida' : ''} · recorta por el borde gris`,
+      text: kitTexts(locale).sheet.header(page + 1, layout.pages, layout.scale < 1),
       size: 2.6,
       weight: 'regular',
       anchor: 'middle',
@@ -316,7 +417,7 @@ export function cardSheetPageItems(
   for (const slot of layout.slots.filter((candidate) => candidate.page === page)) {
     const entry = byMarker.get(slot.markerId);
     if (!entry) continue;
-    items.push(translate(cardItems(entry, template), slot.x, slot.y, layout.scale, `card-${entry.markerId}`));
+    items.push(translate(cardItems(entry, locale, template), slot.x, slot.y, layout.scale, `card-${entry.markerId}`));
   }
   return items;
 }

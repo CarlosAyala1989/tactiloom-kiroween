@@ -20,6 +20,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from . import DETECTOR_VERSION, config
 from .detector import analyze_image, new_request_id
+from .i18n import DEFAULT_LOCALE, LOCALES
 from .imaging import ImageRejectedError, decode_image
 from .models import DetectionResult
 
@@ -149,6 +150,7 @@ async def analyze(
     request: Request,
     image: Annotated[UploadFile, File()],
     sourceMode: Annotated[str, Form()] = "image",  # noqa: N803 - contract field name
+    locale: Annotated[str, Form()] = DEFAULT_LOCALE,
 ) -> JSONResponse:
     request_id = _request_id(request)
     started = time.perf_counter()
@@ -158,6 +160,8 @@ async def analyze(
             return error_response(401, "UNAUTHORIZED", "Token interno inválido.", request_id)
     if sourceMode not in ("physical", "image"):
         return error_response(400, "BAD_REQUEST", "sourceMode debe ser 'physical' o 'image'.", request_id)
+    if locale not in LOCALES:
+        return error_response(400, "BAD_REQUEST", "locale debe ser 'es', 'en', 'it' o 'fr'.", request_id)
     data = await image.read(config.MAX_UPLOAD_BYTES + 1)
     await image.close()
     try:
@@ -174,7 +178,7 @@ async def analyze(
             log_event(event="analyze.rejected", requestId=request_id, code=rejected.code, bytes=len(data))
             return error_response(rejected.status, rejected.code, rejected.message, request_id)
         result = await run_in_threadpool(
-            analyze_image, decoded, request_id=request_id, source_mode=sourceMode, decode_ms=decode_ms
+            analyze_image, decoded, request_id=request_id, source_mode=sourceMode, decode_ms=decode_ms, locale=locale
         )
     finally:
         _semaphore.release()

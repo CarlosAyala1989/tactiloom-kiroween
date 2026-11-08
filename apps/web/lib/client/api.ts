@@ -1,6 +1,6 @@
 'use client';
 
-import type { BoardState, Diagnostic, DetectionResult, ExecutionPlan, IrEdge, RunStatus, WorkflowIR } from '@tactiloom/contracts';
+import type { BoardState, Diagnostic, DetectionResult, ExecutionPlan, IrEdge, Locale, RunStatus, WorkflowIR } from '@tactiloom/contracts';
 
 export class ApiError extends Error {
   constructor(
@@ -179,8 +179,18 @@ export const api = {
       catalog: { cards: { markerId: number; kind: GraphNodeView['kind']; cardInstanceId: string; set: string; enabled: boolean }[] };
       kinds: { kind: GraphNodeView['kind']; labelEs: string; color: string; descriptionEs: string; effectEs: string; params: { key: string; labelEs: string; control: string; helpEs?: string; options?: { value: string; labelEs: string }[] }[] }[];
     }>('/api/catalog/cards'),
+  /** The kit of the request language (locale cookie, then Accept-Language). */
   kit: () =>
-    request<{ kitVersion: string; files: { path: string; description: string; bytes: number; sha256: string; url: string }[]; cards: { path: string; url: string }[]; zipUrl: string; instructionsEs: string[] }>('/api/board/kit'),
+    request<{
+      kitVersion: string;
+      locale: Locale;
+      files: { path: string; locale: Locale; description: string; bytes: number; sha256: string; url: string }[];
+      cards: { path: string; url: string }[];
+      zipUrl: string;
+      instructions: string[];
+      /** @deprecated Spanish instructions kept for older clients; use `instructions`. */
+      instructionsEs: string[];
+    }>('/api/board/kit'),
   analyze: (form: FormData) => request<AnalyzeResponse>('/api/board/analyze', { method: 'POST', body: form }),
   compile: (body: { captureId: string; params: Params } | { boardState: BoardState; params: Params }) => request<CompileView>('/api/workflows/compile', jsonInit('POST', body)),
   createVersion: (body: ({ captureId: string } | { boardState: BoardState }) & { params: Params; workflowId?: string; name?: string }) =>

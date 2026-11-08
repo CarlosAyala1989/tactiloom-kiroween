@@ -1,53 +1,59 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
-import { api, ApiError, type DocumentView } from '@/lib/client/api';
-import { formatBytes } from './ui';
+import { api, type DocumentView } from '@/lib/client/api';
+import { useI18n } from '@/lib/i18n/provider';
+
+/** The cause is kept (not its text) so the message follows the UI language. */
+type Failure = { readonly cause: unknown; readonly fallback: 'loadFailed' | 'uploadFailed' };
 
 /** Picks a document of the current workspace (or uploads one: PDF with text layer or TXT, ≤ 10 MB). */
-export function DocumentSelect({ value, onChange, label = 'Documento de entrada (tarjeta ARCHIVO)' }: { value: string | null; onChange: (id: string | null) => void; label?: string }) {
+export function DocumentSelect({ value, onChange, label }: { value: string | null; onChange: (id: string | null) => void; label?: string }) {
   const id = useId();
+  const { t, bytes, errorText } = useI18n();
+  const words = t.workflow.documents;
   const [documents, setDocuments] = useState<DocumentView[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [failure, setFailure] = useState<Failure | null>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     api
       .documents()
       .then((result) => setDocuments(result.documents))
-      .catch((cause) => setError(cause instanceof ApiError ? cause.message : 'No se pudieron cargar los documentos.'));
+      .catch((cause: unknown) => setFailure({ cause, fallback: 'loadFailed' }));
   }, []);
 
   const upload = async (file: File) => {
     setUploading(true);
-    setError(null);
+    setFailure(null);
     try {
       const { document } = await api.upload(file);
       setDocuments((current) => [...current, document]);
       onChange(document.id);
     } catch (cause) {
-      setError(cause instanceof ApiError ? cause.message : 'No se pudo subir el archivo.');
+      setFailure({ cause, fallback: 'uploadFailed' });
     } finally {
       setUploading(false);
     }
   };
 
+  const error = failure ? errorText(failure.cause, words[failure.fallback]) : null;
   return (
     <div className="space-y-2">
       <label htmlFor={id} className="block text-sm font-semibold">
-        {label}
+        {label ?? words.label(t.catalog.short.INPUT_FILE)}
       </label>
       <select id={id} className="field" value={value ?? ''} onChange={(event) => onChange(event.target.value || null)}>
-        <option value="">— Sin documento (se pedirá antes de ejecutar) —</option>
+        <option value="">{words.none}</option>
         {documents.map((doc) => (
           <option key={doc.id} value={doc.id}>
-            {doc.isDemo ? '[demo] ' : ''}
-            {doc.originalName} · {doc.mime === 'application/pdf' ? 'PDF' : 'TXT'} · {formatBytes(doc.bytes)}
+            {doc.isDemo ? `[${t.demo}] ` : ''}
+            {doc.originalName} · {doc.mime === 'application/pdf' ? 'PDF' : 'TXT'} · {bytes(doc.bytes)}
           </option>
         ))}
       </select>
       <label className="block text-xs text-muted">
-        o sube tu propio documento ficticio:{' '}
+        {words.uploadOwn}{' '}
         <input
           type="file"
           accept="application/pdf,text/plain,.pdf,.txt"
@@ -60,7 +66,7 @@ export function DocumentSelect({ value, onChange, label = 'Documento de entrada 
           }}
         />
       </label>
-      {uploading && <p className="text-xs text-muted">Subiendo…</p>}
+      {uploading && <p className="text-xs text-muted">{words.uploading}</p>}
       {error && (
         <p role="alert" className="text-xs text-err">
           {error}

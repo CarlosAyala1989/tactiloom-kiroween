@@ -7,7 +7,7 @@ import { BoardGrid, CardTile, type BoardCardView } from '@/components/BoardGrid'
 import { CompilePanel } from '@/components/CompilePanel';
 import { SessionGate } from '@/components/SessionProvider';
 import { Section } from '@/components/ui';
-import { es } from '@/lib/i18n/es';
+import { useI18n } from '@/lib/i18n/provider';
 
 const CATALOG = getCardCatalog().cards.filter((card) => card.enabled);
 const KIND_OF = new Map(CATALOG.map((card) => [card.markerId, card.kind]));
@@ -21,6 +21,8 @@ const DELTA: Record<string, [number, number]> = { ArrowUp: [-1, 0], ArrowDown: [
 const CONSEQUENCE_CODES = new Set(['UNREACHABLE_NODE', 'NONTERMINATING_PATH']);
 
 function Simulator() {
+  const { t } = useI18n();
+  const words = t.studio.simulator;
   const [cards, setCards] = useState<BoardCardView[]>(() => fromLayout(OFFICIAL_TWO_BRANCH_LAYOUT));
   const [selected, setSelected] = useState<{ from: 'palette' | 'board'; markerId: number } | null>(null);
   const [announcement, setAnnouncement] = useState('');
@@ -46,7 +48,7 @@ function Simulator() {
   const place = (markerId: number, row: number, col: number) => {
     const target = occupied(row, col);
     if (target && target.markerId !== markerId) {
-      announce(`La casilla (${row},${col}) ya tiene la tarjeta #${target.markerId}.`);
+      announce(words.announce.occupied(row, col, target.markerId));
       return;
     }
     setCards((current) => {
@@ -55,25 +57,25 @@ function Simulator() {
       return [...current, { markerId, row, col, orientation: 'E' as Orientation, kind: KIND_OF.get(markerId) as CardKind }];
     });
     setSelected({ from: 'board', markerId });
-    announce(`Tarjeta #${markerId} colocada en (${row},${col}).`);
+    announce(words.announce.placed(markerId, row, col));
   };
 
   const rotate = (markerId: number) => {
     setCards((current) => current.map((card) => (card.markerId === markerId ? { ...card, orientation: rotateClockwise(card.orientation) } : card)));
     const card = cards.find((c) => c.markerId === markerId);
-    if (card) announce(`Tarjeta #${markerId} ahora apunta al ${es.orientation[rotateClockwise(card.orientation)]}.`);
+    if (card) announce(words.announce.rotated(markerId, rotateClockwise(card.orientation)));
   };
 
   const remove = (markerId: number) => {
     setCards((current) => current.filter((card) => card.markerId !== markerId));
     setSelected(null);
-    announce(`Tarjeta #${markerId} retirada del tablero.`);
+    announce(words.announce.removed(markerId));
   };
 
   const onCellActivate = (row: number, col: number, card: BoardCardView | undefined) => {
     if (card) {
       setSelected({ from: 'board', markerId: card.markerId });
-      announce(`Seleccionada #${card.markerId}. R gira, Supr quita, flechas mueven.`);
+      announce(words.announce.selected(card.markerId));
       return;
     }
     if (selected) place(selected.markerId, row, col);
@@ -102,35 +104,37 @@ function Simulator() {
     <div className="space-y-6">
       <header className="space-y-2">
         <p role="note" className="inline-block rounded-lg border border-warn/60 bg-warn/10 px-3 py-1.5 text-sm font-semibold text-warn">
-          {es.modes.simulator}
+          {t.modes.simulator}
         </p>
-        <h1 className="text-3xl font-bold">Simulador del tablero</h1>
+        <h1 className="text-3xl font-bold">{words.title}</h1>
         <p className="max-w-3xl text-muted">
-          Coloca tarjetas virtuales sobre la misma cuadrícula 8×4. Este modo construye el estado del tablero digitalmente (no hay detección por cámara), pero usa <strong>el mismo compilador y el mismo worker</strong> que las fotos.
+          {words.intro.before}
+          <strong>{words.intro.strong}</strong>
+          {words.intro.after}
         </p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <Section
-          title="Tablero virtual"
+          title={words.boardTitle}
           id="board"
           actions={
             <>
               <button type="button" className="btn" onClick={() => setCards(fromLayout(OFFICIAL_TWO_BRANCH_LAYOUT))}>
-                Ejemplo oficial (2 ramas)
+                {words.officialExample}
               </button>
               <button type="button" className="btn" onClick={() => setCards(fromLayout(LINEAR_LAYOUT))}>
-                Flujo lineal
+                {words.linearExample}
               </button>
               <button type="button" className="btn" onClick={() => setCards([])}>
-                {es.actions.clear}
+                {t.actions.clear}
               </button>
             </>
           }
         >
           <BoardGrid
             cards={cards}
-            caption="Tablero virtual de 8 columnas por 4 filas"
+            caption={words.boardCaption}
             interactive
             errorCells={errorCells}
             selectedMarkerId={selected?.from === 'board' ? selected.markerId : null}
@@ -139,7 +143,13 @@ function Simulator() {
             onDropCard={place}
           />
           <p className="mt-2 text-xs text-muted">
-            Ratón: elige una tarjeta de la paleta y pulsa una casilla, o arrástrala. Teclado: Tab hasta una casilla con tarjeta · <kbd>R</kbd> gira · <kbd>Supr</kbd> quita · <kbd>Mayús</kbd>+flechas mueve.
+            {words.hint.intro}
+            <kbd>{words.keys.rotate}</kbd>
+            {words.hint.rotate}
+            <kbd>{words.keys.remove}</kbd>
+            {words.hint.remove}
+            <kbd>{words.keys.move}</kbd>
+            {words.hint.move}
           </p>
           <p aria-live="polite" className="sr-only">
             {announcement}
@@ -147,20 +157,21 @@ function Simulator() {
           {selectedCard && (
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
               <span>
-                Seleccionada: <strong>#{selectedCard.markerId}</strong> {es.kinds[selectedCard.kind]} en ({selectedCard.row},{selectedCard.col}), apunta al {es.orientation[selectedCard.orientation]}
+                {words.selected.label} <strong>#{selectedCard.markerId}</strong>{' '}
+                {words.selected.details(t.catalog.kinds[selectedCard.kind], selectedCard.row, selectedCard.col, selectedCard.orientation)}
               </span>
               <button type="button" className="btn" onClick={() => rotate(selectedCard.markerId)}>
-                {es.actions.rotate}
+                {t.actions.rotate}
               </button>
               <button type="button" className="btn btn-danger" onClick={() => remove(selectedCard.markerId)}>
-                {es.actions.remove}
+                {t.actions.remove}
               </button>
             </div>
           )}
         </Section>
 
-        <Section title="Paleta de tarjetas" id="palette">
-          <p className="mb-2 text-xs text-muted">Tarjetas del catálogo cards-v1 que no están en el tablero.</p>
+        <Section title={words.paletteTitle} id="palette">
+          <p className="mb-2 text-xs text-muted">{words.paletteNote}</p>
           <ul className="grid grid-cols-3 gap-2">
             {palette.map((card) => (
               <li key={card.markerId}>
@@ -169,10 +180,10 @@ function Simulator() {
                   draggable
                   onDragStart={(event) => event.dataTransfer.setData('text/x-tactiloom-marker', String(card.markerId))}
                   aria-pressed={selected?.from === 'palette' && selected.markerId === card.markerId}
-                  aria-label={`Elegir tarjeta #${card.markerId} ${es.kinds[card.kind]}`}
+                  aria-label={words.pickCard(card.markerId, t.catalog.kinds[card.kind])}
                   onClick={() => {
                     setSelected({ from: 'palette', markerId: card.markerId });
-                    announce(`Elegida #${card.markerId}. Ahora pulsa una casilla vacía.`);
+                    announce(words.announce.picked(card.markerId));
                   }}
                   className={`block h-20 w-full rounded-lg border p-0.5 ${selected?.markerId === card.markerId ? 'border-amber-strong ring-2 ring-amber-strong' : 'border-ink-700'}`}
                 >
@@ -184,7 +195,7 @@ function Simulator() {
         </Section>
       </div>
 
-      <Section title="Compilación en vivo" id="compile">
+      <Section title={words.compileTitle} id="compile">
         <CompilePanel
           source={{ boardState }}
           markerIds={cards.map((card) => card.markerId)}

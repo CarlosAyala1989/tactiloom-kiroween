@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="41mm" height="51mm" viewBox="0 0 41 51" role="img" aria-label="Tactiloom REQUEST_REVIEW #18">
+<title>Tactiloom REQUEST_REVIEW #18</title>
+<rect x="0" y="0" width="41" height="51" rx="2.5" ry="2.5" fill="#ffffff" stroke="#9aa0a6" stroke-width="0.25"/>
+<rect x="0.8" y="0.8" width="39.4" height="8.4" rx="1.7" ry="1.7" fill="#f08c00"/>
+<text x="2.2" y="5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" font-weight="700" text-anchor="start" fill="#ffffff">DEMANDER RÉVISION</text>
+<text x="2.2" y="8" font-family="Helvetica, Arial, sans-serif" font-size="1.5" font-weight="400" text-anchor="start" fill="#ffffff">REQUEST_REVIEW</text>
+<text x="38.8" y="5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" font-weight="700" text-anchor="end" fill="#ffffff">#18</text>
+<g data-aruco-id="18" shape-rendering="crispEdges"><rect x="9.5" y="13" width="22" height="22" fill="#000000"/><rect x="16.833" y="16.667" width="7.333" height="3.667" fill="#ffffff"/><rect x="13.167" y="20.333" width="7.333" height="3.667" fill="#ffffff"/><rect x="16.833" y="24" width="3.667" height="3.667" fill="#ffffff"/><rect x="24.167" y="24" width="3.667" height="3.667" fill="#ffffff"/><rect x="13.167" y="27.667" width="11" height="3.667" fill="#ffffff"/></g>
+<text x="3.2" y="23.1" font-family="Helvetica, Arial, sans-serif" font-size="1.9" font-weight="700" text-anchor="middle" fill="#5f6368">IN</text>
+<path d="M0 -0.35 H2 V-1 L3.4 0 L2 1 V0.35 H0 Z" transform="translate(1.6 26.1) scale(1)" fill="#5f6368"/>
+<path d="M10 2 A8 8 0 1 1 9.99 2 Z" transform="translate(2.4 40.2) scale(0.333)" fill="#f08c00"/>
+<path d="M10 5.2 A4.8 4.8 0 1 1 9.99 5.2 Z" transform="translate(2.4 40.2) scale(0.333)" fill="#ffffff"/>
+<path d="M14.2 16.4 L16.4 14.2 L22.4 20.2 L20.2 22.4 Z" transform="translate(2.4 40.2) scale(0.333)" fill="#f08c00"/>
+<text x="38" y="23.1" font-family="Helvetica, Arial, sans-serif" font-size="1.9" font-weight="700" text-anchor="middle" fill="#5f6368">OUT</text>
+<path d="M0 -0.35 H2 V-1 L3.4 0 L2 1 V0.35 H0 Z" transform="translate(36.3 26.1) scale(1)" fill="#5f6368"/>
+<path d="M0 -0.7 H22.06 V-2.1 L25 0 L22.06 2.1 V0.7 H0 Z" transform="translate(13 44.2) scale(1)" fill="#f08c00"/>
+</svg>

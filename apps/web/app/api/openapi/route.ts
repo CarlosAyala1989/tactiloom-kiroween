@@ -33,9 +33,21 @@ const DOCUMENT = {
   paths: {
     '/api/health': { get: { summary: 'Estado de web, base de datos, visión y worker', responses: { '200': { description: 'Estado' } } } },
     '/api/catalog/cards': { get: { summary: 'Catálogo cerrado de tarjetas, tipos, puertos y parámetros', responses: { '200': { description: 'Catálogo' } } } },
-    '/api/board/kit': { get: { summary: 'Manifiesto del kit imprimible', responses: { '200': { description: 'Manifiesto' } } } },
+    '/api/board/kit': {
+      get: {
+        summary: 'Kit imprimible en el idioma de la petición (cookie tactiloom_locale, luego Accept-Language): archivos, ZIP e instrucciones',
+        responses: { '200': { description: 'Manifiesto del kit de ese idioma (locale, files, cards, zipUrl, instructions)' } },
+      },
+    },
     '/api/board/kit/download': {
-      get: { summary: 'Descarga un archivo del kit (lista blanca) o el ZIP', parameters: [{ name: 'file', in: 'query', required: true, schema: { type: 'string' } }], responses: { '200': { description: 'Archivo' }, '404': { description: 'No existe' } } },
+      get: {
+        summary: 'Descarga un archivo del kit (lista blanca de kit-index.json) o el ZIP tactiloom-board-kit-<locale>.zip',
+        parameters: [
+          { name: 'file', in: 'query', required: true, schema: { type: 'string' } },
+          { name: 'locale', in: 'query', required: false, schema: { enum: ['es', 'en', 'it', 'fr'], default: 'es' } },
+        ],
+        responses: { '200': { description: 'Archivo' }, '400': { description: 'Idioma no válido' }, '404': { description: 'No existe' } },
+      },
     },
     '/api/demo/session': {
       get: { summary: 'Sesión actual', responses: { '200': { description: 'Sesión' } } },
@@ -44,7 +56,7 @@ const DOCUMENT = {
     '/api/demo/scenarios': { get: { summary: 'Imágenes de la galería (sintéticas)', responses: { '200': { description: 'Escenarios' } } } },
     '/api/board/analyze': {
       post: {
-        summary: 'Imagen o escenario → servicio OpenCV → captura almacenada (no ejecuta nada)',
+        summary: 'Imagen o escenario → servicio OpenCV → captura almacenada (no ejecuta nada). La superposición se dibuja en el idioma de la petición; los diagnósticos llevan message canónico en español + params',
         requestBody: { content: { 'multipart/form-data': { schema: { type: 'object', properties: { image: { type: 'string', format: 'binary' }, scenarioId: { type: 'string' }, sourceMode: { enum: ['physical', 'image'] } } } } } },
         responses: withErrors({ '200': { description: 'Detección', ...json({ type: 'object', properties: { captureId: { type: 'string' }, detection: { $ref: '#/components/schemas/DetectionResult' }, boardState: { $ref: '#/components/schemas/BoardState' } } }) }, '413': { description: 'Imagen demasiado grande' }, '415': { description: 'Formato no soportado' }, '422': { description: 'Imagen dañada' }, '503': { description: 'Visión no disponible' } }),
       },

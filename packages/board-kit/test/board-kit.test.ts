@@ -1,13 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { getBoardTemplate, getCardCatalog, sha256HexBytes } from '@tactiloom/contracts';
-import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { getCardCatalog } from '@tactiloom/contracts';
+import { PDFDocument } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 import {
   ARUCO_MARKER_COUNT,
-  buildKit,
-  CARD_TITLES,
   cardSvg,
   enabledCards,
   layoutCardSheets,
@@ -15,10 +10,9 @@ import {
   renderBoardPdf,
   renderBoardSvg,
   renderCardsPdf,
-  TITLE_SIZE_MM,
 } from '../src/index';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
+// Language-specific checks (titles, WinAnsi, manifests, ZIPs, committed files) live in locales.test.ts.
 
 describe('ArUco modules', () => {
   it('exposes the 100 OpenCV DICT_4X4_100 markers with a black border', () => {
@@ -49,27 +43,16 @@ describe('ArUco modules', () => {
 });
 
 describe('card design', () => {
-  it('fits every printed title inside the card header (pdf-lib Helvetica-Bold metrics)', async () => {
-    const doc = await PDFDocument.create();
-    const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-    const { card } = getBoardTemplate();
-    const available = card.width - 2.2 - 8; // left padding and the "#NN" id label
-    for (const title of Object.values(CARD_TITLES)) {
-      const widthMm = bold.widthOfTextAtSize(title, TITLE_SIZE_MM);
-      expect(widthMm, title).toBeLessThan(available);
-    }
-  });
-
-  it('renders each card SVG with exactly one ArUco group of its own id', () => {
+  it.each(['es', 'en', 'it', 'fr'] as const)('renders each card SVG with exactly one ArUco group of its own id (%s)', (locale) => {
     for (const entry of enabledCards()) {
-      const svg = cardSvg(entry);
+      const svg = cardSvg(entry, locale);
       expect(svg.startsWith('<svg')).toBe(true);
       expect(svg.match(/data-aruco-id="(\d+)"/g)).toEqual([`data-aruco-id="${entry.markerId}"`]);
     }
   });
 
-  it('renders the board SVG with fiducials 0..3 only', () => {
-    const ids = [...renderBoardSvg().matchAll(/data-aruco-id="(\d+)"/g)].map((m) => Number(m[1]));
+  it.each(['es', 'en', 'it', 'fr'] as const)('renders the board SVG with fiducials 0..3 only (%s)', (locale) => {
+    const ids = [...renderBoardSvg(locale).matchAll(/data-aruco-id="(\d+)"/g)].map((m) => Number(m[1]));
     expect(ids.sort()).toEqual([0, 1, 2, 3]);
   });
 });
@@ -102,34 +85,12 @@ describe('PDF output', () => {
     expect(Buffer.from(a.bytes).equals(Buffer.from(b.bytes))).toBe(true);
   });
 
-  it('uses A3 landscape for the full board and A4 for the reduced board', async () => {
-    const full = await PDFDocument.load(await renderBoardPdf('full'));
+  it.each(['es', 'fr'] as const)('uses A3 landscape for the full board and A4 for the reduced board (%s)', async (locale) => {
+    const full = await PDFDocument.load(await renderBoardPdf('full', locale));
     const { width, height } = full.getPage(0).getSize();
     expect(Math.round((width * 25.4) / 72)).toBe(420);
     expect(Math.round((height * 25.4) / 72)).toBe(297);
-    const small = await PDFDocument.load(await renderBoardPdf('small'));
+    const small = await PDFDocument.load(await renderBoardPdf('small', locale));
     expect(Math.round((small.getPage(0).getSize().width * 25.4) / 72)).toBe(297);
-  });
-});
-
-describe('committed kit (assets/board-kit)', () => {
-  it('is up to date with the generator (run `pnpm board:generate` after design changes)', async () => {
-    const files = await buildKit();
-    for (const file of files) {
-      const committed = readFileSync(join(root, 'assets', 'board-kit', file.path));
-      const generated = typeof file.contents === 'string' ? Buffer.from(file.contents, 'utf8') : Buffer.from(file.contents);
-      expect(committed.equals(generated), file.path).toBe(true);
-    }
-  });
-
-  it('has a manifest whose hashes match the files', () => {
-    const manifest = JSON.parse(readFileSync(join(root, 'assets', 'board-kit', 'kit-manifest.json'), 'utf8')) as {
-      files: { path: string; sha256: string; bytes: number }[];
-    };
-    for (const entry of manifest.files) {
-      const bytes = readFileSync(join(root, 'assets', 'board-kit', entry.path));
-      expect(bytes.byteLength, entry.path).toBe(entry.bytes);
-      expect(sha256HexBytes(bytes), entry.path).toBe(entry.sha256);
-    }
   });
 });

@@ -70,6 +70,8 @@ export interface ParamFieldUi {
   readonly control: ParamControl;
   readonly helpEs?: string;
   readonly options?: readonly { readonly value: string; readonly labelEs: string }[];
+  /** Value applied by the engine when the parameter is absent (shown by forms; never written implicitly). */
+  readonly defaultValue?: string;
 }
 
 /** Declarative description used by the Workflow Studio to render parameter forms. */
@@ -131,6 +133,7 @@ export const PARAM_UI: Readonly<Record<CardKind, readonly ParamFieldUi[]>> = {
       key: 'language',
       labelEs: 'Idioma del reporte',
       control: 'select',
+      defaultValue: 'es',
       options: [
         { value: 'es', labelEs: 'Español' },
         { value: 'en', labelEs: 'Inglés' },

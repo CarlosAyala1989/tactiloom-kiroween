@@ -173,9 +173,15 @@ importers:
 
   packages/board-kit:
     dependencies:
+      '@pdf-lib/standard-fonts':
+        specifier: 1.0.0
+        version: 1.0.0
       '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../contracts
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
       pdf-lib:
         specifier: 1.17.1
         version: 1.17.1
@@ -183,6 +189,9 @@ importers:
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
+      fast-check:
+        specifier: 4.10.2
+        version: 4.10.2
       tsx:
         specifier: 4.23.15
         version: 4.23.15

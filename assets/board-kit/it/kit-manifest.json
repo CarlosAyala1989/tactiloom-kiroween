@@ -1,0 +1,242 @@
+{
+  "kitVersion": "board-kit/1.0.0",
+  "dictionary": "DICT_4X4_100",
+  "boardTemplate": "board-v1",
+  "catalogVersion": "cards-v1",
+  "files": [
+    {
+      "path": "board-v1-a3.pdf",
+      "description": "Tabellone A3 orizzontale, a grandezza naturale",
+      "bytes": 6659,
+      "sha256": "a33cd9284cb94375c7be19c7fcefff8a81873374979343ac91ca7c60bf9ee653"
+    },
+    {
+      "path": "board-v1-a3.svg",
+      "description": "Tabellone A3 in SVG (1 unità = 1 mm)",
+      "bytes": 17287,
+      "sha256": "b86eb97b3fe0941dea9dd5d0cce46492a7083f7a5be0effbd53e9f67e80126a6"
+    },
+    {
+      "path": "board-v1-a4-tiles.pdf",
+      "description": "Tabellone su 4 fogli A4 a grandezza naturale",
+      "bytes": 40108,
+      "sha256": "6b7aa7074ffc39b3685a99dccc383704f295330327d4e7caab291ce3d777e341"
+    },
+    {
+      "path": "board-v1-small-a4.pdf",
+      "description": "Tabellone ridotto (0,707) su un foglio A4",
+      "bytes": 7235,
+      "sha256": "b0df0e2e3e5322a5c340f6b8d49dc5ca41ff9c3098e22568c9c599b4b8739ac7"
+    },
+    {
+      "path": "cards-v1-a4.pdf",
+      "description": "26 carte su A4 (grandezza naturale)",
+      "bytes": 16438,
+      "sha256": "7e88e148feba085b58883b1717d97f6c3bf6bcdc15ede91b44f8494650010a25"
+    },
+    {
+      "path": "cards-v1-layout.json",
+      "description": "Posizione (mm) di ogni carta in cards-v1-a4.pdf",
+      "bytes": 3283,
+      "sha256": "6d5572210b606bcc4bc8a576cc685c3c66945b4409d1f8b547f87384d9f569b7"
+    },
+    {
+      "path": "cards-v1-small-a4.pdf",
+      "description": "Carte ridotte per il tabellone A4",
+      "bytes": 15944,
+      "sha256": "c147c4ff1d844065b62fe565fdcdf6655ae258faae531dc13692fd28166e93af"
+    },
+    {
+      "path": "cards-v1-small-layout.json",
+      "description": "Posizioni delle carte (mm) in cards-v1-small-a4.pdf",
+      "bytes": 3658,
+      "sha256": "5ec5a1f0db8589d83aa4d6d75178a8ce3aeaf8507741715a618d3cb10b98aa82"
+    },
+    {
+      "path": "cards-v1-sheet-1.svg",
+      "description": "Foglio di carte 1 in SVG",
+      "bytes": 31729,
+      "sha256": "52458f36d72af532735783b4dfaa93c50dc29e851fee7772ed18411a67975b69"
+    },
+    {
+      "path": "cards-v1-sheet-2.svg",
+      "description": "Foglio di carte 2 in SVG",
+      "bytes": 19952,
+      "sha256": "dc273ae65649b63e97884f510077008147566a2d9d02bf33111d3226c40f81a1"
+    },
+    {
+      "path": "cards/card-10.svg",
+      "description": "START #10",
+      "bytes": 1918,
+      "sha256": "c7f7cb54036dcc3249a8ad5d285b3281d6f323263161870e676b0b2baff0ae72"
+    },
+    {
+      "path": "cards/card-11.svg",
+      "description": "INPUT_FILE #11",
+      "bytes": 2123,
+      "sha256": "43708ada887240a50ff1d698112308cb7aca54ee7d298a9cddb74f29eedacdc2"
+    },
+    {
+      "path": "cards/card-12.svg",
+      "description": "EXTRACT_TEXT #12",
+      "bytes": 2076,
+      "sha256": "19d87ab10dc3ea84145866b88596477af360f5b5852888a014e9e4ea1f36754d"
+    },
+    {
+      "path": "cards/card-13.svg",
+      "description": "VALIDATE_FIELDS #13",
+      "bytes": 2086,
+      "sha256": "8d73a9d2df882c569c986b968195560f3216e3c1c6e91fef0af923f64db5ae86"
+    },
+    {
+      "path": "cards/card-14.svg",
+      "description": "CONDITION #14",
+      "bytes": 2300,
+      "sha256": "74e16199e8c5351f9fb9783a5ae9d220994a9ccc6ad6692e4c25bbe14c512d29"
+    },
+    {
+      "path": "cards/card-15.svg",
+      "description": "CREATE_REPORT #15",
+      "bytes": 2091,
+      "sha256": "5f810c03f75ba8baf5821fbe77548d61bb88f049aecee5d983613520eddd3799"
+    },
+    {
+      "path": "cards/card-16.svg",
+      "description": "SAVE_REPORT #16",
+      "bytes": 2132,
+      "sha256": "51467e67d95a51e0281d338e16c58bbd238cd064a2113a181cf77873cc90cdf3"
+    },
+    {
+      "path": "cards/card-17.svg",
+      "description": "END #17",
+      "bytes": 1698,
+      "sha256": "d34d3dfff6db74e5e5dc26068ee327e8ef190e9916a28178ab095073c5b40e63"
+    },
+    {
+      "path": "cards/card-18.svg",
+      "description": "REQUEST_REVIEW #18",
+      "bytes": 2254,
+      "sha256": "a5a8c288fe4d15efbc713f6dbb1796e1ae8ec6e7c8cf5f9ca17c7940791580b1"
+    },
+    {
+      "path": "cards/card-19.svg",
+      "description": "END #19",
+      "bytes": 1905,
+      "sha256": "ac0415ebdd89960ab484b0f0c33657a70042b3a7cf6f7b533c1c9198f33e09df"
+    },
+    {
+      "path": "cards/card-20.svg",
+      "description": "START #20",
+      "bytes": 1846,
+      "sha256": "c8ce58eb7299f2a7117561dccbcc3216fc9af7337b4216bd0547b5bafd6d0002"
+    },
+    {
+      "path": "cards/card-21.svg",
+      "description": "INPUT_FILE #21",
+      "bytes": 2126,
+      "sha256": "bf29534e7b6e84cc201352b3267f84b7052b6a854f3954379775d72791419331"
+    },
+    {
+      "path": "cards/card-22.svg",
+      "description": "EXTRACT_TEXT #22",
+      "bytes": 2230,
+      "sha256": "f3d47339e425b5868471697cb731e327e3fd8e53f05cab6da065f5a0b7465005"
+    },
+    {
+      "path": "cards/card-23.svg",
+      "description": "VALIDATE_FIELDS #23",
+      "bytes": 2229,
+      "sha256": "edfcfe6e40941c5e23d48651a3053ce54ba7bcebc64b8f8c4802c1555c3c2864"
+    },
+    {
+      "path": "cards/card-24.svg",
+      "description": "CONDITION #24",
+      "bytes": 2230,
+      "sha256": "a4afa0dff899f8667a1f305d68327aa10a33b07f2ac19bd05b3d34a1b847db9a"
+    },
+    {
+      "path": "cards/card-25.svg",
+      "description": "CREATE_REPORT #25",
+      "bytes": 2168,
+      "sha256": "e737db9360ec307c61cf116bcdd3de836dc9ef603f94c3e28902b6645aea991b"
+    },
+    {
+      "path": "cards/card-26.svg",
+      "description": "SAVE_REPORT #26",
+      "bytes": 2127,
+      "sha256": "572b9ac6bd445949e5c605e867a7c1ea122cd19c92b8843c5c27971ef8712c6c"
+    },
+    {
+      "path": "cards/card-27.svg",
+      "description": "END #27",
+      "bytes": 2053,
+      "sha256": "266f441cc9f6f485dc25b96ca290a9e33b2aa062d5eec79e92e04bef0e9ccb47"
+    },
+    {
+      "path": "cards/card-28.svg",
+      "description": "REQUEST_REVIEW #28",
+      "bytes": 2182,
+      "sha256": "34302a5ff0716165eecf9def450f589da420e326f0576eec3cb4bac958c86b5e"
+    },
+    {
+      "path": "cards/card-29.svg",
+      "description": "END #29",
+      "bytes": 1839,
+      "sha256": "78a27cc27a8702a2b6557812e14f138379ff4ce74c9afb6a3085d6f4afdb0690"
+    },
+    {
+      "path": "cards/card-30.svg",
+      "description": "END #30",
+      "bytes": 1913,
+      "sha256": "6356b6d30d6264710924027b7a6cb1d03d306dbaa4147b7aae5e0ed18f075f7b"
+    },
+    {
+      "path": "cards/card-31.svg",
+      "description": "END #31",
+      "bytes": 1975,
+      "sha256": "35b31db34f3da1b0c232e4498d11c8a1f032f231ac2a009755e9769a5786db4b"
+    },
+    {
+      "path": "cards/card-32.svg",
+      "description": "REQUEST_REVIEW #32",
+      "bytes": 2259,
+      "sha256": "d7ba15d8ba3a0b9a133a13f35a799bf809b67609742abcabb1cf70f62eb07275"
+    },
+    {
+      "path": "cards/card-33.svg",
+      "description": "CONDITION #33",
+      "bytes": 2234,
+      "sha256": "cd2e6d6b980c6834babafa5cb7ccf35475e3f7384731e0f92ed214bdcf630c17"
+    },
+    {
+      "path": "cards/card-34.svg",
+      "description": "CREATE_REPORT #34",
+      "bytes": 2089,
+      "sha256": "2cbc3b8d7e5ccaed827f9171ca8626eef08ded2f6bddaba859dde6af81fe076a"
+    },
+    {
+      "path": "cards/card-35.svg",
+      "description": "SAVE_REPORT #35",
+      "bytes": 2130,
+      "sha256": "07ae7d1f0dc0635de215b582fe1822761b03b51b2dab47a5c4a00948988d38af"
+    },
+    {
+      "path": "board-v1.json",
+      "description": "Geometria del tabellone (contratto)",
+      "bytes": 1483,
+      "sha256": "00f534db45aa01bba46ab6b55bc2635a33a5663dcb0b9c9da06f791f2452db6e"
+    },
+    {
+      "path": "cards-v1.json",
+      "description": "Catalogo delle carte: markerId → tipo → istanza",
+      "bytes": 3834,
+      "sha256": "cab0064c32f57356ac74d999ed905031d4057c80efce00952e36fdd0fd39ff37"
+    },
+    {
+      "path": "ASSEMBLY.md",
+      "description": "Manuale di stampa e montaggio",
+      "bytes": 5038,
+      "sha256": "58fc262aa48ceb5a1d57aed5e527e60f03b9c8ddfe02dc4ab4d880ddadf5c42d"
+    }
+  ]
+}

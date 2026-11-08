@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { boardStateFromDetection } from '@tactiloom/contracts';
+import { localeFromRequest } from '@/lib/i18n/server';
 import { readScenarioImage } from '@/lib/server/assets';
 import { audit } from '@/lib/server/audit';
 import { assertSameOrigin, handler, HttpError, ok, parseFormLimited } from '@/lib/server/http';
@@ -44,7 +45,8 @@ export const POST = handler(async (request, _context: unknown, requestId) => {
     filename = 'upload';
     mime = image.type || 'application/octet-stream';
   }
-  const detection = await withAnalysisSlot(session.workspaceId, () => analyzeWithVision(bytes, filename, mime, sourceMode, requestId));
+  const locale = localeFromRequest(request);
+  const detection = await withAnalysisSlot(session.workspaceId, () => analyzeWithVision(bytes, filename, mime, sourceMode, requestId, locale));
   const boardState = boardStateFromDetection(detection);
   const { overlay, ...detectionWithoutOverlay } = detection;
   const capture = await prisma().boardCapture.create({

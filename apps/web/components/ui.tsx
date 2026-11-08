@@ -2,15 +2,16 @@
 
 import { useState, type ReactNode } from 'react';
 import type { RunStatus } from '@tactiloom/contracts';
-import { es } from '@/lib/i18n/es';
+import { useI18n } from '@/lib/i18n/provider';
 
 export function ModeBadge({ mode }: { mode: 'physical' | 'image' | 'simulator' | string }) {
+  const { t } = useI18n();
   const styles: Record<string, string> = {
     physical: 'border-ok/60 text-ok',
     image: 'border-info/60 text-info',
     simulator: 'border-warn/60 text-warn',
   };
-  const label = (es.modes as Record<string, string>)[mode] ?? mode;
+  const label = (t.modes as Record<string, string>)[mode] ?? mode;
   return <span className={`chip ${styles[mode] ?? ''}`}>{label}</span>;
 }
 
@@ -26,14 +27,16 @@ const STATUS_STYLE: Record<RunStatus, string> = {
 };
 
 export function StatusPill({ status }: { status: RunStatus }) {
+  const { t } = useI18n();
   return (
     <span className={`chip ${STATUS_STYLE[status]}`} data-status={status}>
-      {es.runStatus[status]}
+      {t.runStatus[status]}
     </span>
   );
 }
 
 export function HashLabel({ value, label = 'hash' }: { value: string | null | undefined; label?: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
   if (!value) return <span className="text-muted">—</span>;
   const short = value.replace('sha256:', '').slice(0, 12);
@@ -53,7 +56,7 @@ export function HashLabel({ value, label = 'hash' }: { value: string | null | un
           });
         }}
       >
-        {copied ? 'copiado' : es.actions.copy}
+        {copied ? t.actions.copied : t.actions.copy}
       </button>
     </span>
   );
@@ -80,15 +83,4 @@ export function ErrorBox({ error }: { error: string | null }) {
       {error}
     </p>
   );
-}
-
-export function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
-}
-
-export function formatDate(value: string | Date | null | undefined): string {
-  if (!value) return '—';
-  return new Date(value).toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'medium' });
 }

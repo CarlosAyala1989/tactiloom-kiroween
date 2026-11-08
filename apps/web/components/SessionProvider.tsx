@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { api, ApiError } from '@/lib/client/api';
+import { api } from '@/lib/client/api';
+import { useI18n } from '@/lib/i18n/provider';
 
 interface SessionState {
   readonly ready: boolean;
@@ -9,7 +10,8 @@ interface SessionState {
   readonly expiresAt: string | null;
   /** Hours until the demo workspace is deleted (computed when the session loads). */
   readonly hoursLeft: number | null;
-  readonly error: string | null;
+  /** What made the session fail (rendered in the UI language by SessionGate). */
+  readonly error: unknown;
   readonly retry: () => void;
 }
 
@@ -31,7 +33,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const hoursLeft = expiresAt ? Math.max(0, Math.round((new Date(expiresAt).getTime() - Date.now()) / 3_600_000)) : null;
         if (!cancelled) setState({ ready: true, workspaceId: session.workspaceId ?? null, expiresAt, hoursLeft, error: null });
       } catch (error) {
-        if (!cancelled) setState({ ready: false, workspaceId: null, expiresAt: null, hoursLeft: null, error: error instanceof ApiError ? error.message : 'No se pudo crear la sesión de demo.' });
+        if (!cancelled) setState({ ready: false, workspaceId: null, expiresAt: null, hoursLeft: null, error: error ?? new Error('session') });
       }
     })();
     return () => {
@@ -48,13 +50,14 @@ export function useSession(): SessionState {
 
 export function SessionGate({ children }: { children: ReactNode }) {
   const session = useSession();
+  const { t, errorText } = useI18n();
   if (session.error) {
     return (
       <div role="alert" className="panel p-6">
-        <p className="font-semibold text-err">No se pudo iniciar la sesión de demostración.</p>
-        <p className="mt-1 text-sm text-muted">{session.error}</p>
+        <p className="font-semibold text-err">{t.session.failedTitle}</p>
+        <p className="mt-1 text-sm text-muted">{errorText(session.error, t.session.failed)}</p>
         <button type="button" className="btn mt-4" onClick={session.retry}>
-          Reintentar
+          {t.actions.retry}
         </button>
       </div>
     );
@@ -62,7 +65,7 @@ export function SessionGate({ children }: { children: ReactNode }) {
   if (!session.ready) {
     return (
       <p className="panel p-6 text-muted" aria-live="polite">
-        Preparando tu workspace de demostración aislado…
+        {t.session.preparing}
       </p>
     );
   }
