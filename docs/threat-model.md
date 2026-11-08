@@ -21,6 +21,7 @@ Activos: integridad de lo que se ejecuta, aislamiento entre workspaces, disponib
 | 13 | Red y secretos | Sin conectores salientes; visión en red privada con `X-Internal-Token` verificado antes de leer el cuerpo; secretos solo en `.env` (ignorado) | `test_api.py` | — |
 | 14 | Privacidad | Datos ficticios; fotos no persistidas (solo sha256 y JSON); TTL con limpieza de BD y archivos | integración «TTL cleanup» | — |
 | 15 | Contenedores | Usuarios sin root, `no-new-privileges`, visión con rootfs de solo lectura, puertos solo en `127.0.0.1` | `docker-compose.yml` | CSP con `'unsafe-inline'` para scripts |
+| 16 | Entradas de idioma (cookie `tactiloom_locale`, `Accept-Language`, `?locale=` del kit, campo `locale` de visión) | Lista cerrada `es`/`en`/`it`/`fr` (`isLocale`); cualquier otro valor se ignora (cookie, cabecera) o se rechaza con 400 (kit, visión); `Accept-Language` se recorta a 512 caracteres; la cookie no es una credencial y no es `HttpOnly` a propósito; los textos traducidos solo interpolan `params` ya validados por `MessageParamsSchema` y React los escapa | `contracts.test.ts` (negociación), `test_i18n.py` (400), rutas del kit (`?locale=xx` → 400) | — |
 
 ## Revisión independiente
 

@@ -14,4 +14,4 @@ fileMatchPattern: "apps/web/**"
 - El botón Ejecutar no existe mientras el grafo sea inválido o la aprobación esté invalidada.
 - Diagrama (React Flow) con alternativa textual (lista ordenada de nodos y ramas).
 - Teclado: todos los controles alcanzables con Tab, foco visible, `prefers-reduced-motion` respetado.
-- Texto de UI en español; cadenas centralizadas para preparar i18n.
+- Texto de UI en español por defecto; cadenas en `apps/web/lib/i18n/dictionaries/` con en/it/fr obligatorios (mismas claves).

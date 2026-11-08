@@ -7,6 +7,9 @@
 > **EN** · Tangible automation: ArUco-marked cards on an 8×4 board → OpenCV reads the board from pixels →
 > a compiler builds a typed graph (`tactiloom-ir/1`) → a sandboxed worker runs it on test documents, **only after
 > a reviewed dry-run and an explicit, hash-bound approval**. English summary at the end.
+>
+> 🌐 Interfaz, diagnósticos, kit imprimible, reportes y superposición de OpenCV en **español, English, italiano y
+> français** (resúmenes en inglés, italiano y francés al final).
 
 Kiroween 2026 · categoría **Frankenstein** · licencia [MIT](LICENSE) · estado real: [`docs/implementation-status.md`](docs/implementation-status.md).
 
@@ -28,6 +31,8 @@ INICIO → ARCHIVO → EXTRAER TEXTO → VALIDAR CAMPOS → CONDICIÓN ─ SÍ �
 
 - Con `valid-application.pdf` (ficticio) la rama **SÍ** genera un reporte Markdown + JSON real y descargable.
 - Con `invalid-application.pdf` la rama **NO** crea una tarea de revisión `OPEN` con los campos faltantes.
+- Cada idioma tiene su pareja de documentos ficticios (`valid-application-en.pdf`, `-it`, `-fr` y sus
+  `invalid-…`); el Studio preselecciona la del idioma de la interfaz.
 - Mover, girar o retirar una tarjeta cambia el programa (otro `contentHash`) o produce errores explicados
   con tarjeta, fila y columna. Mover una tarjeta **nunca** ejecuta nada.
 
@@ -135,19 +140,39 @@ las 4 esquinas (ID 0–3) deben verse en la foto.
 **Cámara:** navegadores modernos con HTTPS o `localhost`; se activa solo al pulsar «Activar cámara» y se
 envía una única foto por análisis (no se guarda). Sin permiso o sin cámara: subir foto o usar la galería.
 
+## Idiomas (es · en · it · fr)
+
+El español es el idioma por defecto. El selector 🌐 de la cabecera cambia de idioma al momento y guarda la
+elección en la cookie `tactiloom_locale` (no es un secreto ni una sesión); sin elección se usa `Accept-Language`.
+Detalle y decisiones: [ADR 0005](docs/adr/0005-i18n.md).
+
+| Qué | Cómo |
+|---|---|
+| Interfaz | Diccionarios tipados en `apps/web/lib/i18n/dictionaries/` (el español define la forma; TypeScript exige las mismas claves en en/it/fr) |
+| Diagnósticos de visión y compilador | Llevan `message` canónico en español **y** `params` estructurados; la web los redacta en el idioma elegido desde `code` + `params` |
+| Superposición de OpenCV | El servicio de visión recibe `locale` y dibuja los textos en ese idioma (los datos de detección no cambian) |
+| Reporte | Parámetro «Idioma del reporte» de CREAR REPORTE (por defecto, el idioma de la interfaz). Ausente = español, así los programas anteriores conservan su `contentHash` |
+| Kit imprimible | `assets/board-kit/` (español, de referencia) y `assets/board-kit/<en|it|fr>/`; ZIP por idioma |
+| Documentos de demostración | Una solicitud válida y otra inválida por idioma; los campos se reconocen con etiquetas en los cuatro idiomas |
+
+Limitaciones: los textos nativos del navegador (p. ej., «Seleccionar archivo» del campo de archivo) siguen el
+idioma del navegador; los diagnósticos de capturas analizadas antes de esta versión no tienen `params` y se
+muestran en español, marcados como «texto original en español».
+
 ## Pruebas
 
 | Comando | Qué ejecuta | Último resultado real (2026-11-08) |
 |---|---|---|
 | `pnpm typecheck` | TypeScript estricto en todos los paquetes + scripts/tests | 0 errores |
 | `pnpm lint` | ESLint (reglas de seguridad) + Ruff | 0 avisos |
-| `pnpm test` | Vitest (155) + pytest con Hypothesis (75) | 230 passed |
+| `pnpm test` | Vitest (277) + pytest con Hypothesis (122) | 399 passed |
 | `pnpm test:integration` | Runner + Postgres (cola, leases, idempotencia, aislamiento, hardening) | 21 passed |
-| `pnpm test:e2e` | Playwright con Chrome contra el stack levantado (+ axe) | 16 passed |
+| `pnpm test:e2e` | Playwright con Chrome contra el stack levantado (+ axe), en español y en/it/fr | 24 passed |
 | `node scripts/abuse-check.mjs` | Cuerpo chunked de 40 MB, CSRF | 413 en 39 ms, 403 / 403 |
 
 Benchmark **sintético** de visión (120 escenas, 6 condiciones, i5-1155G7): 120/120 tableros calibrados,
-recall de tarjetas 1,0, casilla y orientación 1,0, 0 falsos positivos; mediana 23,8 ms, p95 40,3 ms.
+recall de tarjetas 1,0, casilla y orientación 1,0, 0 falsos positivos; mediana 14,5–23,8 ms y p95 23,2–40,3 ms
+según la carga de la máquina en cada ejecución.
 No sustituye pruebas con cámara: [`docs/benchmarking.md`](docs/benchmarking.md).
 
 ## Seguridad
@@ -166,7 +191,8 @@ verificación de Origin · fotos no persistidas · datos ficticios. Una revisió
 - Sin OCR: los PDF escaneados fallan con `PDF_NO_TEXT_LAYER` (nunca se inventan campos).
 - Lectura de cámara por foto; la estabilización en vivo (P1) no está implementada.
 - CSP de producción con `'unsafe-inline'` para scripts (hidratación de Next.js sin nonces).
-- Interfaz solo en español (cadenas centralizadas en `apps/web/lib/i18n/es.ts`).
+- Idiomas: textos nativos del navegador y diagnósticos de capturas antiguas (sin `params`) quedan en el idioma
+  del navegador / en español (ver «Idiomas»).
 - Despliegue público, repositorio GitHub y vídeo dependen del equipo.
 
 ## Cómo se usó Kiro
@@ -193,10 +219,42 @@ that point to card, row and column, and a separate worker executes a closed set 
 documents inside a per-workspace sandbox — only after a dry-run plan is reviewed and approved with matching
 `contentHash` and `planHash`.
 
+**Languages:** the UI, the diagnostics (rendered from structured `code` + `params`; the canonical `message` stays
+Spanish), the OpenCV overlay, the printable kit (`assets/board-kit/<locale>/`), the demo documents and the
+generated report (CREATE REPORT “Report language” parameter, defaulting to the UI language) are available in
+Spanish (default), English, Italian and French. Use the 🌐 selector in the header; without a choice the browser’s
+`Accept-Language` decides.
+
 **Run it:** `cp .env.example .env` (set secrets) → `docker compose up --build` → open http://localhost:3210 →
-Gallery → "Analizar con OpenCV" → save version → dry-run → approve → download the report. Or run
-`node scripts/smoke.mjs http://localhost:3210`.
+pick 🌐 English → Gallery → "Analyse with OpenCV" → save version → dry-run → approve → download the English
+report. Or run `node scripts/smoke.mjs http://localhost:3210`.
 
 **Honesty:** gallery images are synthetic renders of the real printable kit; the simulator says it does not use a
 camera; no physical-camera benchmark has been recorded yet; public deployment and the demo video are still to be
 done by the team. Test status and every command actually run are in `docs/implementation-status.md`.
+
+## Riassunto in italiano
+
+**Che cos’è:** Tactiloom trasforma carte fisiche con marcatori ArUco, disposte su un tabellone 8×4 stampato, in un
+flusso di lavoro tipizzato e reale. OpenCV legge la foto (quattro marcatori d’angolo, omografia su 16 punti, casella
+e orientamento N/E/S/W), un compilatore deterministico produce `tactiloom-ir/1` con un `contentHash` sha256 e una
+diagnostica che indica carta, riga e colonna, e un worker separato esegue un insieme chiuso di 9 azioni su
+documenti fittizi in una sandbox per workspace, solo dopo aver rivisto e approvato il piano del dry-run.
+
+**Provalo:** `docker compose up --build` → http://localhost:3210 → 🌐 Italiano → Galleria → «Analizza con OpenCV» →
+salva la versione → dry-run → approva → scarica il report in italiano. Le immagini della galleria sono sintetiche;
+il simulatore dichiara che non usa la fotocamera; i test fisici con la fotocamera sono ancora da registrare.
+
+## Résumé en français
+
+**Quoi :** Tactiloom transforme des cartes physiques à marqueurs ArUco, posées sur un plateau imprimé de 8×4 cases,
+en un flux de travail typé et réel. OpenCV lit la photo (quatre marqueurs de coin, homographie sur 16 points, case et
+orientation N/E/S/W), un compilateur déterministe produit `tactiloom-ir/1` avec un `contentHash` sha256 et des
+diagnostics qui indiquent la carte, la ligne et la colonne, et un worker séparé exécute un ensemble fermé de
+9 actions sur des documents fictifs dans un sandbox par espace de travail, uniquement après la vérification et
+l’approbation du plan du dry-run.
+
+**Essayer :** `docker compose up --build` → http://localhost:3210 → 🌐 Français → Galerie → « Analyser avec OpenCV »
+→ enregistrer la version → dry-run → approuver → télécharger le rapport en français. Les images de la galerie sont
+des images de synthèse ; le simulateur indique qu’il n’utilise pas de caméra ; les essais physiques avec caméra
+restent à enregistrer.

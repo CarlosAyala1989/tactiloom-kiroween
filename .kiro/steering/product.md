@@ -33,5 +33,6 @@ y `(FALSE) REQUEST_REVIEW → END`. Documentos ficticios `valid-application.pdf`
 - Afirmar novedad absoluta: FloBlocks (2025) y Sheets (2015) son antecedentes y se citan.
 
 ## Idioma
-- UI y mensajes de diagnóstico en español; arquitectura preparada para inglés.
+- UI en español por defecto y completa en inglés, italiano y francés (ADR 0005). Los diagnósticos llevan `message`
+  canónico en español + `params`; la web los redacta en el idioma elegido. Toda cadena nueva va en los cuatro idiomas.
 - Código, APIs, nombres de tipos y clases en inglés. Documentación de especificación en español.

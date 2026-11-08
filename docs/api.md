@@ -10,7 +10,7 @@ permitido. `workspaceId` nunca se acepta del cliente.
 |---|---|---|
 | GET | `/api/health` | Estado de web, BD, visión y worker |
 | GET | `/api/catalog/cards` | Catálogo cerrado, puertos, requisitos de datos, parámetros |
-| GET | `/api/board/kit` · `/api/board/kit/download?file=…` | Manifiesto y descargas (lista blanca, ZIP) |
+| GET | `/api/board/kit` · `/api/board/kit/download?locale=…&file=…` | Kit del idioma de la petición y descargas (lista blanca `kit-index.json`, ZIP `tactiloom-board-kit-<locale>.zip`) |
 | GET/POST | `/api/demo/session` | Sesión actual / crear workspace aislado (TTL, cuotas) |
 | GET | `/api/demo/scenarios` · `/api/demo/scenarios/:id/image` | Galería (imágenes sintéticas) |
 | POST | `/api/board/analyze` | Imagen o escenario → OpenCV → captura (no ejecuta) |
@@ -25,5 +25,10 @@ permitido. `workspaceId` nunca se acepta del cliente.
 | GET | `/api/artifacts/:id/download` | Descarga autorizada con checksum verificado |
 | GET | `/api/history` | Capturas, versiones, runs, documentos, reportes, revisiones |
 
+Idioma: las respuestas de la UI y del kit siguen la cookie `tactiloom_locale` (`es` | `en` | `it` | `fr`) o, sin
+ella, `Accept-Language`. Los mensajes de error y de diagnóstico de la API son canónicos en español; los
+diagnósticos incluyen además `params` estructurados para redactarlos en otro idioma (ADR 0005).
+
 Servicio interno de visión (red privada): `GET /health`, `POST /v1/analyze` (multipart `image`,
-`sourceMode` = `physical` | `image`, cabecera `X-Internal-Token`).
+`sourceMode` = `physical` | `image`, `locale` = `es` | `en` | `it` | `fr` para los textos del overlay, cabecera
+`X-Internal-Token`).

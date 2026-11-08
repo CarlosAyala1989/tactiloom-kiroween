@@ -22,7 +22,7 @@ repositorio en GitHub y vídeo, que requieren al equipo (ver «Pendiente»).
 | P4 Interfaz y E2E | Hecha | 11 pantallas; 16 E2E (incluye cámara **falsa** de Chrome y axe) |
 | P5 Calidad y pruebas físicas | Parcial | revisión de seguridad + correcciones; benchmark **sintético**; pruebas físicas pendientes |
 | P6 Despliegue y entrega | Parcial | Docker verificado en local; guía de despliegue; URL pública, GitHub y vídeo pendientes |
-| P7 Extras | No iniciada | estabilización en vivo, exportación JSON, inglés |
+| P7 Extras | Parcial | **idiomas es/en/it/fr hechos** (ADR 0005); estabilización en vivo y exportación JSON pendientes |
 
 ## Comandos ejecutados y resultados (última ejecución)
 
@@ -31,15 +31,15 @@ repositorio en GitHub y vídeo, que requieren al equipo (ver «Pendiente»).
 | `pnpm install` | OK (lockfile pnpm 11, `allowBuilds`) |
 | `pnpm typecheck` | 0 errores (7 paquetes + scripts/tests de la raíz) |
 | `pnpm lint` | ESLint 0 avisos · Ruff «All checks passed» · formato OK |
-| `pnpm test` | Vitest 155 passed (contracts 16, board-kit 11, compiler 55, web 23, engine 46, runner 4) · pytest 75 passed |
+| `pnpm test` | Vitest 277 passed (contracts 18, board-kit 79, compiler 60, web 61, engine 55, runner 4) · pytest 122 passed |
 | `pnpm test:integration` | 21 passed (cola 5, runner 11, hardening 5) contra `tactiloom_test` |
-| `pnpm test:e2e` | 16 passed contra el stack Docker (`docker compose up`) |
+| `pnpm test:e2e` | 24 passed contra el stack Docker (`docker compose up`): 16 en español + 8 de idiomas (inglés de punta a punta con reporte en inglés, diagnóstico en italiano, kit en francés, `Accept-Language`, axe en en/it/fr) |
 | `node scripts/smoke.mjs http://localhost:3210` | SMOKE OK: rama SÍ con 2 artefactos, rama NO con revisión OPEN, tablero ambiguo no compila |
 | `node scripts/abuse-check.mjs http://localhost:3210` | upload chunked de 40 MB sin Content-Length → 413 en 39 ms; health 200; sin Origin → 403; Origin ajeno → 403 |
 | `prisma migrate deploy` + seed en una BD vacía (`tactiloom_clean_check`, luego borrada) | 3 migraciones aplicadas; 26 entradas de catálogo |
-| `pnpm benchmark:vision` | sintético: 120/120 tableros, recall 1,0 (línea base 113/120, 0,9418) |
+| `pnpm benchmark:vision` | sintético: 120/120 tableros, recall 1,0 (línea base 113/120, 0,9418); re-ejecutado tras el cambio de nombre e i18n con métricas idénticas (`synthetic-2026-11-08-i18n.json`) |
 | `kiro-cli agent validate` (2 agentes) | sin errores; un agente inválido sí se rechaza |
-| `docker compose up --build` | 4 servicios sanos (db, vision, web healthy; runner activo); migrate + seed OK |
+| `docker compose build` + `docker compose up -d` (imágenes `tactiloom-node:local` 1,48 GB, `tactiloom-vision:local` 579 MB) | 4 servicios sanos (db, vision, web healthy; runner activo); migrate + seed OK; smoke y abuse-check OK contra Docker |
 
 ## Lista de validación final (§16.5 del prompt)
 
@@ -83,13 +83,21 @@ repositorio en GitHub y vídeo, que requieren al equipo (ver «Pendiente»).
    reintento tras caída con `FILE_CHANGED` → corregidos en `885c463` con pruebas que fallan sin el arreglo.
 6. Imagen de visión no arrancaba en el contenedor (`config.py` asumía la estructura del repo) → ruta tolerante.
 7. Compose intentaba descargar la imagen compartida `tactiloom-node:local` → `pull_policy: never` en web/runner (probado con un proyecto mínimo).
+8. i18n: añadir `language` con valor por defecto a CREATE_REPORT cambiaba la forma canónica de los parámetros y,
+   con ella, el `contentHash` de todos los programas guardados (el snapshot del compilador lo detectó) → parámetro
+   opcional sin valor por defecto; el hash del ejemplo oficial vuelve a ser el de la v1.
+9. i18n: el detalle técnico de Zod incluido en `INVALID_BOARD_STATE` contiene «received undefined»; la prueba de
+   artefactos de plantilla lo marcaba como error → la prueba excluye el detalle citado literalmente.
 
 ## Riesgos y limitaciones
 
 - **Visión física no medida:** el 100 % sintético no predice el rendimiento con cámara (reflejos, papel curvado, lente).
-- Sin OCR; CSP con `'unsafe-inline'`; interfaz solo en español.
+- Sin OCR; CSP con `'unsafe-inline'`.
+- Idiomas: los textos nativos del navegador (selector de archivo) siguen el idioma del navegador; los diagnósticos
+  de capturas analizadas antes de la i18n (sin `params`) se muestran en español, marcados.
 - Sin proxy de confianza (`TRUST_PROXY_HOPS=0`) el límite de sesiones es compartido por todos los clientes.
-- Disco de la máquina de desarrollo al 97–99 %: cada build Docker completo crea ~5 GB de caché (se purgó solo la caché propia).
+- Disco de la máquina de desarrollo al 97 %: el build de la imagen Node bajó momentáneamente el espacio libre a
+  ~0,4 GB mientras se desempaquetaba; tras purgar solo la caché de build de este proyecto quedan ~5,9 GB libres.
 
 ## Pendiente (requiere al equipo)
 

@@ -27,6 +27,14 @@ En el resultado final: precisión de casilla y de orientación 1,0 sobre las tar
 positivos, 120/120 escenas perfectas; latencia mediana 23,8 ms, p95 40,3 ms, máx. 69,4 ms.
 Archivos: `docs/benchmark-results/synthetic-2026-11-08-baseline.json` y `synthetic-2026-11-08.json`.
 
+**Re-ejecución tras el cambio de nombre a Tactiloom y la internacionalización** (mismo comando, misma semilla,
+misma máquina; `docs/benchmark-results/synthetic-2026-11-08-i18n.json`, detector `tactiloom-vision/1.0.0`):
+todas las métricas de precisión son idénticas a `synthetic-2026-11-08.json` (120/120 calibrados, recall 1,0,
+casilla y orientación 1,0, 0 falsos positivos). Era lo esperado: el cambio solo añadió `params` a los
+diagnósticos y textos del overlay por idioma, que el benchmark no dibuja. La latencia de esa ejecución fue
+mediana 14,5 ms, p95 23,2 ms, máx. 46,4 ms; la diferencia con la anterior (23,8 / 40,3 ms) refleja la carga de
+la máquina en cada momento, no una optimización.
+
 **Hallazgo y corrección:** en la línea base, todos los fallos (58 tarjetas) se debían a un único motivo: el
 fiducial #0 no se detectaba con desenfoque fuerte, así que el tablero no se calibraba. Se añadió una segunda
 pasada sobre una copia con nitidez solo cuando falta un fiducial (commit `f2687d2`) y una prueba de regresión

@@ -4,6 +4,14 @@
 y abrir http://localhost:3210 (ver README). No se necesitan credenciales: cada visitante recibe un workspace
 de demostración aislado que se borra a las 24 h.
 
+## Language
+
+The app opens in your browser's language when it is Spanish, English, Italian or French (Spanish otherwise).
+Switch at any time with the 🌐 selector in the header: the UI, the error explanations, the OpenCV overlay, the
+printable kit and the generated report follow it. The steps below quote the Spanish labels; in English they read
+"Analyse with OpenCV", "Save version and open Workflow Studio", "Review and run (dry run)" and "Approve and run",
+and the default input document is `valid-application-en.pdf` (report: "Workshop application report").
+
 ## 5-minute path (no camera, no printer)
 
 1. **Gallery → "Analizar con OpenCV"** on *Tablero válido en perspectiva*. The server detects the 10 cards from
@@ -51,4 +59,5 @@ card sheet; lay out the official example (`docs/physical-grammar-v1.md` §5); Bo
 Galería → «Analizar con OpenCV» → «Guardar versión» → «Revisar y ejecutar (dry-run)» → casilla de confirmación →
 «Aprobar y ejecutar» → descargar reporte. Cambiar el documento a `invalid-application.pdf` para ver la rama NO.
 Analizar los tableros inválidos para ver los diagnósticos con tarjeta, fila y columna. El simulador se maneja con
-teclado (`R` gira, `Supr` quita, `Mayús`+flechas mueve).
+teclado (`R` gira, `Supr` quita, `Mayús`+flechas mueve). El selector 🌐 de la cabecera cambia el idioma
+(español, inglés, italiano, francés) de la interfaz, los diagnósticos, la superposición de OpenCV, el kit y el reporte.

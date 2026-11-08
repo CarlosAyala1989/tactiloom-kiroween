@@ -153,3 +153,19 @@ Cada criterio indica cómo se verifica (archivo de prueba o comando). Formato EA
 
 1. THE SYSTEM SHALL versionar `.kiro/` (steering, specs, hooks, agents) en la raíz del repositorio.
 2. THE SYSTEM SHALL documentar el uso real de Kiro en `docs/kiro-usage.md` y el estado en `docs/implementation-status.md`.
+
+### Requirement 15 — Idiomas (es, en, it, fr)
+
+**User Story:** Como participante de un taller en Italia, Francia o un país angloparlante, quiero usar Tactiloom
+en mi idioma, para entender cada paso, cada error y el reporte sin traducir nada. Decisiones: ADR 0005.
+
+#### Acceptance Criteria
+
+1. THE SYSTEM SHALL ofrecer la interfaz completa en español (por defecto), inglés, italiano y francés, con un selector visible en la cabecera que no recarga el trabajo en curso y guarda la preferencia. *(E2E `i18n.spec.ts`, `client.test.ts`: paridad de claves)*
+2. WHEN no hay preferencia guardada THE SYSTEM SHALL elegir el idioma con `Accept-Language` y, si no hay coincidencia, español; `<html lang>` SHALL coincidir. *(`contracts.test.ts`, E2E `i18n.spec.ts`)*
+3. THE SYSTEM SHALL explicar cada diagnóstico de visión y de compilación en el idioma elegido con la misma tarjeta, fila y columna que el texto canónico en español. *(`diagnostics-i18n.test.ts`: fast-check sobre tableros aleatorios y diagnósticos reales del detector)*
+4. WHEN un diagnóstico almacenado no tiene `params` THE SYSTEM SHALL mostrar el texto español original marcado como tal (nunca inventar un texto).
+5. THE SYSTEM SHALL generar el reporte en el idioma del parámetro «Idioma del reporte» de CREAR REPORTE (por defecto, el de la interfaz) sin cambiar el `contentHash` de los programas existentes, y el reporte español SHALL ser idéntico byte a byte al de la v1. *(`i18n.test.ts` del motor, snapshot del compilador)*
+6. THE SYSTEM SHALL ofrecer el kit imprimible en los cuatro idiomas, con títulos que caben en la tarjeta y marcadores que OpenCV recupera desde los PDF de cada idioma. *(`locales.test.ts`, `test_board_kit_raster.py`)*
+7. THE SYSTEM SHALL dibujar los textos de la superposición de OpenCV en el idioma de la petición sin cambiar los datos de detección. *(`test_i18n.py`)*
+8. THE SYSTEM SHALL reconocer las etiquetas de campos de los documentos en los cuatro idiomas y ofrecer documentos de demostración ficticios en cada uno. *(`i18n.test.ts` del motor)*

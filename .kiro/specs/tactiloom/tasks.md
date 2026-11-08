@@ -86,4 +86,13 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
 - [ ] 15. P1 opcional
   - [ ] 15.1 Cámara en vivo 1–2 FPS con estabilización temporal (K observaciones iguales)
   - [ ] 15.2 Exportar/importar flujos JSON versionados
-  - [ ] 15.3 Interfaz en inglés (`lib/i18n/en.ts`)
+  - [x] 15.3 Interfaz en inglés → ampliado a es/en/it/fr en la tarea 16
+
+- [x] 16. Idiomas: español, inglés, italiano y francés (todos) — ADR 0005
+  - [x] 16.1 Contratos: `LOCALES`, negociación de `Accept-Language`, `params` en diagnósticos y efectos; `CREATE_REPORT.language` opcional (sin cambio de `contentHash`) · Commit `6fa5ca1`
+  - [x] 16.2 Compilador: `params` en todos los diagnósticos; motor: reporte en 4 idiomas (español idéntico), etiquetas de campos en 4 idiomas, documentos de demostración por idioma · Commit `6fa5ca1`
+  - [x] 16.3 Visión: `params` en todos los diagnósticos, `locale` en `/v1/analyze`, overlay localizado, muestras reales para la web (`tests/fixtures/vision-diagnostic-samples.json`) · Commit `063581f`
+  - [x] 16.4 Web: diccionarios tipados, selector de idioma, diagnósticos/efectos/errores localizados, pasos del programa en el idioma elegido · Commit `063581f`
+  - [x] 16.5 Kit imprimible por idioma (`assets/board-kit/<locale>/`, `kit-index.json`, ZIP por idioma, ajuste de títulos con métricas reales) · Commit `063581f`
+  - [x] 16.6 Pruebas: paridad de diccionarios, fast-check de diagnósticos, kit por idioma rasterizado con OpenCV, E2E en/it/fr + axe · Commit `063581f`
+  - _Requirements: 15.1–15.8_
