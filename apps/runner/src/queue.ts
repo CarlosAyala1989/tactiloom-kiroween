@@ -1,4 +1,4 @@
-import type { Job, PrismaClient } from '@ritualos/db';
+import type { Job, PrismaClient } from '@tactiloom/db';
 
 /**
  * Postgres job queue with leases.

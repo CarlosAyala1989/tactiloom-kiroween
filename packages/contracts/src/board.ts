@@ -3,7 +3,7 @@ import { CardKindSchema } from './cards';
 import { DiagnosticCodeSchema, DiagnosticSchema } from './diagnostics';
 import { CellSchema, OrientationSchema } from './geometry';
 
-export const BOARD_PROTOCOL_VERSION = 'ritual-board/1' as const;
+export const BOARD_PROTOCOL_VERSION = 'tactiloom-board/1' as const;
 export const SOURCE_MODES = ['physical', 'image', 'simulator'] as const;
 export const SourceModeSchema = z.enum(SOURCE_MODES);
 export type SourceMode = z.infer<typeof SourceModeSchema>;

@@ -1,6 +1,6 @@
 'use client';
 
-import { DIAGNOSTIC_TITLES_ES, type Diagnostic } from '@ritualos/contracts';
+import { DIAGNOSTIC_TITLES_ES, type Diagnostic } from '@tactiloom/contracts';
 import { es } from '@/lib/i18n/es';
 
 const ICON: Record<Diagnostic['severity'], string> = { error: '✕', warning: '!', info: 'i' };

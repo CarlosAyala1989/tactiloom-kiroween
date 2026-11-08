@@ -1,6 +1,6 @@
 'use client';
 
-import { diffBoards, type BoardDiff } from '@ritualos/compiler';
+import { diffBoards, type BoardDiff } from '@tactiloom/compiler';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
@@ -13,7 +13,7 @@ import { api, ApiError, type AnalyzeResponse, type ScenarioView } from '@/lib/cl
 import { es } from '@/lib/i18n/es';
 
 type Tab = 'camera' | 'image';
-const LAST_CAPTURE_KEY = 'ritualos:last-capture-cards';
+const LAST_CAPTURE_KEY = 'tactiloom:last-capture-cards';
 
 function BoardDiffSummary({ diff }: { diff: BoardDiff }) {
   const changes = diff.added.length + diff.removed.length + diff.moved.length + diff.rotated.length;

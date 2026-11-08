@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/runner",
+  "name": "@tactiloom/runner",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS long-running worker: claims jobs from Postgres (FOR UPDATE SKIP LOCKED + lease) and runs the workflow engine",
+  "description": "Tactiloom long-running worker: claims jobs from Postgres (FOR UPDATE SKIP LOCKED + lease) and runs the workflow engine",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -15,10 +15,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ritualos/compiler": "workspace:*",
-    "@ritualos/contracts": "workspace:*",
-    "@ritualos/db": "workspace:*",
-    "@ritualos/workflow-engine": "workspace:*",
+    "@tactiloom/compiler": "workspace:*",
+    "@tactiloom/contracts": "workspace:*",
+    "@tactiloom/db": "workspace:*",
+    "@tactiloom/workflow-engine": "workspace:*",
     "dotenv": "18.0.9",
     "tsx": "4.23.15",
     "zod": "4.6.7"

@@ -4,7 +4,7 @@ import { CardKindSchema, DataFactSchema, PortSchema } from './cards';
 import { HASH_PATTERN } from './canonical';
 import { OrientationSchema } from './geometry';
 
-export const IR_VERSION = 'ritual-ir/1' as const;
+export const IR_VERSION = 'tactiloom-ir/1' as const;
 export const MAX_IR_NODES = 30;
 
 const JsonValueSchema: z.ZodType<unknown> = z.lazy(() =>

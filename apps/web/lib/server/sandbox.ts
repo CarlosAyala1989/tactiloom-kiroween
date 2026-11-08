@@ -1,5 +1,5 @@
 import 'server-only';
-import { FileSandbox } from '@ritualos/workflow-engine/sandbox';
+import { FileSandbox } from '@tactiloom/workflow-engine/sandbox';
 import { env } from './env';
 
 let sandbox: Promise<FileSandbox> | undefined;

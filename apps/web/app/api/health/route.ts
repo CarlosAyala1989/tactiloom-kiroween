@@ -21,7 +21,7 @@ export const GET = handler(async (_request, _context: unknown, requestId) => {
   return ok(
     {
       status: healthy ? 'ok' : 'degraded',
-      service: 'ritualos-web',
+      service: 'tactiloom-web',
       checks: { web: true, database, vision: vision.ok, worker: worker.alive },
       worker,
       vision: vision.detail ?? null,

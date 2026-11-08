@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 
 _PARENTS = Path(__file__).resolve().parents
-# Repository layout: services/vision/ritualos_vision/config.py → repo root is 3 levels up.
-# In the container the package lives at /app/ritualos_vision and paths come from env vars.
+# Repository layout: services/vision/tactiloom_vision/config.py → repo root is 3 levels up.
+# In the container the package lives at /app/tactiloom_vision and paths come from env vars.
 REPO_ROOT = _PARENTS[3] if len(_PARENTS) > 3 else _PARENTS[-1]
 
 
@@ -21,9 +21,9 @@ def _int(name: str, default: int) -> int:
     return int(value) if value else default
 
 
-CATALOG_DIR = _path("RITUALOS_CATALOG_DIR", REPO_ROOT / "packages" / "contracts" / "catalog")
-SCHEMAS_DIR = _path("RITUALOS_SCHEMAS_DIR", REPO_ROOT / "packages" / "contracts" / "schemas")
-KIT_DIR = _path("RITUALOS_KIT_DIR", REPO_ROOT / "assets" / "board-kit")
+CATALOG_DIR = _path("TACTILOOM_CATALOG_DIR", REPO_ROOT / "packages" / "contracts" / "catalog")
+SCHEMAS_DIR = _path("TACTILOOM_SCHEMAS_DIR", REPO_ROOT / "packages" / "contracts" / "schemas")
+KIT_DIR = _path("TACTILOOM_KIT_DIR", REPO_ROOT / "assets" / "board-kit")
 
 MAX_UPLOAD_BYTES = _int("VISION_MAX_UPLOAD_BYTES", 12 * 1024 * 1024)
 MAX_PIXELS = _int("VISION_MAX_PIXELS", 40_000_000)

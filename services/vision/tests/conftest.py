@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from ritualos_vision import config
+from tactiloom_vision import config
 
 REPO_ROOT = config.REPO_ROOT
 EXPECTED_PATH = REPO_ROOT / "tests" / "fixtures" / "expected-results.json"

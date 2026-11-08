@@ -1,4 +1,4 @@
-# Estado de implementación — RitualOS
+# Estado de implementación — Tactiloom
 
 > Registro honesto por fase. Solo se anotan comandos ejecutados de verdad y resultados observados.
 > Entorno: Ubuntu 24.04.5 · i5-1155G7 · Node 24.15.0 · pnpm 11.9.0 · Python 3.14.6 · Docker 29.9.3 / Compose v5.7.0 ·
@@ -32,11 +32,11 @@ repositorio en GitHub y vídeo, que requieren al equipo (ver «Pendiente»).
 | `pnpm typecheck` | 0 errores (7 paquetes + scripts/tests de la raíz) |
 | `pnpm lint` | ESLint 0 avisos · Ruff «All checks passed» · formato OK |
 | `pnpm test` | Vitest 155 passed (contracts 16, board-kit 11, compiler 55, web 23, engine 46, runner 4) · pytest 75 passed |
-| `pnpm test:integration` | 21 passed (cola 5, runner 11, hardening 5) contra `ritualos_test` |
+| `pnpm test:integration` | 21 passed (cola 5, runner 11, hardening 5) contra `tactiloom_test` |
 | `pnpm test:e2e` | 16 passed contra el stack Docker (`docker compose up`) |
 | `node scripts/smoke.mjs http://localhost:3210` | SMOKE OK: rama SÍ con 2 artefactos, rama NO con revisión OPEN, tablero ambiguo no compila |
 | `node scripts/abuse-check.mjs http://localhost:3210` | upload chunked de 40 MB sin Content-Length → 413 en 39 ms; health 200; sin Origin → 403; Origin ajeno → 403 |
-| `prisma migrate deploy` + seed en una BD vacía (`ritualos_clean_check`, luego borrada) | 3 migraciones aplicadas; 26 entradas de catálogo |
+| `prisma migrate deploy` + seed en una BD vacía (`tactiloom_clean_check`, luego borrada) | 3 migraciones aplicadas; 26 entradas de catálogo |
 | `pnpm benchmark:vision` | sintético: 120/120 tableros, recall 1,0 (línea base 113/120, 0,9418) |
 | `kiro-cli agent validate` (2 agentes) | sin errores; un agente inválido sí se rechaza |
 | `docker compose up --build` | 4 servicios sanos (db, vision, web healthy; runner activo); migrate + seed OK |
@@ -82,7 +82,7 @@ repositorio en GitHub y vídeo, que requieren al equipo (ver «Pendiente»).
 5. Revisión de seguridad (agente de Kiro): cuerpos chunked, limitador, cuotas con carrera, sniffing parcial,
    reintento tras caída con `FILE_CHANGED` → corregidos en `885c463` con pruebas que fallan sin el arreglo.
 6. Imagen de visión no arrancaba en el contenedor (`config.py` asumía la estructura del repo) → ruta tolerante.
-7. Compose intentaba descargar la imagen compartida `ritualos-node:local` → `pull_policy: never` en web/runner (probado con un proyecto mínimo).
+7. Compose intentaba descargar la imagen compartida `tactiloom-node:local` → `pull_policy: never` en web/runner (probado con un proyecto mínimo).
 
 ## Riesgos y limitaciones
 

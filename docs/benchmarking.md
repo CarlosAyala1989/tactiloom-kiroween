@@ -5,7 +5,7 @@ impresas fotografiadas por el equipo).
 
 ## 1. Sintético (real, reproducible)
 
-`pnpm benchmark:vision` → `services/vision/ritualos_vision/benchmark.py`, semilla 7, 120 escenas. Cada escena:
+`pnpm benchmark:vision` → `services/vision/tactiloom_vision/benchmark.py`, semilla 7, 120 escenas. Cada escena:
 4–12 tarjetas del catálogo colocadas al azar (desplazamiento ±3 mm, giro ±7°), renderizadas desde los PDF del
 kit, «fotografiadas» con perspectiva aleatoria, giro de cámara ±5° y 0/90/180/270°, desenfoque, ruido,
 gradiente de luz y JPEG 75–92. El detector solo ve píxeles; la verdad sale de la especificación de la escena.

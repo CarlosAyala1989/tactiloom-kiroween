@@ -4,4 +4,4 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 if [[ -f "$ROOT/.env" ]]; then set -a; . "$ROOT/.env"; set +a; fi
 cd "$ROOT"
-exec pnpm --filter @ritualos/runner start
+exec pnpm --filter @tactiloom/runner start

@@ -14,7 +14,7 @@ const withErrors = (responses: Record<string, unknown>) => ({
 /** OpenAPI 3.1 description of the HTTP API. Contract bodies reference the versioned JSON Schemas. */
 const DOCUMENT = {
   openapi: '3.1.0',
-  info: { title: 'RitualOS API', version: '1.0.0', description: 'API HTTP de RitualOS (Next.js). Autenticación: cookie de sesión demo (HttpOnly, SameSite=Lax). Las mutaciones verifican Origin.' },
+  info: { title: 'Tactiloom API', version: '1.0.0', description: 'API HTTP de Tactiloom (Next.js). Autenticación: cookie de sesión demo (HttpOnly, SameSite=Lax). Las mutaciones verifican Origin.' },
   servers: [{ url: '/' }],
   components: {
     schemas: {
@@ -23,10 +23,10 @@ const DOCUMENT = {
         required: ['error'],
         properties: { error: { type: 'object', required: ['code', 'message', 'requestId'], properties: { code: { type: 'string' }, message: { type: 'string' }, requestId: { type: 'string' }, details: {} } } },
       },
-      BoardState: { $ref: 'https://ritualos.dev/schemas/board-state.v1.schema.json' },
-      DetectionResult: { $ref: 'https://ritualos.dev/schemas/detection-result.v1.schema.json' },
-      WorkflowIR: { $ref: 'https://ritualos.dev/schemas/workflow-ir.v1.schema.json' },
-      ExecutionPlan: { $ref: 'https://ritualos.dev/schemas/execution-plan.v1.schema.json' },
+      BoardState: { $ref: 'https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/board-state.v1.schema.json' },
+      DetectionResult: { $ref: 'https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/detection-result.v1.schema.json' },
+      WorkflowIR: { $ref: 'https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/workflow-ir.v1.schema.json' },
+      ExecutionPlan: { $ref: 'https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/execution-plan.v1.schema.json' },
       Params: { type: 'object', additionalProperties: { type: 'object' }, description: 'Parámetros por instancia de tarjeta, p. ej. {"input-11": {"uploadedFileId": "…"}}' },
     },
   },

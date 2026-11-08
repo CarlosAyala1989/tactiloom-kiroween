@@ -8,8 +8,8 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from ritualos_vision import app as app_module
-from ritualos_vision import config
+from tactiloom_vision import app as app_module
+from tactiloom_vision import config
 
 from .conftest import read_bytes
 

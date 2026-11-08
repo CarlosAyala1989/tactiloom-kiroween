@@ -4,7 +4,7 @@ import {
   type BoardTemplate,
   type CardCatalogEntry,
   type CardKind,
-} from '@ritualos/contracts';
+} from '@tactiloom/contracts';
 import { markerModules } from './aruco';
 import type { Primitive } from './display-list';
 import { translate } from './display-list';
@@ -133,7 +133,7 @@ export function boardItems(variant: BoardVariant = 'full', template: BoardTempla
   const items: Primitive[] = [{ type: 'rect', x: 0, y: 0, width: page.width, height: page.height, fill: '#ffffff' }];
 
   items.push(
-    { type: 'text', x: page.width / 2, y: 17.5, text: 'RitualOS · Ritual Board v1', size: 6, weight: 'bold', anchor: 'middle', fill: INK },
+    { type: 'text', x: page.width / 2, y: 17.5, text: 'Tactiloom · Board v1', size: 6, weight: 'bold', anchor: 'middle', fill: INK },
     {
       type: 'text',
       x: page.width / 2,
@@ -306,7 +306,7 @@ export function cardSheetPageItems(
       type: 'text',
       x: layout.pageWidth / 2,
       y: 8.5,
-      text: `RitualOS · tarjetas cards-v1 · hoja ${page + 1}/${layout.pages}${layout.scale < 1 ? ' · versión reducida' : ''} · recorta por el borde gris`,
+      text: `Tactiloom · tarjetas cards-v1 · hoja ${page + 1}/${layout.pages}${layout.scale < 1 ? ' · versión reducida' : ''} · recorta por el borde gris`,
       size: 2.6,
       weight: 'regular',
       anchor: 'middle',

@@ -3,7 +3,7 @@
  * Long page copy lives next to each page; shared labels live here.
  */
 export const es = {
-  appName: 'RitualOS',
+  appName: 'Tactiloom',
   tagline: 'Construye flujos con tus manos. Ejecútalos en tu computadora.',
   nav: {
     studio: 'Estudio',

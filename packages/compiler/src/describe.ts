@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, type WorkflowIR } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, type WorkflowIR } from '@tactiloom/contracts';
 import { cardLabel, cellLabel } from './messages';
 
 export interface DescribedStep {

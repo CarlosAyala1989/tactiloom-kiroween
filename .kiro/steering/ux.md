@@ -3,7 +3,7 @@ inclusion: fileMatch
 fileMatchPattern: "apps/web/**"
 ---
 
-# UX / UI de RitualOS
+# UX / UI de Tactiloom
 
 - Estética de estación de trabajo creativa: superficies oscuras cálidas, tarjetas con color por tipo, tipografía legible.
   No es un CRUD genérico ni una app infantil.

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getBoardTemplate, getCardCatalog, sha256HexBytes } from '@ritualos/contracts';
+import { getBoardTemplate, getCardCatalog, sha256HexBytes } from '@tactiloom/contracts';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 import {

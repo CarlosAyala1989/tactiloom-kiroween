@@ -1,4 +1,4 @@
-import { adjacent, getCardCatalog, rotateClockwise, type CardKind, type Orientation } from '@ritualos/contracts';
+import { adjacent, getCardCatalog, rotateClockwise, type CardKind, type Orientation } from '@tactiloom/contracts';
 import fc from 'fast-check';
 import type { LayoutEntry } from '../src/index';
 
@@ -67,7 +67,7 @@ export function layoutProgram(tail: Tail, startRow: number, startCol: number, st
 }
 
 /**
- * Arbitrary of valid layouts (by construction) for the Ritual Board Grammar v1.
+ * Arbitrary of valid layouts (by construction) for the Tactiloom Board Grammar v1.
  * For each generated program every board placement is tried and one feasible placement is
  * picked, so branching programs are not filtered away (see generators-coverage.test.ts).
  */

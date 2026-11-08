@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   outputFileTracingRoot: path.join(import.meta.dirname, '..', '..'),
-  transpilePackages: ['@ritualos/contracts', '@ritualos/compiler', '@ritualos/board-kit', '@ritualos/workflow-engine', '@ritualos/db'],
+  transpilePackages: ['@tactiloom/contracts', '@tactiloom/compiler', '@tactiloom/board-kit', '@tactiloom/workflow-engine', '@tactiloom/db'],
   serverExternalPackages: ['pg', '@prisma/adapter-pg', '@prisma/client'],
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];

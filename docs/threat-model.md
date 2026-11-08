@@ -1,4 +1,4 @@
-# Modelo de amenazas — RitualOS
+# Modelo de amenazas — Tactiloom
 
 Alcance: demo pública multi-sesión (cualquiera puede crear un workspace temporal) y uso local en talleres.
 Activos: integridad de lo que se ejecuta, aislamiento entre workspaces, disponibilidad, documentos subidos
@@ -24,7 +24,7 @@ Activos: integridad de lo que se ejecuta, aislamiento entre workspaces, disponib
 
 ## Revisión independiente
 
-El 2026-11-08 el agente `ritualos-security-reviewer` (`.kiro/agents/`) revisó el código en modo solo lectura:
+El 2026-11-08 el agente `tactiloom-security-reviewer` (`.kiro/agents/`) revisó el código en modo solo lectura:
 4 problemas confirmados (cuerpos chunked sin límite, limitador global/IP falsificable, cuotas con carrera,
 sniffing de TXT parcial) y varias mejoras (plan fail-closed, transiciones condicionadas, errores internos
 expuestos, entorno del worker PDF, token antes del cuerpo, `__Host-`). Todos corregidos en el commit `885c463`

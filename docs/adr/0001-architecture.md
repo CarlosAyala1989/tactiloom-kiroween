@@ -15,7 +15,7 @@
 | Otros | ffmpeg 6.1.1, poppler 24.02, ImageMagick 6.9, Tesseract 5.3.4 (no usado), Kiro CLI 2.34.2 |
 | Cámara | `/dev/video0`, `/dev/video1` presentes; no usadas en pruebas automáticas |
 
-Puertos 3000, 8000 y 55432 ya estaban ocupados por otros proyectos: RitualOS usa **web 3210, vision 8210,
+Puertos 3000, 8000 y 55432 ya estaban ocupados por otros proyectos: Tactiloom usa **web 3210, vision 8210,
 Postgres 55439** (solo `127.0.0.1`).
 
 ## Decisiones

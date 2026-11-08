@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/contracts",
+  "name": "@tactiloom/contracts",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS shared contracts: Zod schemas, JSON Schemas, board template and card catalog",
+  "description": "Tactiloom shared contracts: Zod schemas, JSON Schemas, board template and card catalog",
   "license": "MIT",
   "type": "module",
   "exports": {

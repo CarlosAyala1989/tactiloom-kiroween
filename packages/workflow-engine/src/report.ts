@@ -1,4 +1,4 @@
-import { FIELD_IDS, FIELD_LABELS_ES } from '@ritualos/contracts';
+import { FIELD_IDS, FIELD_LABELS_ES } from '@tactiloom/contracts';
 import type { ValidationResult } from './fields';
 
 export interface ReportInput {
@@ -55,7 +55,7 @@ export function renderReport(input: ReportInput): RenderedReport {
             return `| ${FIELD_LABELS_ES[field]} | ${value === null ? '—' : escapeMarkdown(value)} | ${fieldStatus(validation, field)} |`;
           }),
           '',
-          '> Generado por RitualOS (plantilla workshop-summary-v1). Documento de demostración con datos ficticios.',
+          '> Generado por Tactiloom (plantilla workshop-summary-v1). Documento de demostración con datos ficticios.',
           '',
         ].join('\n');
   const json =

@@ -1,4 +1,4 @@
-import { CreateWorkflowVersionRequestSchema } from '@ritualos/contracts';
+import { CreateWorkflowVersionRequestSchema } from '@tactiloom/contracts';
 import { assertSameOrigin, handler, ok, parseJson } from '@/lib/server/http';
 import { prisma } from '@/lib/server/prisma';
 import { requireSession } from '@/lib/server/session';

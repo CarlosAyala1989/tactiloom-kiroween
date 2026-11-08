@@ -1,4 +1,4 @@
-import { canonicalHash, getCardCatalog, indexCatalog, irHashPayload, type CardCatalog } from '@ritualos/contracts';
+import { canonicalHash, getCardCatalog, indexCatalog, irHashPayload, type CardCatalog } from '@tactiloom/contracts';
 import { describe, expect, it } from 'vitest';
 import { compile, describeIrEs, diffBoards, diffIr, LINEAR_LAYOUT, OFFICIAL_TWO_BRANCH_LAYOUT } from '../src/index';
 import { errorCodes, replace, state, without, withCard } from './helpers';
@@ -12,7 +12,7 @@ describe('official two-branch example (§4.3)', () => {
     expect(result.valid).toBe(true);
     expect(errorCodes(result.diagnostics)).toEqual([]);
     const ir = result.ir!;
-    expect(ir.irVersion).toBe('ritual-ir/1');
+    expect(ir.irVersion).toBe('tactiloom-ir/1');
     expect(ir.startNodeId).toBe('start-10');
     expect(ir.nodes.map((n) => n.id)).toEqual([
       'start-10', 'input-11', 'extract-12', 'validate-13', 'condition-14', 'report-15', 'save-16', 'end-17', 'review-18', 'end-19',

@@ -6,7 +6,7 @@ import { Nav } from '@/components/Nav';
 import { SessionProvider } from '@/components/SessionProvider';
 
 export const metadata: Metadata = {
-  title: { default: 'RitualOS — Build workflows with your hands', template: '%s · RitualOS' },
+  title: { default: 'Tactiloom — Build workflows with your hands', template: '%s · Tactiloom' },
   description: 'Automatización tangible: tarjetas ArUco sobre un tablero → OpenCV → grafo tipado → ejecución segura y aprobada.',
 };
 
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <footer className="mx-auto max-w-7xl px-6 pb-10 text-xs text-muted">
-            RitualOS · MIT · Datos de demostración ficticios · Antecedentes: FloBlocks (2025) y Sheets (2015) exploraron la programación con tarjetas y webcam.
+            Tactiloom · MIT · Datos de demostración ficticios · Antecedentes: FloBlocks (2025) y Sheets (2015) exploraron la programación con tarjetas y webcam.
           </footer>
         </SessionProvider>
       </body>

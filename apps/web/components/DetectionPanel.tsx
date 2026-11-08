@@ -1,6 +1,6 @@
 'use client';
 
-import type { DetectionResult } from '@ritualos/contracts';
+import type { DetectionResult } from '@tactiloom/contracts';
 import { es } from '@/lib/i18n/es';
 import { DiagnosticsList } from './DiagnosticsList';
 import { ModeBadge } from './ui';

@@ -1,4 +1,4 @@
-import { ApproveRunRequestSchema } from '@ritualos/contracts';
+import { ApproveRunRequestSchema } from '@tactiloom/contracts';
 import { assertSameOrigin, handler, ok, parseJson } from '@/lib/server/http';
 import { prisma } from '@/lib/server/prisma';
 import { approveRun } from '@/lib/server/runs';

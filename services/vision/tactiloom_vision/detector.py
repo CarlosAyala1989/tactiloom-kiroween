@@ -1,4 +1,4 @@
-"""Board reading pipeline (Ritual Board Grammar v1, see docs/physical-grammar-v1.md).
+"""Board reading pipeline (Tactiloom Board Grammar v1, see docs/physical-grammar-v1.md).
 
 pixels → ArUco markers → 4 fiducials → homography (16 corner correspondences) → card marker
 geometry in board millimetres → cell + N/E/S/W orientation → DetectionResult.
@@ -281,7 +281,7 @@ def analyze_image(
                 "TOO_MANY_MARKERS",
                 "error",
                 f"Se detectaron {raw_count} marcadores (máximo {config.MAX_MARKERS}). La imagen no se procesa.",
-                suggestion="Fotografía solo un tablero RitualOS.",
+                suggestion="Fotografía solo un tablero Tactiloom.",
             )
         )
         markers = []
@@ -573,7 +573,7 @@ def analyze_image(
     if render:
         errors = sum(1 for d in diagnostics if d["severity"] == "error")
         status = "calibrado" if board["calibrated"] else "SIN CALIBRAR"
-        header = f"RitualOS vision | {len(cards)} tarjetas | {status} | errores: {errors}"
+        header = f"Tactiloom vision | {len(cards)} tarjetas | {status} | errores: {errors}"
         if missing and markers:
             header += " | faltan esquinas: " + ",".join(str(f) for f in missing)
         jpeg, overlay_w, overlay_h = render_overlay(image_bgr, shapes, header)
@@ -582,7 +582,7 @@ def analyze_image(
     total_ms = (time.perf_counter() - started) * 1000 + decode_ms
 
     return {
-        "protocolVersion": "ritual-board/1",
+        "protocolVersion": "tactiloom-board/1",
         "requestId": request_id,
         "detectorVersion": DETECTOR_VERSION,
         "sourceMode": source_mode,

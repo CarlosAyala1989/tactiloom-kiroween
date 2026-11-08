@@ -1,4 +1,4 @@
-import { BOARD_PROTOCOL_VERSION, type BoardState, type Orientation, type SourceMode } from '@ritualos/contracts';
+import { BOARD_PROTOCOL_VERSION, type BoardState, type Orientation, type SourceMode } from '@tactiloom/contracts';
 
 export type LayoutEntry = readonly [markerId: number, row: number, col: number, orientation: Orientation];
 

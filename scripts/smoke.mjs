@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// End-to-end API smoke test against a running RitualOS stack (local or deployed):
+// End-to-end API smoke test against a running Tactiloom stack (local or deployed):
 //   node scripts/smoke.mjs [baseUrl]
 // image (gallery scenario) → OpenCV → compile → version → dry-run → approval → execution → download.
 const base = (process.argv[2] ?? process.env.SMOKE_BASE_URL ?? 'http://127.0.0.1:3210').replace(/\/$/, '');

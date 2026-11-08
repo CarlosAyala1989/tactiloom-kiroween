@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/workflow-engine",
+  "name": "@tactiloom/workflow-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS workflow engine: executes verified ritual-ir/1 DAGs with a closed set of handlers inside a file sandbox",
+  "description": "Tactiloom workflow engine: executes verified tactiloom-ir/1 DAGs with a closed set of handlers inside a file sandbox",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -16,8 +16,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ritualos/compiler": "workspace:*",
-    "@ritualos/contracts": "workspace:*",
+    "@tactiloom/compiler": "workspace:*",
+    "@tactiloom/contracts": "workspace:*",
     "unpdf": "2.1.0",
     "zod": "4.6.7"
   },

@@ -1,5 +1,5 @@
 {
-  "generatedBy": "python -m ritualos_vision.fixtures",
+  "generatedBy": "python -m tactiloom_vision.fixtures",
   "note": "Ground truth from the scene specifications. Tests compare detector output against it; the detector never reads it.",
   "boards": [
     {

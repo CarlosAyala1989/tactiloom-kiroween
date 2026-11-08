@@ -14,7 +14,7 @@ export default defineConfig({
     env: {
       DATABASE_URL: 'postgresql://unused@localhost/unused',
       SESSION_SECRET: 'test-secret-test-secret',
-      PUBLIC_ORIGIN: 'https://demo.ritualos.test',
+      PUBLIC_ORIGIN: 'https://demo.tactiloom.test',
     },
   },
 });

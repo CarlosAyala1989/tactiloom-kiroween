@@ -4,8 +4,8 @@
  * Idempotent: safe to run on every deploy.
  */
 import 'dotenv/config';
-import { getBoardTemplate, getCardCatalog } from '@ritualos/contracts';
-import { getPrisma } from '@ritualos/db';
+import { getBoardTemplate, getCardCatalog } from '@tactiloom/contracts';
+import { getPrisma } from '@tactiloom/db';
 
 const prisma = getPrisma();
 const template = getBoardTemplate();

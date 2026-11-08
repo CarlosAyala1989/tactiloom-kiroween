@@ -1,4 +1,4 @@
-import { PreviewRunRequestSchema } from '@ritualos/contracts';
+import { PreviewRunRequestSchema } from '@tactiloom/contracts';
 import { assertSameOrigin, handler, ok, parseJson } from '@/lib/server/http';
 import { requestPreview } from '@/lib/server/runs';
 import { requireSession } from '@/lib/server/session';

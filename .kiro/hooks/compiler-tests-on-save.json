@@ -8,7 +8,7 @@
       "matcher": "packages/compiler/.*\\.ts$",
       "action": {
         "type": "command",
-        "command": "pnpm --filter @ritualos/compiler test",
+        "command": "pnpm --filter @tactiloom/compiler test",
         "timeout": 180
       }
     }

@@ -28,11 +28,11 @@ import {
   type Port,
   type SourceMode,
   type WorkflowIR,
-} from '@ritualos/contracts';
+} from '@tactiloom/contracts';
 import { analyzeGraph, type GraphInput } from './graph';
 import { cardLabel, cellLabel, directionLabel } from './messages';
 
-export const COMPILER_VERSION = 'ritualos-compiler/1.0.0';
+export const COMPILER_VERSION = 'tactiloom-compiler/1.0.0';
 
 /** A recognised card instance after normalisation (catalog-derived identity). */
 export interface CompiledNode {
@@ -94,7 +94,7 @@ function portDirection(orientation: Orientation, direction: 'FORWARD' | 'RIGHT')
 }
 
 /**
- * Ritual Board Grammar v1 compiler (docs/physical-grammar-v1.md, Appendix A of the master prompt).
+ * Tactiloom Board Grammar v1 compiler (docs/physical-grammar-v1.md, Appendix A of the master prompt).
  * Pure and deterministic: the same BoardState + params always yields the same IR and contentHash.
  */
 export function compile(boardStateInput: unknown, paramsInput: unknown = {}, options: CompileOptions = {}): CompileResult {
@@ -113,7 +113,7 @@ export function compile(boardStateInput: unknown, paramsInput: unknown = {}, opt
     return {
       valid: false,
       diagnostics: [
-        compilerDiagnostic('INVALID_BOARD_STATE', 'error', `El estado del tablero no cumple el contrato ritual-board/1: ${issues}`, {
+        compilerDiagnostic('INVALID_BOARD_STATE', 'error', `El estado del tablero no cumple el contrato tactiloom-board/1: ${issues}`, {
           suggestion: 'Vuelve a analizar la imagen o recarga el simulador.',
         }),
       ],

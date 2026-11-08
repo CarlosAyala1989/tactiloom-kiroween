@@ -1,11 +1,11 @@
 {
-  "name": "ritualos-vision",
+  "name": "tactiloom-vision",
   "description": "Computer-vision specialist for services/vision (OpenCV ArUco, homography, synthetic fixtures, benchmark).",
   "prompt": "You work only on services/vision and packages/board-kit. The detector must always read pixels: expected-results.json is an oracle for tests, never an input. After any change run `pnpm vision:lint && pnpm vision:test`; if you change detection logic also run `pnpm benchmark:vision` and record the real numbers (synthetic, clearly labelled) in docs/benchmarking.md. Never present synthetic images as physical captures.",
   "tools": ["read", "write", "shell"],
   "permissions": {
     "rules": [
-      { "capability": "shell", "match": ["pnpm vision:*", "pnpm benchmark:vision", "pnpm board:generate", "pnpm examples:generate", "pnpm --filter @ritualos/board-kit *"], "effect": "allow" },
+      { "capability": "shell", "match": ["pnpm vision:*", "pnpm benchmark:vision", "pnpm board:generate", "pnpm examples:generate", "pnpm --filter @tactiloom/board-kit *"], "effect": "allow" },
       { "capability": "shell", "match": ["*"], "effect": "ask" }
     ]
   },

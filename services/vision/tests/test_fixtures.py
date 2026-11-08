@@ -9,8 +9,8 @@ import cv2
 import numpy as np
 import pytest
 
-from ritualos_vision.detector import analyze_image
-from ritualos_vision.imaging import decode_image
+from tactiloom_vision.detector import analyze_image
+from tactiloom_vision.imaging import decode_image
 
 from .conftest import EXPECTED_PATH, card_tuples, read_bytes
 

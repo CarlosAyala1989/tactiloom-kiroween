@@ -1,6 +1,6 @@
 import 'server-only';
-import { advisoryLock } from '@ritualos/db';
-import { sha256Hex } from '@ritualos/workflow-engine/sandbox';
+import { advisoryLock } from '@tactiloom/db';
+import { sha256Hex } from '@tactiloom/workflow-engine/sandbox';
 import { DEMO_DOCUMENTS, readDemoDocument } from './assets';
 import { audit } from './audit';
 import { env } from './env';

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { config as loadDotenv } from 'dotenv';
-import { createPrismaClient } from '@ritualos/db';
-import { FileSandbox } from '@ritualos/workflow-engine';
+import { createPrismaClient } from '@tactiloom/db';
+import { FileSandbox } from '@tactiloom/workflow-engine';
 import { loadRunnerConfig, REPO_ROOT } from './config';
 import { log } from './log';
 import { RUNNER_VERSION, runLoop } from './worker';

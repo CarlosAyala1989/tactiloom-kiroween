@@ -107,7 +107,7 @@ describe('canonical JSON', () => {
 describe('BoardState schema', () => {
   it('accepts the documented example and applies defaults', () => {
     const state = BoardStateSchema.parse({
-      protocolVersion: 'ritual-board/1',
+      protocolVersion: 'tactiloom-board/1',
       sourceMode: 'simulator',
       board: { templateId: 'board-v1', columns: 8, rows: 4, calibrated: true },
       cards: [{ markerId: 10, row: 0, col: 0, orientation: 'E' }],

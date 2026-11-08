@@ -1,4 +1,4 @@
-import { CompileRequestSchema } from '@ritualos/contracts';
+import { CompileRequestSchema } from '@tactiloom/contracts';
 import { assertSameOrigin, handler, ok, parseJson } from '@/lib/server/http';
 import { requireSession } from '@/lib/server/session';
 import { compileBoard } from '@/lib/server/workflows';

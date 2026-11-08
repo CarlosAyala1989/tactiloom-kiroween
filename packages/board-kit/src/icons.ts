@@ -1,4 +1,4 @@
-import type { CardKind } from '@ritualos/contracts';
+import type { CardKind } from '@tactiloom/contracts';
 
 /** Icon layers in a 24x24 box. `ink` uses the card colour, `paper` is white. Original artwork (MIT). */
 export interface IconLayer {

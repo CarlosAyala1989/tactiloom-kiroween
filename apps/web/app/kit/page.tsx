@@ -1,7 +1,7 @@
 'use client';
 
-import { cardSvg } from '@ritualos/board-kit/browser';
-import { getCardCatalog } from '@ritualos/contracts';
+import { cardSvg } from '@tactiloom/board-kit/browser';
+import { getCardCatalog } from '@tactiloom/contracts';
 import { useEffect, useState } from 'react';
 import { ErrorBox, formatBytes, Section } from '@/components/ui';
 import { api, ApiError } from '@/lib/client/api';

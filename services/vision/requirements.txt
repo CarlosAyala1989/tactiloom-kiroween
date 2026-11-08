@@ -1,4 +1,4 @@
-# Runtime dependencies of the RitualOS vision service (pinned; see docs/adr/0001-architecture.md)
+# Runtime dependencies of the Tactiloom vision service (pinned; see docs/adr/0001-architecture.md)
 fastapi==0.162.2
 uvicorn==0.54.0
 python-multipart==0.0.33

@@ -10,7 +10,7 @@
 2. Un **test de deriva** (`packages/contracts/test/contracts.test.ts`) falla si los schemas commiteados no
    coinciden con la salida actual de Zod. Un hook de Kiro (`.kiro/hooks/contracts-drift-check.json`) lo
    ejecuta al guardar un archivo de contratos.
-3. El servicio de visión valida cada respuesta con **Pydantic** (`ritualos_vision/models.py`, `extra="forbid"`)
+3. El servicio de visión valida cada respuesta con **Pydantic** (`tactiloom_vision/models.py`, `extra="forbid"`)
    y, en pruebas, contra el JSON Schema publicado (`tests/test_contracts.py`, `jsonschema` Draft 2020-12),
    incluida la proyección `DetectionResult → BoardState`.
 4. La web vuelve a validar la respuesta de visión con Zod (`DetectionResultSchema`) antes de usarla
@@ -20,7 +20,7 @@
 
 ## Versionado
 
-`protocolVersion: "ritual-board/1"`, `irVersion: "ritual-ir/1"`, `planVersion: "ritual-plan/1"`,
+`protocolVersion: "tactiloom-board/1"`, `irVersion: "tactiloom-ir/1"`, `planVersion: "tactiloom-plan/1"`,
 `catalogVersion: "cards-v1"`, `templateId: "board-v1"`. Un cambio incompatible crea `/2` y nuevos archivos de
 schema; nunca se reutiliza un identificador con otro significado.
 

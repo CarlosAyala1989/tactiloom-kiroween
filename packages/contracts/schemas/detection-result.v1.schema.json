@@ -1,12 +1,12 @@
 {
-  "$id": "https://ritualos.dev/schemas/detection-result.v1.schema.json",
-  "title": "RitualOS DetectionResult (ritual-board/1)",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/detection-result.v1.schema.json",
+  "title": "Tactiloom DetectionResult (tactiloom-board/1)",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
     "protocolVersion": {
       "type": "string",
-      "const": "ritual-board/1"
+      "const": "tactiloom-board/1"
     },
     "requestId": {
       "type": "string",

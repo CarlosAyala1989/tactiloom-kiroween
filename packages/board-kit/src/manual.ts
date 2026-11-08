@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, getBoardTemplate, type CardCatalogEntry } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, getBoardTemplate, type CardCatalogEntry } from '@tactiloom/contracts';
 import { CARD_TITLES } from './designs';
 
 /** Printing & assembly manual (Spanish first, English summary). Generated with the kit. */
@@ -8,7 +8,7 @@ export function assemblyManual(entries: readonly CardCatalogEntry[]): string {
   const rows = entries
     .map((entry) => `| #${entry.markerId} | ${entry.kind} | ${CARD_TITLES[entry.kind]} | \`${entry.cardInstanceId}\` | ${entry.set} |`)
     .join('\n');
-  return `# RitualOS — Manual de impresión y montaje del kit (board-v1 / cards-v1)
+  return `# Tactiloom — Manual de impresión y montaje del kit (board-v1 / cards-v1)
 
 > Archivo generado por \`pnpm board:generate\`. No editar a mano.
 
@@ -34,7 +34,7 @@ tablero: debe medir 100 mm (o 70,7 mm en la versión reducida). Papel mate y bla
 3. **Tarjetas:** recorta por el borde gris redondeado. No recortes ni dobles el marcador ni su margen blanco.
    Opcional: pega cada tarjeta sobre cartulina para que no se curve.
 
-## 3. Reglas de colocación (Ritual Board Grammar v1)
+## 3. Reglas de colocación (Tactiloom Board Grammar v1)
 
 - Cuadrícula de **8 columnas × 4 filas**; casillas de ${grid.cellWidth} × ${grid.cellHeight} mm. Las coordenadas impresas
   en cada casilla son \`fila,columna\` (desde 0).

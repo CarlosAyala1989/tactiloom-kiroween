@@ -18,20 +18,20 @@ async function kitZip(): Promise<Uint8Array> {
   const entries: Record<string, Uint8Array> = {};
   for (const file of manifest.files) {
     const found = await readKitFile(file.path);
-    if (found) entries[`ritualos-board-kit/${file.path}`] = new Uint8Array(found.bytes);
+    if (found) entries[`tactiloom-board-kit/${file.path}`] = new Uint8Array(found.bytes);
   }
   const manifestFile = await readKitFile('kit-manifest.json');
-  if (manifestFile) entries['ritualos-board-kit/kit-manifest.json'] = new Uint8Array(manifestFile.bytes);
+  if (manifestFile) entries['tactiloom-board-kit/kit-manifest.json'] = new Uint8Array(manifestFile.bytes);
   zipCache = zipSync(entries, { level: 6, mtime: new Date('2026-11-01T00:00:00Z') });
   return zipCache;
 }
 
 export const GET = handler(async (request, _context: unknown, requestId) => {
   const name = new URL(request.url).searchParams.get('file') ?? '';
-  if (name === 'ritualos-board-kit.zip') {
+  if (name === 'tactiloom-board-kit.zip') {
     const bytes = await kitZip();
     return new Response(new Uint8Array(bytes), {
-      headers: { 'content-type': MIME.zip as string, 'content-disposition': 'attachment; filename="ritualos-board-kit.zip"', 'x-content-type-options': 'nosniff' },
+      headers: { 'content-type': MIME.zip as string, 'content-disposition': 'attachment; filename="tactiloom-board-kit.zip"', 'x-content-type-options': 'nosniff' },
     });
   }
   const file = await readKitFile(name);

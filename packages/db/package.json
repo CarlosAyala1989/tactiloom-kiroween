@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/db",
+  "name": "@tactiloom/db",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS Prisma client (schema lives in /prisma/schema.prisma)",
+  "description": "Tactiloom Prisma client (schema lives in /prisma/schema.prisma)",
   "license": "MIT",
   "type": "module",
   "exports": {

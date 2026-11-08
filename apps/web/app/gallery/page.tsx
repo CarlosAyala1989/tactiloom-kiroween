@@ -22,7 +22,7 @@ export default function GalleryPage() {
     <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Galería de demostración</h1>
-        <p className="max-w-3xl text-muted">{note || 'Imágenes de tableros para probar RitualOS sin cámara ni impresora.'}</p>
+        <p className="max-w-3xl text-muted">{note || 'Imágenes de tableros para probar Tactiloom sin cámara ni impresora.'}</p>
         <p className="inline-block rounded-lg border border-info/50 bg-info/10 px-3 py-1.5 text-sm text-info">
           Procedencia: sintéticas — renderizadas desde los PDF reales del kit y «fotografiadas» por software. No son capturas físicas.
         </p>

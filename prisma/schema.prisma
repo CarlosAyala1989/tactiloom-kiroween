@@ -1,4 +1,4 @@
-// RitualOS persistence model (PostgreSQL). See docs/adr/0001-architecture.md.
+// Tactiloom persistence model (PostgreSQL). See docs/adr/0001-architecture.md.
 // Connection URL lives in prisma.config.ts (Prisma 7); the client uses @prisma/adapter-pg.
 
 generator client {

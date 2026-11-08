@@ -63,7 +63,7 @@ export default function HomePage() {
           <p className="chip text-amber-strong">Kiroween 2026 · Frankenstein</p>
           <h1 className="text-4xl font-black leading-tight sm:text-5xl">{es.tagline}</h1>
           <p className="max-w-xl text-lg text-muted">
-            RitualOS convierte tarjetas físicas con marcadores ArUco, colocadas sobre un tablero, en un programa real: la cámara lee el tablero, un compilador lo traduce a un grafo tipado y un worker aislado lo ejecuta sobre documentos de prueba —solo después de que lo apruebes.
+            Tactiloom convierte tarjetas físicas con marcadores ArUco, colocadas sobre un tablero, en un programa real: la cámara lee el tablero, un compilador lo traduce a un grafo tipado y un worker aislado lo ejecuta sobre documentos de prueba —solo después de que lo apruebes.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/gallery" className="btn btn-primary">
@@ -106,7 +106,7 @@ export default function HomePage() {
           <li>• El simulador construye el tablero digitalmente y está marcado «no utiliza cámara».</li>
         </ul>
         <p className="text-xs text-muted">
-          RitualOS no inventó la programación tangible: FloBlocks (2025) y Sheets (2015) ya usaron tarjetas y webcam. Aquí la integramos con un motor seguro de automatización documental, trazabilidad y aprobación.
+          Tactiloom no inventó la programación tangible: FloBlocks (2025) y Sheets (2015) ya usaron tarjetas y webcam. Aquí la integramos con un motor seguro de automatización documental, trazabilidad y aprobación.
         </p>
       </section>
     </div>

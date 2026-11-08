@@ -31,7 +31,7 @@ export default function HowItWorksPage() {
           <h2 className="text-lg font-bold">3. Escanea, revisa y aprueba</h2>
           <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
             <li>OpenCV detecta los 4 marcadores de esquina, calibra la perspectiva y asigna cada tarjeta a su casilla y orientación.</li>
-            <li>El compilador genera la IR ritual-ir/1 con su hash sha256, o explica cada error con fila y columna.</li>
+            <li>El compilador genera la IR tactiloom-ir/1 con su hash sha256, o explica cada error con fila y columna.</li>
             <li>El worker hace un dry-run; tú revisas entrada, pasos y efectos; apruebas con el hash; el worker ejecuta.</li>
           </ul>
         </li>

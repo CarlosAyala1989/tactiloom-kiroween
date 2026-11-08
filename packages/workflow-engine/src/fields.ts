@@ -1,4 +1,4 @@
-import { FIELD_IDS, type FieldId } from '@ritualos/contracts';
+import { FIELD_IDS, type FieldId } from '@tactiloom/contracts';
 import { z } from 'zod';
 
 export type FieldValues = Record<FieldId, string | null>;

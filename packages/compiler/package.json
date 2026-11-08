@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/compiler",
+  "name": "@tactiloom/compiler",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS compiler: BoardState (Ritual Board Grammar v1) → canonical workflow IR (ritual-ir/1)",
+  "description": "Tactiloom compiler: BoardState (Tactiloom Board Grammar v1) → canonical workflow IR (tactiloom-ir/1)",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -13,7 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ritualos/contracts": "workspace:*",
+    "@tactiloom/contracts": "workspace:*",
     "zod": "4.6.7"
   },
   "devDependencies": {

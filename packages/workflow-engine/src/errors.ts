@@ -1,4 +1,4 @@
-import type { DiagnosticCode } from '@ritualos/contracts';
+import type { DiagnosticCode } from '@tactiloom/contracts';
 
 /** Error with a contract diagnostic code and a Spanish message safe to show to the user. */
 export class EngineError extends Error {

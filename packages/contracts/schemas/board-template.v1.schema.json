@@ -1,6 +1,6 @@
 {
-  "$id": "https://ritualos.dev/schemas/board-template.v1.schema.json",
-  "title": "RitualOS BoardTemplate v1",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/board-template.v1.schema.json",
+  "title": "Tactiloom BoardTemplate v1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
@@ -10,7 +10,7 @@
     },
     "protocolVersion": {
       "type": "string",
-      "const": "ritual-board/1"
+      "const": "tactiloom-board/1"
     },
     "description": {
       "type": "string"

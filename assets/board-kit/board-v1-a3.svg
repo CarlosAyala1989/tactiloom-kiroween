@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297" role="img" aria-label="RitualOS Ritual Board v1 (A3)">
-<title>RitualOS Ritual Board v1 (A3)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297" role="img" aria-label="Tactiloom Board v1 (A3)">
+<title>Tactiloom Board v1 (A3)</title>
 <rect x="0" y="0" width="420" height="297" fill="#ffffff"/>
-<text x="210" y="17.5" font-family="Helvetica, Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" fill="#202124">RitualOS · Ritual Board v1</text>
+<text x="210" y="17.5" font-family="Helvetica, Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" fill="#202124">Tactiloom · Board v1</text>
 <text x="210" y="24" font-family="Helvetica, Arial, sans-serif" font-size="2.8" font-weight="400" text-anchor="middle" fill="#5f6368">8 × 4 casillas · ArUco DICT_4X4_100 · fiduciales 0, 1, 2, 3 · tarjetas #10–#89</text>
 <text x="23.6" y="38.1" font-family="Helvetica, Arial, sans-serif" font-size="2.4" font-weight="400" text-anchor="start" fill="#a0a4a8">0,0</text>
 <line x1="43.5" y1="63" x2="47.5" y2="63" stroke="#d0d3d6" stroke-width="0.3"/>

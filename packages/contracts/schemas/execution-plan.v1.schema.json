@@ -1,12 +1,12 @@
 {
-  "$id": "https://ritualos.dev/schemas/execution-plan.v1.schema.json",
-  "title": "RitualOS Execution Plan (ritual-plan/1)",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/execution-plan.v1.schema.json",
+  "title": "Tactiloom Execution Plan (tactiloom-plan/1)",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
     "planVersion": {
       "type": "string",
-      "const": "ritual-plan/1"
+      "const": "tactiloom-plan/1"
     },
     "contentHash": {
       "type": "string",

@@ -150,10 +150,10 @@ export async function createKitDocument(meta: PdfMetadata): Promise<{ doc: PDFDo
   const doc = await PDFDocument.create({ updateMetadata: false });
   doc.setTitle(meta.title);
   doc.setSubject(meta.subject);
-  doc.setAuthor('RitualOS contributors');
-  doc.setCreator('RitualOS board-kit');
-  doc.setProducer('RitualOS board-kit (pdf-lib 1.17.1)');
-  doc.setKeywords(['RitualOS', 'ArUco', 'DICT_4X4_100', 'board-v1', 'cards-v1']);
+  doc.setAuthor('Tactiloom contributors');
+  doc.setCreator('Tactiloom board-kit');
+  doc.setProducer('Tactiloom board-kit (pdf-lib 1.17.1)');
+  doc.setKeywords(['Tactiloom', 'ArUco', 'DICT_4X4_100', 'board-v1', 'cards-v1']);
   doc.setCreationDate(KIT_METADATA_DATE);
   doc.setModificationDate(KIT_METADATA_DATE);
   const fonts = {

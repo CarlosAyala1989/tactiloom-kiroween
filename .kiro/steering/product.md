@@ -2,13 +2,13 @@
 inclusion: always
 ---
 
-# Producto: RitualOS
+# Producto: Tactiloom
 
-**RitualOS — Build workflows with your hands. Run them on your computer.**
+**Tactiloom — Build workflows with your hands. Run them on your computer.**
 
 Plataforma de automatización tangible: tarjetas físicas con marcadores ArUco sobre un tablero de 8×4 casillas
 se fotografían, OpenCV las reconoce desde los píxeles, un compilador las traduce a un grafo dirigido tipado
-(IR `ritual-ir/1`) y un worker aislado ejecuta acciones permitidas sobre documentos de prueba.
+(IR `tactiloom-ir/1`) y un worker aislado ejecuta acciones permitidas sobre documentos de prueba.
 
 ## Audiencia
 - Coordinadores de talleres, personal administrativo y estudiantes que prototipan procesos de documentos.

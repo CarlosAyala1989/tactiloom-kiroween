@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { boardStateFromDetection } from '@ritualos/contracts';
+import { boardStateFromDetection } from '@tactiloom/contracts';
 import { readScenarioImage } from '@/lib/server/assets';
 import { audit } from '@/lib/server/audit';
 import { assertSameOrigin, handler, HttpError, ok, parseFormLimited } from '@/lib/server/http';

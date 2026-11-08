@@ -1,6 +1,6 @@
 'use client';
 
-import { FIELD_IDS, TERMINAL_RUN_STATUSES, type ExecutionPlan, type RunStatus } from '@ritualos/contracts';
+import { FIELD_IDS, TERMINAL_RUN_STATUSES, type ExecutionPlan, type RunStatus } from '@tactiloom/contracts';
 import Link from 'next/link';
 import { use, useCallback, useEffect, useState } from 'react';
 import { SessionGate } from '@/components/SessionProvider';

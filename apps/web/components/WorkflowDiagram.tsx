@@ -1,6 +1,6 @@
 'use client';
 
-import { CARD_KIND_SPECS, type CardKind, type IrEdge } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, type CardKind, type IrEdge } from '@tactiloom/contracts';
 import { Background, Handle, Position, ReactFlow, type Edge, type Node, type NodeProps } from '@xyflow/react';
 import { useMemo } from 'react';
 import { textOn } from '@/lib/client/contrast';

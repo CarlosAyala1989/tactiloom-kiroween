@@ -8,15 +8,15 @@
   bucles y bifurcaciones que dibujan y mueven gráficos ([Tada et al., AHFE 2015](https://www.iplab.cs.tsukuba.ac.jp/paper/international/tada_ahfe2015.pdf)).
 - Marcadores ArUco, homografía, compiladores de grafos y automatización de documentos son técnicas conocidas.
 
-RitualOS **no** afirma haber inventado la programación tangible ni ser mejor que estos trabajos (no hay
+Tactiloom **no** afirma haber inventado la programación tangible ni ser mejor que estos trabajos (no hay
 comparación empírica).
 
-## Qué integra RitualOS
+## Qué integra Tactiloom
 
-| Pieza «cosida» | Qué aporta en RitualOS |
+| Pieza «cosida» | Qué aporta en Tactiloom |
 |---|---|
-| Papel impreso + OpenCV (ArUco, homografía de 16 puntos) | Lectura física versionada (`ritual-board/1`) con diagnósticos espaciales (tarjeta, fila, columna) dibujados sobre la propia foto |
-| Teoría de compiladores (componentes de Tarjan, orden topológico, *definite assignment*) | Un programa formal `ritual-ir/1` con hash canónico; los errores se explican antes de ejecutar |
+| Papel impreso + OpenCV (ArUco, homografía de 16 puntos) | Lectura física versionada (`tactiloom-board/1`) con diagnósticos espaciales (tarjeta, fila, columna) dibujados sobre la propia foto |
+| Teoría de compiladores (componentes de Tarjan, orden topológico, *definite assignment*) | Un programa formal `tactiloom-ir/1` con hash canónico; los errores se explican antes de ejecutar |
 | Cola transaccional en PostgreSQL con leases | Ejecución real fuera del ciclo HTTP, reintentos sin efectos duplicados |
 | Sandbox de archivos + pdf.js aislado | Acciones de oficina reales (extraer, validar, reportar, pedir revisión) con un catálogo cerrado |
 | Aprobación ligada a hashes (dry-run → `planHash`) | Lo que se ejecuta es exactamente lo que se revisó |

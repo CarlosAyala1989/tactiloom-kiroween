@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Diagnostic } from '@ritualos/contracts';
+import type { Diagnostic } from '@tactiloom/contracts';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/index';
 
@@ -23,7 +23,7 @@ describe('compile expectations of every board fixture (ground-truth board states
       message: `Diagnóstico de visión ${code}`,
     }));
     const result = compile({
-      protocolVersion: 'ritual-board/1',
+      protocolVersion: 'tactiloom-board/1',
       sourceMode: 'image',
       board: { templateId: 'board-v1', columns: 8, rows: 4, calibrated: board.vision.calibrated },
       cards: board.vision.cards,

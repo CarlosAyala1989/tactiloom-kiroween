@@ -1,7 +1,7 @@
 [project]
-name = "ritualos-vision"
+name = "tactiloom-vision"
 version = "1.0.0"
-description = "RitualOS vision service: ArUco board reading, homography and cell assignment"
+description = "Tactiloom vision service: ArUco board reading, homography and cell assignment"
 license = "MIT"
 requires-python = ">=3.12"
 
@@ -34,7 +34,7 @@ ignore = [
 "tests/*" = ["S", "PLR", "N802"]
 "scripts/*" = ["E402"]
 # Pydantic models mirror the camelCase JSON contract field names.
-"ritualos_vision/models.py" = ["N815"]
+"tactiloom_vision/models.py" = ["N815"]
 
 [tool.ruff.format]
 quote-style = "double"

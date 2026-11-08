@@ -1,6 +1,6 @@
 """Reproducible SYNTHETIC vision benchmark (not a physical-camera benchmark).
 
-python -m ritualos_vision.benchmark --scenes 120 --seed 7 --out docs/benchmark-results/synthetic-latest.json
+python -m tactiloom_vision.benchmark --scenes 120 --seed 7 --out docs/benchmark-results/synthetic-latest.json
 
 Each scene: random legal placement of catalog cards (rendered from the real kit PDFs) photographed
 under a random condition bucket (perspective, lighting, resolution, blur, noise, JPEG). Metrics are

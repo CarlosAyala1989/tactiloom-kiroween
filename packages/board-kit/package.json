@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/board-kit",
+  "name": "@tactiloom/board-kit",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS printable board and cards (SVG/PDF) with real ArUco DICT_4X4_100 markers",
+  "description": "Tactiloom printable board and cards (SVG/PDF) with real ArUco DICT_4X4_100 markers",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -16,7 +16,7 @@
     "examples": "tsx scripts/generate-example-documents.ts"
   },
   "dependencies": {
-    "@ritualos/contracts": "workspace:*",
+    "@tactiloom/contracts": "workspace:*",
     "pdf-lib": "1.17.1"
   },
   "devDependencies": {

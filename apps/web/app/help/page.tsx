@@ -7,7 +7,7 @@ export default function HelpPage() {
     <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Guía para jueces · Judges guide</h1>
-        <p className="max-w-3xl text-muted">Evalúa RitualOS en ~5 minutos sin hardware. Each step below is also described in English in docs/judge-guide.md.</p>
+        <p className="max-w-3xl text-muted">Evalúa Tactiloom en ~5 minutos sin hardware. Each step below is also described in English in docs/judge-guide.md.</p>
       </header>
 
       <section className="panel space-y-3 p-6">

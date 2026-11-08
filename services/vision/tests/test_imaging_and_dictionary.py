@@ -6,10 +6,10 @@ import json
 import numpy as np
 from PIL import Image
 
-from ritualos_vision import config
-from ritualos_vision.aruco import export_dictionary
-from ritualos_vision.detector import analyze_image
-from ritualos_vision.imaging import decode_image, sniff_format
+from tactiloom_vision import config
+from tactiloom_vision.aruco import export_dictionary
+from tactiloom_vision.detector import analyze_image
+from tactiloom_vision.imaging import decode_image, sniff_format
 
 from .conftest import read_bytes
 

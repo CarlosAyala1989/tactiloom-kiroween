@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, CARD_KINDS, RUN_STATUSES } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, CARD_KINDS, RUN_STATUSES } from '@tactiloom/contracts';
 import { describe, expect, it } from 'vitest';
 import { contrastRatio, textOn } from '../lib/client/contrast';
 import { es } from '../lib/i18n/es';

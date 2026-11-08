@@ -1,6 +1,6 @@
 """Synthetic board scenarios (ground truth) and fixture generation.
 
-`python -m ritualos_vision.fixtures` renders every scenario from the printable kit PDFs and writes:
+`python -m tactiloom_vision.fixtures` renders every scenario from the printable kit PDFs and writes:
   * assets/examples/boards/*.png      gallery images used by the demo and E2E tests
   * tests/fixtures/boards/*.jpg|png   extra CV fixtures (negatives, variations)
   * tests/fixtures/expected-results.json and assets/examples/boards/scenarios.json
@@ -400,7 +400,7 @@ def main() -> None:
     corrupt = tests_dir / "corrupt-image.png"
     corrupt.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\rIHDR" + b"\x00" * 7)
     expected = {
-        "generatedBy": "python -m ritualos_vision.fixtures",
+        "generatedBy": "python -m tactiloom_vision.fixtures",
         "note": (
             "Ground truth from the scene specifications. "
             "Tests compare detector output against it; the detector never reads it."

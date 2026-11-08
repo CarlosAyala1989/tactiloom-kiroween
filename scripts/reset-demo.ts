@@ -6,8 +6,8 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config as loadDotenv } from 'dotenv';
-import { createPrismaClient } from '@ritualos/db';
-import { FileSandbox } from '@ritualos/workflow-engine/sandbox';
+import { createPrismaClient } from '@tactiloom/db';
+import { FileSandbox } from '@tactiloom/workflow-engine/sandbox';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 loadDotenv({ path: path.join(root, '.env'), quiet: true });

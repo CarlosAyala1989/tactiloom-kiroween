@@ -114,7 +114,7 @@ class Overlay(Strict):
 
 
 class DetectionResult(Strict):
-    protocolVersion: Literal["ritual-board/1"]
+    protocolVersion: Literal["tactiloom-board/1"]
     requestId: str = Field(min_length=1, max_length=100)
     detectorVersion: str
     sourceMode: Literal["physical", "image"]

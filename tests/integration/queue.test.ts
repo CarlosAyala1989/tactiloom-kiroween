@@ -1,4 +1,4 @@
-import { claimJob, completeJob, failJob, heartbeat } from '@ritualos/runner';
+import { claimJob, completeJob, failJob, heartbeat } from '@tactiloom/runner';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { createPreviewRun, createVersion, createWorkspace, resetDatabase, testContext, testPrisma } from './support';
 

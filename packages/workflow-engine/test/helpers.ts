@@ -2,8 +2,8 @@ import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { compile, OFFICIAL_TWO_BRANCH_LAYOUT, boardStateFromLayout, type LayoutEntry } from '@ritualos/compiler';
-import type { FieldId, WorkflowIR } from '@ritualos/contracts';
+import { compile, OFFICIAL_TWO_BRANCH_LAYOUT, boardStateFromLayout, type LayoutEntry } from '@tactiloom/compiler';
+import type { FieldId, WorkflowIR } from '@tactiloom/contracts';
 import { FileSandbox, sha256Hex, type EnginePorts, type NodeEvent, type ResolvedDocument, type ReviewTaskRef, type SavedArtifactRef } from '../src/index';
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -37,7 +37,7 @@ export interface TestHarness {
 }
 
 export async function harness(): Promise<TestHarness> {
-  const root = await mkdtemp(join(tmpdir(), 'ritualos-engine-'));
+  const root = await mkdtemp(join(tmpdir(), 'tactiloom-engine-'));
   const sandbox = await FileSandbox.open(root);
   const workspaceId = 'ws_test';
   const h: TestHarness = {

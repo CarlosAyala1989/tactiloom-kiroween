@@ -1,7 +1,7 @@
 'use client';
 
-import type { BoardState } from '@ritualos/contracts';
-import { getCardCatalog } from '@ritualos/contracts';
+import type { BoardState } from '@tactiloom/contracts';
+import { getCardCatalog } from '@tactiloom/contracts';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError, type CompileView } from '@/lib/client/api';

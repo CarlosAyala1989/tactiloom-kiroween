@@ -3,7 +3,7 @@ import { assertSameOrigin, clientKey, HttpError, parseFormLimited, parseJson, ra
 import { displayName } from '../lib/server/uploads';
 import { z } from 'zod';
 
-const ORIGIN = 'https://demo.ritualos.test';
+const ORIGIN = 'https://demo.tactiloom.test';
 
 function chunkedRequest(totalBytes: number, chunkBytes = 64 * 1024, headers: Record<string, string> = {}): Request {
   let sent = 0;

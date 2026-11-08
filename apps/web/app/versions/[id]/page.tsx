@@ -1,6 +1,6 @@
 'use client';
 
-import { canonicalStringify } from '@ritualos/contracts';
+import { canonicalStringify } from '@tactiloom/contracts';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useMemo, useState } from 'react';

@@ -1,9 +1,9 @@
-# RitualOS full stack: `docker compose up --build`
+# Tactiloom full stack: `docker compose up --build`
 # Only the web UI is published (127.0.0.1); vision and the runner live on the private network.
-name: ritualos
+name: tactiloom
 
 x-node-env: &node-env
-  DATABASE_URL: postgresql://${POSTGRES_USER:-ritualos}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-ritualos}
+  DATABASE_URL: postgresql://${POSTGRES_USER:-tactiloom}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-tactiloom}
   WORKSPACE_ROOT: /workspace
   NODE_ENV: production
 
@@ -12,9 +12,9 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-ritualos}
+      POSTGRES_USER: ${POSTGRES_USER:-tactiloom}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
-      POSTGRES_DB: ${POSTGRES_DB:-ritualos}
+      POSTGRES_DB: ${POSTGRES_DB:-tactiloom}
     ports:
       - "127.0.0.1:${POSTGRES_PORT:-55439}:5432"
     volumes:
@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: services/vision/Dockerfile
-    image: ritualos-vision:local
+    image: tactiloom-vision:local
     restart: unless-stopped
     environment:
       VISION_INTERNAL_TOKEN: ${VISION_INTERNAL_TOKEN:?set VISION_INTERNAL_TOKEN in .env}
@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ritualos-node:local
+    image: tactiloom-node:local
     command: ["sh", "-c", "pnpm exec prisma migrate deploy && pnpm exec tsx prisma/seed.ts"]
     environment:
       <<: *node-env
@@ -58,10 +58,10 @@ services:
     restart: "no"
 
   runner:
-    image: ritualos-node:local
+    image: tactiloom-node:local
     # Built by the `migrate` service (same image); never pulled from a registry.
     pull_policy: never
-    command: ["pnpm", "--filter", "@ritualos/runner", "start"]
+    command: ["pnpm", "--filter", "@tactiloom/runner", "start"]
     restart: unless-stopped
     environment:
       <<: *node-env
@@ -78,9 +78,9 @@ services:
         condition: service_completed_successfully
 
   web:
-    image: ritualos-node:local
+    image: tactiloom-node:local
     pull_policy: never
-    command: ["pnpm", "--filter", "@ritualos/web", "start"]
+    command: ["pnpm", "--filter", "@tactiloom/web", "start"]
     restart: unless-stopped
     environment:
       <<: *node-env

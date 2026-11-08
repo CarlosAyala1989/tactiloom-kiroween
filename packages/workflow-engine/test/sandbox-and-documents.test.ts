@@ -9,7 +9,7 @@ import { exampleDocument } from './helpers';
 const LIMITS = { timeoutMs: 15_000, maxPages: 50, maxChars: 500_000 };
 
 async function freshSandbox() {
-  const root = await mkdtemp(join(tmpdir(), 'ritualos-sandbox-'));
+  const root = await mkdtemp(join(tmpdir(), 'tactiloom-sandbox-'));
   return { root, sandbox: await FileSandbox.open(root) };
 }
 
@@ -30,7 +30,7 @@ describe('FileSandbox', () => {
 
   it('never follows symlinks that escape the sandbox (file or directory)', async () => {
     const { root, sandbox } = await freshSandbox();
-    const outside = await mkdtemp(join(tmpdir(), 'ritualos-outside-'));
+    const outside = await mkdtemp(join(tmpdir(), 'tactiloom-outside-'));
     await writeFile(join(outside, 'secret.txt'), 'top secret');
     await mkdir(join(root, 'ws1', 'uploads'), { recursive: true });
     await symlink(join(outside, 'secret.txt'), join(root, 'ws1', 'uploads', 'link.txt'));

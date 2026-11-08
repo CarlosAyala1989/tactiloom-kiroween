@@ -1,7 +1,7 @@
 import 'server-only';
-import { lockWorkspace } from '@ritualos/db';
-import { sha256Hex } from '@ritualos/workflow-engine/sandbox';
-import { sniffMime } from '@ritualos/workflow-engine/sniff';
+import { lockWorkspace } from '@tactiloom/db';
+import { sha256Hex } from '@tactiloom/workflow-engine/sandbox';
+import { sniffMime } from '@tactiloom/workflow-engine/sniff';
 import { audit } from './audit';
 import { env } from './env';
 import { HttpError } from './http';

@@ -8,10 +8,10 @@ importers:
 
   .:
     dependencies:
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:packages/contracts
-      '@ritualos/db':
+      '@tactiloom/db':
         specifier: workspace:*
         version: link:packages/db
       dotenv:
@@ -33,13 +33,13 @@ importers:
       '@playwright/test':
         specifier: 1.65.0
         version: 1.65.0
-      '@ritualos/compiler':
+      '@tactiloom/compiler':
         specifier: workspace:*
         version: link:packages/compiler
-      '@ritualos/runner':
+      '@tactiloom/runner':
         specifier: workspace:*
         version: link:apps/runner
-      '@ritualos/workflow-engine':
+      '@tactiloom/workflow-engine':
         specifier: workspace:*
         version: link:packages/workflow-engine
       '@types/node':
@@ -75,16 +75,16 @@ importers:
 
   apps/runner:
     dependencies:
-      '@ritualos/compiler':
+      '@tactiloom/compiler':
         specifier: workspace:*
         version: link:../../packages/compiler
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@ritualos/db':
+      '@tactiloom/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@ritualos/workflow-engine':
+      '@tactiloom/workflow-engine':
         specifier: workspace:*
         version: link:../../packages/workflow-engine
       dotenv:
@@ -112,16 +112,16 @@ importers:
       '@next/env':
         specifier: 16.4.5
         version: 16.4.5
-      '@ritualos/board-kit':
+      '@tactiloom/board-kit':
         specifier: workspace:*
         version: link:../../packages/board-kit
-      '@ritualos/compiler':
+      '@tactiloom/compiler':
         specifier: workspace:*
         version: link:../../packages/compiler
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@ritualos/db':
+      '@tactiloom/db':
         specifier: workspace:*
         version: link:../../packages/db
       '@xyflow/react':
@@ -173,7 +173,7 @@ importers:
 
   packages/board-kit:
     dependencies:
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../contracts
       pdf-lib:
@@ -195,7 +195,7 @@ importers:
 
   packages/compiler:
     dependencies:
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../contracts
       zod:
@@ -261,10 +261,10 @@ importers:
 
   packages/workflow-engine:
     dependencies:
-      '@ritualos/compiler':
+      '@tactiloom/compiler':
         specifier: workspace:*
         version: link:../compiler
-      '@ritualos/contracts':
+      '@tactiloom/contracts':
         specifier: workspace:*
         version: link:../contracts
       unpdf:

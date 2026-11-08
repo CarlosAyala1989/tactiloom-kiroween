@@ -25,7 +25,7 @@ export type NodeRunStatus = z.infer<typeof NodeRunStatusSchema>;
 export const EXECUTION_MODES = ['dry-run', 'execute'] as const;
 export type ExecutionMode = (typeof EXECUTION_MODES)[number];
 
-export const PLAN_VERSION = 'ritual-plan/1' as const;
+export const PLAN_VERSION = 'tactiloom-plan/1' as const;
 
 export const PlannedEffectSchema = z.object({
   nodeId: z.string(),

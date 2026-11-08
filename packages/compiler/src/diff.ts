@@ -1,4 +1,4 @@
-import { canonicalStringify, compareEdges, type IrEdge, type Orientation, type WorkflowIR } from '@ritualos/contracts';
+import { canonicalStringify, compareEdges, type IrEdge, type Orientation, type WorkflowIR } from '@tactiloom/contracts';
 
 export interface PlacedCardLike {
   readonly markerId: number;

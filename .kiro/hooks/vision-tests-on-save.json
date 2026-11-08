@@ -5,7 +5,7 @@
       "name": "Vision lint and tests on save",
       "trigger": "PostFileSave",
       "description": "Lints (ruff) and tests (pytest + Hypothesis, pixels only) the vision service whenever a vision Python module is saved.",
-      "matcher": "services/vision/(ritualos_vision|tests)/.*\\.py$",
+      "matcher": "services/vision/(tactiloom_vision|tests)/.*\\.py$",
       "action": {
         "type": "command",
         "command": "pnpm vision:lint && pnpm vision:test",

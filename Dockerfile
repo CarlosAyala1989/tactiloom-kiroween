@@ -21,13 +21,13 @@ COPY packages/db/package.json packages/db/
 
 # ---- full install + build ----
 FROM manifests AS build
-RUN --mount=type=cache,id=ritualos-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store
+RUN --mount=type=cache,id=tactiloom-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store
 COPY . .
-RUN pnpm exec prisma generate && pnpm --filter @ritualos/web build
+RUN pnpm exec prisma generate && pnpm --filter @tactiloom/web build
 
 # ---- production dependencies only ----
 FROM manifests AS prod-deps
-RUN --mount=type=cache,id=ritualos-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod --store-dir /pnpm/store
+RUN --mount=type=cache,id=tactiloom-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod --store-dir /pnpm/store
 
 # ---- runtime ----
 FROM base AS runtime
@@ -50,4 +50,4 @@ COPY --from=build /app/assets ./assets
 RUN mkdir -p /workspace && chown -R node:node /workspace
 USER node
 EXPOSE 3210
-CMD ["pnpm", "--filter", "@ritualos/web", "start"]
+CMD ["pnpm", "--filter", "@tactiloom/web", "start"]

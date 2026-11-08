@@ -6,14 +6,14 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
 - [x] 1. Monorepo, contratos y steering (C)
   - pnpm workspaces, TypeScript 6.0.3 estricto, `.kiro/steering/*`, licencia MIT, `.env.example`
   - Zod como fuente de autoría y JSON Schemas publicados en `packages/contracts/schemas` con drift test
-  - _Requirements: 5.3, 14.1_ · Verificación: `pnpm --filter @ritualos/contracts test` · Commit `9fc4afb`
+  - _Requirements: 5.3, 14.1_ · Verificación: `pnpm --filter @tactiloom/contracts test` · Commit `9fc4afb`
 
 - [x] 2. Board-kit imprimible (A)
   - [x] 2.1 Exportar los bits de `DICT_4X4_100` desde OpenCV y test de deriva (`test_imaging_and_dictionary.py`)
   - [x] 2.2 Display list común → SVG y PDF deterministas (A3, mosaico 4×A4, reducido A4, tarjetas)
   - [x] 2.3 Manual de montaje y manifiesto con sha256
   - [x] 2.4 Rasterizar PDF/SVG y recuperar todos los IDs con OpenCV
-  - _Requirements: 1.1–1.4_ · Verificación: `pnpm board:generate`, `pnpm --filter @ritualos/board-kit test`, `test_board_kit_raster.py` · Commits `9fc4afb`, `527e58a`
+  - _Requirements: 1.1–1.4_ · Verificación: `pnpm board:generate`, `pnpm --filter @tactiloom/board-kit test`, `test_board_kit_raster.py` · Commits `9fc4afb`, `527e58a`
 
 - [x] 3. Servicio de visión (A)
   - [x] 3.1 Decodificación segura (firma, píxeles, EXIF), detector ArUco, homografía de 16 esquinas
@@ -28,13 +28,13 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
   - [x] 4.2 Análisis de grafo: Tarjan, alcanzabilidad, terminación, definite assignment
   - [x] 4.3 IR canónica, `contentHash`, `verifyIr`, diffs y descripción textual
   - [x] 4.4 Propiedades fast-check y guardia de cobertura del generador
-  - _Requirements: 3.1–3.5, 4.1–4.2, 5.1–5.2_ · Verificación: `pnpm --filter @ritualos/compiler test` (55 passed) · Commit `527e58a`
+  - _Requirements: 3.1–3.5, 4.1–4.2, 5.1–5.2_ · Verificación: `pnpm --filter @tactiloom/compiler test` (55 passed) · Commit `527e58a`
 
 - [x] 5. Motor de ejecución (B)
   - [x] 5.1 Sandbox (segmentos, lstat, `O_NOFOLLOW`, escritura create-only idempotente)
   - [x] 5.2 Extracción PDF en worker aislado con límites; TXT; error claro sin capa de texto
   - [x] 5.3 Handlers cerrados, dry-run con plan/planHash, postcondiciones de `SUCCEEDED`
-  - _Requirements: 7.1–7.5, 12.1–12.2_ · Verificación: `pnpm --filter @ritualos/workflow-engine test` (46 passed) · Commits `2904162`, `885c463`
+  - _Requirements: 7.1–7.5, 12.1–12.2_ · Verificación: `pnpm --filter @tactiloom/workflow-engine test` (46 passed) · Commits `2904162`, `885c463`
 
 - [x] 6. Persistencia y runner (B)
   - [x] 6.1 Esquema Prisma, migraciones, seed del catálogo
@@ -67,7 +67,7 @@ Responsables sugeridos: **A** visión y materiales físicos · **B** compilador,
   - Hooks y agentes en `.kiro/` validados contra la versión instalada (`kiro-cli agent validate`)
   - _Requirements: 14.1–14.2_
 
-- [x] 11b. Revisión de seguridad con el agente `ritualos-security-reviewer` y correcciones (B)
+- [x] 11b. Revisión de seguridad con el agente `tactiloom-security-reviewer` y correcciones (B)
   - Cuerpos chunked limitados, cuotas atómicas (`QuotaUsage`), locks de workspace, claves de cliente con proxy de confianza,
     Origin obligatorio, plan fail-closed en el worker, fecha de reporte determinista, errores genéricos, token antes del multipart
   - _Requirements: 8.3, 12.1–12.5, 13.3_ · Verificación: `pnpm test:integration` (21 passed), `node scripts/abuse-check.mjs` · Commit `885c463`

@@ -1,5 +1,5 @@
 import 'server-only';
-import { consumeQuota as consume, type QuotaKind } from '@ritualos/db';
+import { consumeQuota as consume, type QuotaKind } from '@tactiloom/db';
 import { env } from './env';
 import { HttpError } from './http';
 import { prisma } from './prisma';

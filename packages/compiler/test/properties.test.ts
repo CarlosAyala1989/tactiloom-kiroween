@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, rotateClockwise, type DataFact, type WorkflowIR } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, rotateClockwise, type DataFact, type WorkflowIR } from '@tactiloom/contracts';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { compile, verifyIr, type LayoutEntry } from '../src/index';

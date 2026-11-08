@@ -1,7 +1,7 @@
 'use client';
 
-import { LINEAR_LAYOUT, OFFICIAL_TWO_BRANCH_LAYOUT, type LayoutEntry } from '@ritualos/compiler';
-import { BOARD_PROTOCOL_VERSION, getCardCatalog, rotateClockwise, type BoardState, type CardKind, type Orientation } from '@ritualos/contracts';
+import { LINEAR_LAYOUT, OFFICIAL_TWO_BRANCH_LAYOUT, type LayoutEntry } from '@tactiloom/compiler';
+import { BOARD_PROTOCOL_VERSION, getCardCatalog, rotateClockwise, type BoardState, type CardKind, type Orientation } from '@tactiloom/contracts';
 import { useMemo, useState, type KeyboardEvent } from 'react';
 import { BoardGrid, CardTile, type BoardCardView } from '@/components/BoardGrid';
 import { CompilePanel } from '@/components/CompilePanel';
@@ -167,7 +167,7 @@ function Simulator() {
                 <button
                   type="button"
                   draggable
-                  onDragStart={(event) => event.dataTransfer.setData('text/x-ritualos-marker', String(card.markerId))}
+                  onDragStart={(event) => event.dataTransfer.setData('text/x-tactiloom-marker', String(card.markerId))}
                   aria-pressed={selected?.from === 'palette' && selected.markerId === card.markerId}
                   aria-label={`Elegir tarjeta #${card.markerId} ${es.kinds[card.kind]}`}
                   onClick={() => {

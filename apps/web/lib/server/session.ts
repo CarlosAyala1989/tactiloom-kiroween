@@ -5,7 +5,7 @@ import { env } from './env';
 import { HttpError } from './http';
 import { prisma } from './prisma';
 
-export const SESSION_COOKIE = 'ritualos_session';
+export const SESSION_COOKIE = 'tactiloom_session';
 
 /** `__Host-` prefix (Secure, Path=/, no Domain) whenever the public origin is HTTPS. */
 export function sessionCookieName(): string {

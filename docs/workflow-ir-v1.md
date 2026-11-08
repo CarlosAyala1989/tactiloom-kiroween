@@ -1,4 +1,4 @@
-# Workflow IR `ritual-ir/1` y plan de ejecución `ritual-plan/1`
+# Workflow IR `tactiloom-ir/1` y plan de ejecución `tactiloom-plan/1`
 
 Fuente: `packages/contracts/src/ir.ts`, `runs.ts`; JSON Schemas en `packages/contracts/schemas/`.
 
@@ -10,8 +10,8 @@ las aristas: un `ExecutionContext` tipado acumula hechos (`DocumentRef`, `Extrac
 
 ```jsonc
 {
-  "irVersion": "ritual-ir/1",
-  "compilerVersion": "ritualos-compiler/1.0.0",
+  "irVersion": "tactiloom-ir/1",
+  "compilerVersion": "tactiloom-compiler/1.0.0",
   "catalogVersion": "cards-v1",
   "boardTemplateId": "board-v1",
   "sourceMode": "image",                  // physical | image | simulator (no entra en el hash)
@@ -63,7 +63,7 @@ Objetos estrictos: cualquier clave desconocida es `INVALID_PARAMETER`.
 
 ## Plan de ejecución y aprobación
 
-El dry-run produce `ritual-plan/1`: `{ contentHash, input{uploadedFileId, originalName, mime, bytes, sha256},
+El dry-run produce `tactiloom-plan/1`: `{ contentHash, input{uploadedFileId, originalName, mime, bytes, sha256},
 path[], decision, validation, effects[], reportPreview, planHash }`. `planHash` = sha256 canónico de todo
 salvo `reportPreview`. Aprobar requiere `confirm: true` + `contentHash` + `planHash` iguales a los del
 servidor, dentro de 30 min; el worker repite el plan sin efectos y exige el mismo `planHash` antes de escribir.

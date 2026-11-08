@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "services" / "vision"))
 
-from ritualos_vision.aruco import export_dictionary  # noqa: E402
+from tactiloom_vision.aruco import export_dictionary  # noqa: E402
 
 OUTPUT = ROOT / "packages" / "board-kit" / "src" / "aruco" / "dict-4x4-100.json"
 

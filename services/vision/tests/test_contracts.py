@@ -7,10 +7,10 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from ritualos_vision import config
-from ritualos_vision.detector import analyze_image
-from ritualos_vision.imaging import decode_image
-from ritualos_vision.models import DetectionResult
+from tactiloom_vision import config
+from tactiloom_vision.detector import analyze_image
+from tactiloom_vision.imaging import decode_image
+from tactiloom_vision.models import DetectionResult
 
 from .conftest import EXPECTED_PATH, read_bytes
 

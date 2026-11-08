@@ -1,5 +1,5 @@
 import 'server-only';
-import { getPrisma, type Prisma } from '@ritualos/db';
+import { getPrisma, type Prisma } from '@tactiloom/db';
 
 export const prisma = () => getPrisma();
 

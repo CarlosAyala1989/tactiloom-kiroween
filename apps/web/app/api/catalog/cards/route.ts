@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, getBoardTemplate, getCardCatalog, PARAM_UI } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, getBoardTemplate, getCardCatalog, PARAM_UI } from '@tactiloom/contracts';
 import { handler, ok } from '@/lib/server/http';
 
 export const GET = handler(async (_request, _context: unknown, requestId) =>

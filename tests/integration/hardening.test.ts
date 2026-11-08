@@ -1,8 +1,8 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { consumeQuota } from '@ritualos/db';
-import { runOnce } from '@ritualos/runner';
-import { sha256Hex } from '@ritualos/workflow-engine';
+import { consumeQuota } from '@tactiloom/db';
+import { runOnce } from '@tactiloom/runner';
+import { sha256Hex } from '@tactiloom/workflow-engine';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { approve, createPreviewRun, createVersion, createWorkspace, resetDatabase, testContext, testPrisma, uploadExample } from './support';
 

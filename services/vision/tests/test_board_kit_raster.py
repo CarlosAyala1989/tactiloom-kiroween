@@ -9,9 +9,9 @@ import subprocess
 import cv2
 import pytest
 
-from ritualos_vision.catalog import load_catalog
-from ritualos_vision.detector import analyze_image, detect_markers
-from ritualos_vision.synth import render_pdf_page
+from tactiloom_vision.catalog import load_catalog
+from tactiloom_vision.detector import analyze_image, detect_markers
+from tactiloom_vision.synth import render_pdf_page
 
 from .conftest import kit_path
 

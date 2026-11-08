@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { constants, promises as fs } from 'node:fs';
 import path from 'node:path';
-import { SAFE_ID_PATTERN } from '@ritualos/contracts';
+import { SAFE_ID_PATTERN } from '@tactiloom/contracts';
 import { EngineError } from './errors';
 
 /** Each path segment: starts alphanumeric, then [A-Za-z0-9._-]; never "." or "..". */

@@ -1,6 +1,6 @@
-import { verifyIr } from '@ritualos/compiler';
-import type { DiagnosticCode, ExecutionPlan } from '@ritualos/contracts';
-import { Prisma, type Job, type PrismaClient, type Run, type WorkflowVersion } from '@ritualos/db';
+import { verifyIr } from '@tactiloom/compiler';
+import type { DiagnosticCode, ExecutionPlan } from '@tactiloom/contracts';
+import { Prisma, type Job, type PrismaClient, type Run, type WorkflowVersion } from '@tactiloom/db';
 import {
   DEFAULT_LIMITS,
   EngineError,
@@ -10,7 +10,7 @@ import {
   type EnginePorts,
   type FileSandbox,
   type RunOutcome,
-} from '@ritualos/workflow-engine';
+} from '@tactiloom/workflow-engine';
 import type { RunnerConfig } from './config';
 import { log } from './log';
 

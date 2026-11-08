@@ -5,7 +5,7 @@ realizó en esta sesión. Esta guía es el procedimiento recomendado (no verific
 
 ## Por qué no serverless
 
-RitualOS necesita un **worker de larga duración** (cola con leases), un servicio Python con OpenCV y
+Tactiloom necesita un **worker de larga duración** (cola con leases), un servicio Python con OpenCV y
 PostgreSQL. Una plataforma solo serverless no ejecuta el runner continuo. Lo más simple es una VM con Docker.
 
 ## Pasos (VM Ubuntu con Docker y un dominio)

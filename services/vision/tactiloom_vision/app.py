@@ -26,7 +26,7 @@ from .models import DetectionResult
 REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 MULTIPART_OVERHEAD = 64 * 1024
 
-logger = logging.getLogger("ritualos.vision")
+logger = logging.getLogger("tactiloom.vision")
 if not logger.handlers:
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(logging.Formatter("%(message)s"))
@@ -113,9 +113,9 @@ class BodySizeLimitMiddleware:
 
 
 app = FastAPI(
-    title="RitualOS Vision",
+    title="Tactiloom Vision",
     version=DETECTOR_VERSION,
-    description="ArUco board reading for RitualOS (internal service).",
+    description="ArUco board reading for Tactiloom (internal service).",
 )
 app.add_middleware(BodySizeLimitMiddleware, max_bytes=config.MAX_UPLOAD_BYTES + MULTIPART_OVERHEAD)
 _semaphore = asyncio.Semaphore(config.MAX_CONCURRENT_ANALYSES)
@@ -137,7 +137,7 @@ async def validation_handler(request: Request, exc: RequestValidationError) -> J
 async def health() -> dict:
     return {
         "status": "ok",
-        "service": "ritualos-vision",
+        "service": "tactiloom-vision",
         "detectorVersion": DETECTOR_VERSION,
         "opencv": cv2.__version__,
         "dictionary": "DICT_4X4_100",

@@ -1,10 +1,10 @@
-import type { Job } from '@ritualos/db';
+import type { Job } from '@tactiloom/db';
 import { cleanupExpired } from './cleanup';
 import { log } from './log';
 import { failRunForDeadJob, processJob, type RunnerContext } from './process';
 import { claimJob, completeJob, failJob, heartbeat } from './queue';
 
-export const RUNNER_VERSION = 'ritualos-runner/1.0.0';
+export const RUNNER_VERSION = 'tactiloom-runner/1.0.0';
 
 /** Processes one claimed job with a heartbeat that extends the lease while it runs. */
 export async function runClaimedJob(ctx: RunnerContext, job: Job): Promise<'DONE' | 'RETRY' | 'DEAD'> {

@@ -1,12 +1,12 @@
 {
-  "$id": "https://ritualos.dev/schemas/workflow-ir.v1.schema.json",
-  "title": "RitualOS Workflow IR (ritual-ir/1)",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/workflow-ir.v1.schema.json",
+  "title": "Tactiloom Workflow IR (tactiloom-ir/1)",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
     "irVersion": {
       "type": "string",
-      "const": "ritual-ir/1"
+      "const": "tactiloom-ir/1"
     },
     "compilerVersion": {
       "type": "string",

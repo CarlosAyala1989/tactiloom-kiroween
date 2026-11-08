@@ -1,6 +1,6 @@
 'use client';
 
-import type { BoardState, Diagnostic, DetectionResult, ExecutionPlan, IrEdge, RunStatus, WorkflowIR } from '@ritualos/contracts';
+import type { BoardState, Diagnostic, DetectionResult, ExecutionPlan, IrEdge, RunStatus, WorkflowIR } from '@tactiloom/contracts';
 
 export class ApiError extends Error {
   constructor(

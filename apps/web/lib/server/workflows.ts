@@ -1,7 +1,7 @@
 import 'server-only';
-import { compile, describeIrEs, diffBoards, diffIr, type CompileResult } from '@ritualos/compiler';
-import { BoardStateSchema, type BoardState, type WorkflowIR } from '@ritualos/contracts';
-import { Prisma } from '@ritualos/db';
+import { compile, describeIrEs, diffBoards, diffIr, type CompileResult } from '@tactiloom/compiler';
+import { BoardStateSchema, type BoardState, type WorkflowIR } from '@tactiloom/contracts';
+import { Prisma } from '@tactiloom/db';
 import { audit } from './audit';
 import { HttpError } from './http';
 import { json, prisma } from './prisma';
@@ -67,7 +67,7 @@ export async function createVersion(
             versionNumber: (previous?.versionNumber ?? 0) + 1,
             boardCaptureId: captureId,
             sourceMode: boardState.sourceMode,
-            compilerVersion: result.ir?.compilerVersion ?? 'ritualos-compiler/1.0.0',
+            compilerVersion: result.ir?.compilerVersion ?? 'tactiloom-compiler/1.0.0',
             valid: result.valid,
             boardStateJson: json(boardState),
             irJson: result.ir ? json(result.ir) : Prisma.JsonNull,

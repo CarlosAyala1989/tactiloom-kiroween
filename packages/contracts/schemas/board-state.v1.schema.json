@@ -1,12 +1,12 @@
 {
-  "$id": "https://ritualos.dev/schemas/board-state.v1.schema.json",
-  "title": "RitualOS BoardState (ritual-board/1)",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/board-state.v1.schema.json",
+  "title": "Tactiloom BoardState (tactiloom-board/1)",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
     "protocolVersion": {
       "type": "string",
-      "const": "ritual-board/1"
+      "const": "tactiloom-board/1"
     },
     "sourceMode": {
       "type": "string",

@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, ORIENTATION_LABEL_ES, type CardKind, type DataFact, type Orientation } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, ORIENTATION_LABEL_ES, type CardKind, type DataFact, type Orientation } from '@tactiloom/contracts';
 
 export const DATA_FACT_LABEL_ES: Readonly<Record<DataFact, string>> = {
   DocumentRef: 'documento de entrada',

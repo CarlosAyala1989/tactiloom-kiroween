@@ -1,10 +1,10 @@
-# Requirements Document — RitualOS
+# Requirements Document — Tactiloom
 
 ## Introduction
 
-RitualOS convierte tarjetas físicas con marcadores ArUco dispuestas sobre un tablero de 8×4 casillas en
+Tactiloom convierte tarjetas físicas con marcadores ArUco dispuestas sobre un tablero de 8×4 casillas en
 programas reales: OpenCV lee el tablero desde los píxeles, un compilador produce un grafo dirigido tipado
-(IR `ritual-ir/1`) y un worker aislado ejecuta un catálogo cerrado de acciones sobre documentos de prueba,
+(IR `tactiloom-ir/1`) y un worker aislado ejecuta un catálogo cerrado de acciones sobre documentos de prueba,
 solo después de un dry-run revisado y una aprobación explícita. Fuente contractual:
 #[[file:RitualOS_KiroCLI_Prompt_Maestro.md]].
 
@@ -16,8 +16,8 @@ Cada criterio indica cómo se verifica (archivo de prueba o comando). Formato EA
 - **Fiducial:** marcador ArUco de esquina del tablero (IDs 0 TL, 1 TR, 2 BR, 3 BL).
 - **Instancia de tarjeta:** tarjeta física única (`markerId` 10–89) mapeada por el catálogo a un tipo (`START`…`END`).
 - **F / R(F) / B(F):** dirección de avance impresa, giro horario de 90° y dirección opuesta.
-- **BoardState:** estado del tablero (`ritual-board/1`); **DetectionResult:** salida de visión.
-- **IR:** programa compilado `ritual-ir/1` con `contentHash` sha256 canónico.
+- **BoardState:** estado del tablero (`tactiloom-board/1`); **DetectionResult:** salida de visión.
+- **IR:** programa compilado `tactiloom-ir/1` con `contentHash` sha256 canónico.
 - **Plan / planHash:** resultado del dry-run que el usuario aprueba.
 
 ## Requirements
@@ -73,7 +73,7 @@ Cada criterio indica cómo se verifica (archivo de prueba o comando). Formato EA
 
 #### Acceptance Criteria
 
-1. THE SYSTEM SHALL producir `ritual-ir/1` canónica: el mismo BoardState y parámetros generan la misma IR y `contentHash`. *(propiedades: idempotencia e invarianza de orden)*
+1. THE SYSTEM SHALL producir `tactiloom-ir/1` canónica: el mismo BoardState y parámetros generan la misma IR y `contentHash`. *(propiedades: idempotencia e invarianza de orden)*
 2. WHEN cambia la orientación de una tarjeta, una tarjeta o un parámetro semántico THE SYSTEM SHALL producir una IR inválida o un hash distinto. *(propiedades de detección de cambio)*
 3. THE SYSTEM SHALL publicar JSON Schemas versionados generados desde Zod y detectar divergencias. *(`contracts.test.ts`, `test_contracts.py`)*
 

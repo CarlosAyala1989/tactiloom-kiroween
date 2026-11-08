@@ -1,8 +1,8 @@
 {
-  "name": "@ritualos/web",
+  "name": "@tactiloom/web",
   "version": "0.1.0",
   "private": true,
-  "description": "RitualOS web app (Next.js): Board Studio, Workflow Studio, Review & Run, history and HTTP API",
+  "description": "Tactiloom web app (Next.js): Board Studio, Workflow Studio, Review & Run, history and HTTP API",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@next/env": "16.4.5",
-    "@ritualos/board-kit": "workspace:*",
-    "@ritualos/compiler": "workspace:*",
-    "@ritualos/contracts": "workspace:*",
-    "@ritualos/db": "workspace:*",
+    "@tactiloom/board-kit": "workspace:*",
+    "@tactiloom/compiler": "workspace:*",
+    "@tactiloom/contracts": "workspace:*",
+    "@tactiloom/db": "workspace:*",
     "@xyflow/react": "12.12.1",
     "fflate": "0.8.3",
     "next": "16.4.5",

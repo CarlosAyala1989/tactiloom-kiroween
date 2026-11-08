@@ -8,10 +8,10 @@ import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
-from ritualos_vision.benchmark import camera_for, random_scene
-from ritualos_vision.catalog import load_catalog, load_template
-from ritualos_vision.detector import analyze_image
-from ritualos_vision.synth import (
+from tactiloom_vision.benchmark import camera_for, random_scene
+from tactiloom_vision.catalog import load_catalog, load_template
+from tactiloom_vision.detector import analyze_image
+from tactiloom_vision.synth import (
     Camera,
     PlacedCard,
     Scene,

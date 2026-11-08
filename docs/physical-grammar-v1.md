@@ -1,6 +1,6 @@
-# Ritual Board Grammar v1 (normativa)
+# Tactiloom Board Grammar v1 (normativa)
 
-Contrato entre el tablero físico y el programa. Implementación: `services/vision/ritualos_vision/detector.py`
+Contrato entre el tablero físico y el programa. Implementación: `services/vision/tactiloom_vision/detector.py`
 (lectura) y `packages/compiler/src/compile.ts` + `graph.ts` (semántica). Geometría: ADR 0004.
 
 ## 1. Tablero y marcadores

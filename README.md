@@ -1,14 +1,17 @@
-# RitualOS — Build workflows with your hands. Run them on your computer.
+# Tactiloom — Build workflows with your hands. Run them on your computer.
 
 > **ES** · Automatización tangible: tarjetas con marcadores ArUco sobre un tablero 8×4 → OpenCV lee el
-> tablero desde los píxeles → un compilador genera un grafo tipado (`ritual-ir/1`) → un worker aislado
+> tablero desde los píxeles → un compilador genera un grafo tipado (`tactiloom-ir/1`) → un worker aislado
 > lo ejecuta sobre documentos de prueba, **solo después de un dry-run revisado y una aprobación explícita**.
 >
 > **EN** · Tangible automation: ArUco-marked cards on an 8×4 board → OpenCV reads the board from pixels →
-> a compiler builds a typed graph (`ritual-ir/1`) → a sandboxed worker runs it on test documents, **only after
+> a compiler builds a typed graph (`tactiloom-ir/1`) → a sandboxed worker runs it on test documents, **only after
 > a reviewed dry-run and an explicit, hash-bound approval**. English summary at the end.
 
 Kiroween 2026 · categoría **Frankenstein** · licencia [MIT](LICENSE) · estado real: [`docs/implementation-status.md`](docs/implementation-status.md).
+
+> El brief original ([`RitualOS_KiroCLI_Prompt_Maestro.md`](RitualOS_KiroCLI_Prompt_Maestro.md)) usa el nombre
+> provisional *RitualOS*; el producto se llama **Tactiloom** (paquetes `@tactiloom/*`, contratos `tactiloom-*/1`).
 
 ---
 
@@ -30,7 +33,7 @@ INICIO → ARCHIVO → EXTRAER TEXTO → VALIDAR CAMPOS → CONDICIÓN ─ SÍ �
 
 No inventamos la programación tangible: [FloBlocks (2025)](https://link.springer.com/article/10.1007/s44217-025-01064-7)
 y [Sheets (2015)](https://www.iplab.cs.tsukuba.ac.jp/paper/international/tada_ahfe2015.pdf) ya usaron tarjetas
-de papel y cámara. RitualOS lo integra con un motor seguro de automatización documental, aprobación ligada a
+de papel y cámara. Tactiloom lo integra con un motor seguro de automatización documental, aprobación ligada a
 hashes y trazabilidad. Ver [`docs/frankenstein-differentiation.md`](docs/frankenstein-differentiation.md).
 
 ## Qué es real y qué no (honestidad)
@@ -154,7 +157,7 @@ del cliente · ejecución solo con dry-run + `confirm` + `contentHash` + `planHa
 worker · sandbox por workspace con `O_NOFOLLOW` y escrituras create-only · uploads verificados por contenido ·
 cuotas atómicas, TTL y límite global de workspaces · cookies `HttpOnly`/`SameSite=Lax` (`__Host-` en HTTPS) y
 verificación de Origin · fotos no persistidas · datos ficticios. Una revisión con el agente
-`ritualos-security-reviewer` de Kiro encontró 4 problemas confirmados, ya corregidos con pruebas
+`tactiloom-security-reviewer` de Kiro encontró 4 problemas confirmados, ya corregidos con pruebas
 ([`docs/kiro-usage.md`](docs/kiro-usage.md)). Detalle: [`docs/threat-model.md`](docs/threat-model.md).
 
 ## Limitaciones conocidas
@@ -169,7 +172,7 @@ verificación de Origin · fotos no persistidas · datos ficticios. Una revisió
 ## Cómo se usó Kiro
 
 Steering (`.kiro/steering/`), spec con requisitos EARS, diseño y tareas trazables a commits
-(`.kiro/specs/ritualos/`), 3 hooks `PostFileSave` (tests del compilador, deriva de contratos, visión) y 2 agentes
+(`.kiro/specs/tactiloom/`), 3 hooks `PostFileSave` (tests del compilador, deriva de contratos, visión) y 2 agentes
 personalizados validados con `kiro-cli agent validate`. Registro con evidencias: [`docs/kiro-usage.md`](docs/kiro-usage.md).
 
 ## Licencias y créditos
@@ -183,9 +186,9 @@ Playwright (Apache-2.0), Tailwind CSS (MIT). Iconos de tarjetas: dibujos propios
 
 ## English summary
 
-**What:** RitualOS turns a physical arrangement of ArUco cards on a printed 8×4 board into a real, typed
+**What:** Tactiloom turns a physical arrangement of ArUco cards on a printed 8×4 board into a real, typed
 workflow. OpenCV reads the photo (four corner fiducials, 16-point homography, cell and N/E/S/W orientation),
-a deterministic compiler produces `ritual-ir/1` with a canonical sha256 `contentHash` and Spanish diagnostics
+a deterministic compiler produces `tactiloom-ir/1` with a canonical sha256 `contentHash` and Spanish diagnostics
 that point to card, row and column, and a separate worker executes a closed set of 9 actions on fictitious
 documents inside a per-workspace sandbox — only after a dry-run plan is reviewed and approved with matching
 `contentHash` and `planHash`.

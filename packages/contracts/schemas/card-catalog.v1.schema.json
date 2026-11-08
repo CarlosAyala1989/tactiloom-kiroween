@@ -1,6 +1,6 @@
 {
-  "$id": "https://ritualos.dev/schemas/card-catalog.v1.schema.json",
-  "title": "RitualOS CardCatalog v1",
+  "$id": "https://raw.githubusercontent.com/CarlosAyala1989/tactiloom-kiroween/main/packages/contracts/schemas/card-catalog.v1.schema.json",
+  "title": "Tactiloom CardCatalog v1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {

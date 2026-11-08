@@ -3,7 +3,7 @@ import { handler, HttpError } from '@/lib/server/http';
 import { prisma } from '@/lib/server/prisma';
 import { getSandbox } from '@/lib/server/sandbox';
 import { requireSession } from '@/lib/server/session';
-import { sha256Hex } from '@ritualos/workflow-engine/sandbox';
+import { sha256Hex } from '@tactiloom/workflow-engine/sandbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +23,7 @@ export const GET = handler(async (_request, context: { params: Promise<{ id: str
       'content-disposition': `attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(artifact.safeName)}`,
       'x-content-type-options': 'nosniff',
       'cache-control': 'no-store',
-      'x-ritualos-sha256': artifact.sha256,
+      'x-tactiloom-sha256': artifact.sha256,
       'x-request-id': requestId,
     },
   });

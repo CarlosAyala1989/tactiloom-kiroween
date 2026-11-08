@@ -1,6 +1,6 @@
 'use client';
 
-import { CARD_KIND_SPECS, PARAM_UI, type CardKind } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, PARAM_UI, type CardKind } from '@tactiloom/contracts';
 import { es } from '@/lib/i18n/es';
 import { DocumentSelect } from './DocumentSelect';
 

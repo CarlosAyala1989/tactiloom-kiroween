@@ -1,4 +1,4 @@
-import { verifyIr } from '@ritualos/compiler';
+import { verifyIr } from '@tactiloom/compiler';
 import {
   canonicalHash,
   PLAN_VERSION,
@@ -14,7 +14,7 @@ import {
   type Port,
   type RunFailure,
   type WorkflowIR,
-} from '@ritualos/contracts';
+} from '@tactiloom/contracts';
 import { extractDocumentText, SUPPORTED_MIME, type ExtractedText, type ExtractionLimits } from './documents';
 import { asEngineError, EngineError } from './errors';
 import { maskEmail, validateFields, type ValidationResult } from './fields';
@@ -154,7 +154,7 @@ export function artifactPath(runId: string, nodeId: string, type: ArtifactType):
   return `runs/${runId}/reports/${nodeId}.${type === 'REPORT_MARKDOWN' ? 'md' : 'json'}`;
 }
 
-/** Closed set of handlers: the only operations RitualOS can ever perform. */
+/** Closed set of handlers: the only operations Tactiloom can ever perform. */
 const HANDLERS: Readonly<Record<CardKind, Handler>> = {
   START: async (_node, _state, ctx) => ({ port: 'NEXT', output: { mode: ctx.mode } }),
 
@@ -303,7 +303,7 @@ export function computePlanHash(core: Omit<ExecutionPlan, 'planHash' | 'reportPr
 }
 
 /**
- * Executes (or dry-runs) a verified ritual-ir/1 program. Only the chosen branch runs; every node
+ * Executes (or dry-runs) a verified tactiloom-ir/1 program. Only the chosen branch runs; every node
  * emits events; SUCCEEDED requires the promised artifacts/review tasks to really exist.
  */
 export async function runWorkflow(request: RunRequest, ports: EnginePorts): Promise<RunOutcome> {

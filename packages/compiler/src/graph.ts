@@ -1,4 +1,4 @@
-import { CARD_KIND_SPECS, type CardKind, type DataFact, type Diagnostic, type IrEdge } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, type CardKind, type DataFact, type Diagnostic, type IrEdge } from '@tactiloom/contracts';
 import { cardLabel, DATA_FACT_LABEL_ES, listEs, PRODUCER_OF } from './messages';
 
 export interface GraphNodeInput {

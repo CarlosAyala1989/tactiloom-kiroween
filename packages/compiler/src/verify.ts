@@ -9,7 +9,7 @@ import {
   type CatalogIndex,
   type Diagnostic,
   type WorkflowIR,
-} from '@ritualos/contracts';
+} from '@tactiloom/contracts';
 import { analyzeGraph } from './graph';
 
 export interface IrVerification {
@@ -30,7 +30,7 @@ function runtimeDiag(code: Diagnostic['code'], message: string, nodeIds?: string
 export function verifyIr(candidate: unknown, expectedHash?: string, catalog: CatalogIndex = indexCatalog()): IrVerification {
   const parsed = WorkflowIRSchema.safeParse(candidate);
   if (!parsed.success) {
-    return { ok: false, ir: null, diagnostics: [runtimeDiag('IR_INVALID', `La IR no cumple ritual-ir/1: ${parsed.error.issues[0]?.message ?? 'inválida'}.`)] };
+    return { ok: false, ir: null, diagnostics: [runtimeDiag('IR_INVALID', `La IR no cumple tactiloom-ir/1: ${parsed.error.issues[0]?.message ?? 'inválida'}.`)] };
   }
   const ir = parsed.data;
   const diagnostics: Diagnostic[] = [];

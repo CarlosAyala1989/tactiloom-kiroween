@@ -8,7 +8,7 @@
       "matcher": "packages/contracts/(src|catalog)/.*\\.(ts|json)$",
       "action": {
         "type": "command",
-        "command": "pnpm --filter @ritualos/contracts test",
+        "command": "pnpm --filter @tactiloom/contracts test",
         "timeout": 120
       }
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import { CARD_KIND_SPECS, type CardKind, type Orientation } from '@ritualos/contracts';
+import { CARD_KIND_SPECS, type CardKind, type Orientation } from '@tactiloom/contracts';
 import type { DragEvent, KeyboardEvent } from 'react';
 import { textOn } from '@/lib/client/contrast';
 import { es } from '@/lib/i18n/es';
@@ -81,7 +81,7 @@ export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCell
   const rows = [0, 1, 2, 3];
   const cols = [0, 1, 2, 3, 4, 5, 6, 7];
   const onDragStart = (event: DragEvent, markerId: number) => {
-    event.dataTransfer.setData('text/x-ritualos-marker', String(markerId));
+    event.dataTransfer.setData('text/x-tactiloom-marker', String(markerId));
     event.dataTransfer.effectAllowed = 'move';
   };
   return (
@@ -121,7 +121,7 @@ export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCell
                       interactive
                         ? (event) => {
                             event.preventDefault();
-                            const marker = Number(event.dataTransfer.getData('text/x-ritualos-marker'));
+                            const marker = Number(event.dataTransfer.getData('text/x-tactiloom-marker'));
                             if (Number.isFinite(marker) && marker > 0) onDropCard?.(marker, row, col);
                           }
                         : undefined

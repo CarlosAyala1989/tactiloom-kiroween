@@ -1,7 +1,7 @@
 {
   "templateId": "board-v1",
-  "protocolVersion": "ritual-board/1",
-  "description": "Ritual Board Grammar v1: 8 columnas x 4 filas, 4 fiduciales ArUco (0 TL, 1 TR, 2 BR, 3 BL) fuera de las casillas.",
+  "protocolVersion": "tactiloom-board/1",
+  "description": "Tactiloom Board Grammar v1: 8 columnas x 4 filas, 4 fiduciales ArUco (0 TL, 1 TR, 2 BR, 3 BL) fuera de las casillas.",
   "dictionary": "DICT_4X4_100",
   "markerBits": 4,
   "markerBorderBits": 1,

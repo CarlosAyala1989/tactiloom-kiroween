@@ -1,6 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { LINEAR_LAYOUT } from '@ritualos/compiler';
+import { LINEAR_LAYOUT } from '@tactiloom/compiler';
 import { describe, expect, it } from 'vitest';
 import { runWorkflow, sha256Hex } from '../src/index';
 import { exampleDocument, harness, officialIr } from './helpers';

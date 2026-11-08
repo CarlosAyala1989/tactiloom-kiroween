@@ -1,5 +1,5 @@
 /**
- * `pnpm --filter @ritualos/board-kit examples` — fictitious workshop applications used by the demo.
+ * `pnpm --filter @tactiloom/board-kit examples` — fictitious workshop applications used by the demo.
  * PDFs are generated with a real text layer (pdf-lib), plus TXT twins and an image-only PDF
  * (no text layer) to exercise the PDF_NO_TEXT_LAYER path. All data is fictitious.
  */
@@ -28,7 +28,7 @@ interface ApplicationDoc {
 const VALID: ApplicationDoc = {
   file: 'valid-application',
   lines: [
-    'Solicitud de participación - Taller RitualOS',
+    'Solicitud de participación - Taller Tactiloom',
     'Documento ficticio para demostración (no contiene datos reales).',
     '',
     'Nombre: Ana Ejemplo Ríos',
@@ -49,7 +49,7 @@ const VALID: ApplicationDoc = {
 const INVALID: ApplicationDoc = {
   file: 'invalid-application',
   lines: [
-    'Solicitud de participación - Taller RitualOS',
+    'Solicitud de participación - Taller Tactiloom',
     'Documento ficticio para demostración (no contiene datos reales).',
     '',
     'Nombre: Bruno Prueba Díaz',
@@ -68,9 +68,9 @@ const INVALID: ApplicationDoc = {
 
 async function textPdf(doc: ApplicationDoc): Promise<Uint8Array> {
   const pdf = await PDFDocument.create({ updateMetadata: false });
-  pdf.setTitle(`RitualOS ${doc.file} (ficticio)`);
-  pdf.setProducer('RitualOS examples (pdf-lib 1.17.1)');
-  pdf.setCreator('RitualOS');
+  pdf.setTitle(`Tactiloom ${doc.file} (ficticio)`);
+  pdf.setProducer('Tactiloom examples (pdf-lib 1.17.1)');
+  pdf.setCreator('Tactiloom');
   pdf.setCreationDate(FIXED_DATE);
   pdf.setModificationDate(FIXED_DATE);
   const page = pdf.addPage([595.28, 841.89]);
@@ -128,9 +128,9 @@ function scanLikePng(width: number, height: number): Buffer {
 
 async function imageOnlyPdf(): Promise<Uint8Array> {
   const pdf = await PDFDocument.create({ updateMetadata: false });
-  pdf.setTitle('RitualOS scanned-application (sin capa de texto, ficticio)');
-  pdf.setProducer('RitualOS examples (pdf-lib 1.17.1)');
-  pdf.setCreator('RitualOS');
+  pdf.setTitle('Tactiloom scanned-application (sin capa de texto, ficticio)');
+  pdf.setProducer('Tactiloom examples (pdf-lib 1.17.1)');
+  pdf.setCreator('Tactiloom');
   pdf.setCreationDate(FIXED_DATE);
   pdf.setModificationDate(FIXED_DATE);
   const page = pdf.addPage([595.28, 841.89]);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import type { RunStatus } from '@ritualos/contracts';
+import type { RunStatus } from '@tactiloom/contracts';
 import { es } from '@/lib/i18n/es';
 
 export function ModeBadge({ mode }: { mode: 'physical' | 'image' | 'simulator' | string }) {

@@ -5,7 +5,7 @@ import {
   getCardCatalog,
   sha256HexBytes,
   type CardCatalogEntry,
-} from '@ritualos/contracts';
+} from '@tactiloom/contracts';
 import { PDFDocument } from 'pdf-lib';
 import { ARUCO_DICTIONARY } from './aruco';
 import { boardItems, cardItems, cardSheetPageItems, layoutCardSheets, MUTED, type CardSheetLayout } from './designs';
@@ -29,11 +29,11 @@ export function cardDrawing(entry: CardCatalogEntry): Drawing {
 }
 
 export function renderCardSvg(entry: CardCatalogEntry): string {
-  return renderSvg(cardDrawing(entry), `RitualOS ${entry.kind} #${entry.markerId}`);
+  return renderSvg(cardDrawing(entry), `Tactiloom ${entry.kind} #${entry.markerId}`);
 }
 
 export function renderBoardSvg(): string {
-  return renderSvg(boardDrawing('full'), 'RitualOS Ritual Board v1 (A3)');
+  return renderSvg(boardDrawing('full'), 'Tactiloom Board v1 (A3)');
 }
 
 export function enabledCards(): CardCatalogEntry[] {
@@ -43,12 +43,12 @@ export function enabledCards(): CardCatalogEntry[] {
 export async function renderBoardPdf(variant: 'full' | 'small'): Promise<Uint8Array> {
   if (variant === 'full') {
     return renderSinglePagePdf(boardDrawing('full'), {
-      title: 'RitualOS Ritual Board v1 — A3 horizontal',
+      title: 'Tactiloom Board v1 — A3 horizontal',
       subject: 'Imprimir al 100 % en A3 horizontal. Fiduciales ArUco 0-3.',
     });
   }
   const { doc, fonts } = await createKitDocument({
-    title: 'RitualOS Ritual Board v1 — versión reducida A4',
+    title: 'Tactiloom Board v1 — versión reducida A4',
     subject: 'Tablero a escala 0,707 en A4 horizontal; usar con cards-v1-small-a4.pdf.',
   });
   const a4 = { width: 297, height: 210 };
@@ -65,7 +65,7 @@ export async function renderBoardTilesPdf(): Promise<Uint8Array> {
   const fullBytes = await renderBoardPdf('full');
   const source = await PDFDocument.load(fullBytes, { updateMetadata: false });
   const { doc, fonts } = await createKitDocument({
-    title: 'RitualOS Ritual Board v1 — mosaico 2×2 A4',
+    title: 'Tactiloom Board v1 — mosaico 2×2 A4',
     subject: 'Cuatro hojas A4 horizontales a escala real; recortar por las marcas y unir borde con borde.',
   });
   const quadW = template.page.width / 2;
@@ -105,7 +105,7 @@ export async function renderBoardTilesPdf(): Promise<Uint8Array> {
       type: 'text',
       x: pageW / 2,
       y: 8,
-      text: `RitualOS board-v1 · mosaico ${index + 1}/4 (${TILE_NAMES[index]}) · imprimir al 100 %, sin ajustar a página · recortar por las marcas`,
+      text: `Tactiloom board-v1 · mosaico ${index + 1}/4 (${TILE_NAMES[index]}) · imprimir al 100 %, sin ajustar a página · recortar por las marcas`,
       size: 2.6,
       weight: 'regular',
       anchor: 'middle',
@@ -120,7 +120,7 @@ export async function renderCardsPdf(scale: number): Promise<{ bytes: Uint8Array
   const entries = enabledCards();
   const layout = layoutCardSheets(entries, scale);
   const { doc, fonts } = await createKitDocument({
-    title: scale < 1 ? 'RitualOS cards-v1 — versión reducida' : 'RitualOS cards-v1 — tarjetas A4',
+    title: scale < 1 ? 'Tactiloom cards-v1 — versión reducida' : 'Tactiloom cards-v1 — tarjetas A4',
     subject: 'Tarjetas con marcadores ArUco DICT_4X4_100 (IDs 10-35). Imprimir al 100 %.',
   });
   for (let page = 0; page < layout.pages; page += 1) {
@@ -159,7 +159,7 @@ export async function buildKit(): Promise<KitFile[]> {
       path: `cards-v1-sheet-${page + 1}.svg`,
       contents: renderSvg(
         { width: full.layout.pageWidth, height: full.layout.pageHeight, items: cardSheetPageItems(full.layout, page, entries) },
-        `RitualOS cards-v1 hoja ${page + 1}`,
+        `Tactiloom cards-v1 hoja ${page + 1}`,
       ),
       description: `Hoja ${page + 1} de tarjetas en SVG`,
     });

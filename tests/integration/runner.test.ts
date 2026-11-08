@@ -1,10 +1,10 @@
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { LINEAR_LAYOUT } from '@ritualos/compiler';
-import type { ExecutionPlan } from '@ritualos/contracts';
-import type { Prisma } from '@ritualos/db';
-import { cleanupExpired, runOnce } from '@ritualos/runner';
-import { sha256Hex } from '@ritualos/workflow-engine';
+import { LINEAR_LAYOUT } from '@tactiloom/compiler';
+import type { ExecutionPlan } from '@tactiloom/contracts';
+import type { Prisma } from '@tactiloom/db';
+import { cleanupExpired, runOnce } from '@tactiloom/runner';
+import { sha256Hex } from '@tactiloom/workflow-engine';
 import { readFile } from 'node:fs/promises';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { approve, createPreviewRun, createVersion, createWorkspace, resetDatabase, testContext, testPrisma, uploadExample } from './support';
@@ -200,7 +200,7 @@ describe('runner end-to-end with Postgres and the sandbox', () => {
     const version = await createVersion(ctx, ws.id, null, LINEAR_LAYOUT);
     expect(version.valid).toBe(true);
     const params = { 'input-21': { uploadedFileId: scanned.id } };
-    const { compile, boardStateFromLayout } = await import('@ritualos/compiler');
+    const { compile, boardStateFromLayout } = await import('@tactiloom/compiler');
     const ir = compile(boardStateFromLayout(LINEAR_LAYOUT), params).ir!;
     const v2 = await ctx.prisma.workflowVersion.create({
       data: {

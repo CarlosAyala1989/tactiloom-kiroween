@@ -1,4 +1,4 @@
-import type { BoardState, Diagnostic, Orientation } from '@ritualos/contracts';
+import type { BoardState, Diagnostic, Orientation } from '@tactiloom/contracts';
 import { boardStateFromLayout, type LayoutEntry } from '../src/index';
 
 export function state(layout: readonly LayoutEntry[], overrides: Partial<BoardState> = {}): BoardState {

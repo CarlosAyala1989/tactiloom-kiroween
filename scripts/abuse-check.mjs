@@ -28,7 +28,7 @@ const session = await rawRequest('/api/demo/session', { method: 'POST', headers:
 const cookie = String(session.headers['set-cookie']?.[0] ?? '').split(';')[0];
 console.log(`session: ${session.status} ${cookie ? 'cookie ok' : 'NO COOKIE'}`);
 
-const boundary = 'ritualosAbuseBoundary';
+const boundary = 'tactiloomAbuseBoundary';
 const started = Date.now();
 const oversized = await rawRequest('/api/uploads', {
   method: 'POST',

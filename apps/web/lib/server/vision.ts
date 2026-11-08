@@ -1,5 +1,5 @@
 import 'server-only';
-import { DetectionResultSchema, type DetectionResult } from '@ritualos/contracts';
+import { DetectionResultSchema, type DetectionResult } from '@tactiloom/contracts';
 import { env } from './env';
 import { HttpError } from './http';
 
@@ -35,7 +35,7 @@ export async function analyzeWithVision(
     throw new HttpError(503, 'VISION_UNAVAILABLE', 'El servicio de visión respondió con un error.');
   }
   const parsed = DetectionResultSchema.safeParse(await response.json());
-  if (!parsed.success) throw new HttpError(502, 'CONTRACT_VIOLATION', 'La respuesta de visión no cumple el contrato ritual-board/1.');
+  if (!parsed.success) throw new HttpError(502, 'CONTRACT_VIOLATION', 'La respuesta de visión no cumple el contrato tactiloom-board/1.');
   return parsed.data;
 }
 

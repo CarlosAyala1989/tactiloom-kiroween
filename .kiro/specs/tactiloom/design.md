@@ -1,8 +1,8 @@
-# Design Document — RitualOS
+# Design Document — Tactiloom
 
 ## Overview
 
-RitualOS integra programación tangible (tarjetas ArUco sobre un tablero) con un motor seguro de
+Tactiloom integra programación tangible (tarjetas ArUco sobre un tablero) con un motor seguro de
 automatización documental. El flujo es siempre: **leer → compilar → revisar (dry-run) → aprobar → ejecutar**.
 Contratos normativos: `docs/physical-grammar-v1.md` y `docs/workflow-ir-v1.md`. Decisiones: `docs/adr/`.
 
@@ -71,7 +71,7 @@ El dry-run es la fase PREVIEW del mismo run (job `PREVIEW`); la ejecución real 
 | Motor | Vitest | handlers reales, sandbox, PDF aislado, dry-run, manipulación, timeouts |
 | Integración | Vitest + Postgres | cola, leases, crash/reintento, idempotencia, aislamiento, TTL |
 | E2E | Playwright (Chrome) | flujo de jueces, errores, simulador, cámara falsa, axe |
-| Benchmark | `ritualos_vision.benchmark` | 120 escenas sintéticas por condición |
+| Benchmark | `tactiloom_vision.benchmark` | 120 escenas sintéticas por condición |
 
 ## Security
 

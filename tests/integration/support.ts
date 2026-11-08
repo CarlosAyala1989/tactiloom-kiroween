@@ -3,10 +3,10 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import 'dotenv/config';
-import { boardStateFromLayout, compile, OFFICIAL_TWO_BRANCH_LAYOUT, type LayoutEntry } from '@ritualos/compiler';
-import { createPrismaClient, type PrismaClient, type Prisma } from '@ritualos/db';
-import type { RunnerConfig, RunnerContext } from '@ritualos/runner';
-import { FileSandbox, sha256Hex } from '@ritualos/workflow-engine';
+import { boardStateFromLayout, compile, OFFICIAL_TWO_BRANCH_LAYOUT, type LayoutEntry } from '@tactiloom/compiler';
+import { createPrismaClient, type PrismaClient, type Prisma } from '@tactiloom/db';
+import type { RunnerConfig, RunnerContext } from '@tactiloom/runner';
+import { FileSandbox, sha256Hex } from '@tactiloom/workflow-engine';
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -24,7 +24,7 @@ export async function resetDatabase(): Promise<void> {
 }
 
 export async function testContext(overrides: Partial<RunnerConfig> = {}): Promise<RunnerContext> {
-  const sandbox = await FileSandbox.open(await mkdtemp(join(tmpdir(), 'ritualos-it-')));
+  const sandbox = await FileSandbox.open(await mkdtemp(join(tmpdir(), 'tactiloom-it-')));
   return {
     prisma: testPrisma(),
     sandbox,
