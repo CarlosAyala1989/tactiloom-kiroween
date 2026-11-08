@@ -1,9 +1,13 @@
-import 'dotenv/config';
+import path from 'node:path';
+import { config as loadDotenv } from 'dotenv';
 import { createPrismaClient } from '@ritualos/db';
 import { FileSandbox } from '@ritualos/workflow-engine';
-import { loadRunnerConfig } from './config';
+import { loadRunnerConfig, REPO_ROOT } from './config';
 import { log } from './log';
 import { RUNNER_VERSION, runLoop } from './worker';
+
+// Local development: read the repository .env (containers receive real environment variables).
+loadDotenv({ path: [path.join(process.cwd(), '.env'), path.join(REPO_ROOT, '.env')], quiet: true });
 
 const config = loadRunnerConfig();
 const prisma = createPrismaClient(config.databaseUrl);

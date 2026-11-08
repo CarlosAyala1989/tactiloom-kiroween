@@ -95,7 +95,7 @@ export const CARD_KIND_SPECS: Readonly<Record<CardKind, CardKindSpec>> = {
     requires: ['DocumentRef'],
     produces: ['ExtractedText'],
     instancePrefix: 'extract',
-    color: '#0c8599',
+    color: '#0b7285',
     effectEs: 'Extrae texto en memoria (solo lectura).',
     sideEffect: 'read',
   },

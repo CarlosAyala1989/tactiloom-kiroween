@@ -8,6 +8,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./sandbox": "./src/sandbox.ts",
+    "./sniff": "./src/sniff.ts",
     "./documents": "./src/documents.ts"
   },
   "scripts": {

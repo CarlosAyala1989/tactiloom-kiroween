@@ -30,6 +30,7 @@ const MAX_VALUE_LENGTH = 200;
 
 function clean(value: string): string {
   return value
+    // eslint-disable-next-line no-control-regex -- intentionally strips control characters from untrusted text
     .replace(/[\u0000-\u001f\u007f]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()

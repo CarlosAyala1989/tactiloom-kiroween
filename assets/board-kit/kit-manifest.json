@@ -31,8 +31,8 @@
     {
       "path": "cards-v1-a4.pdf",
       "description": "26 tarjetas en A4 (escala real)",
-      "bytes": 16465,
-      "sha256": "eae1377d9026eb1647e4ce25788d956d56c0809016274a7910fc48dfd9c2fb09"
+      "bytes": 16469,
+      "sha256": "dcd962e45c0cd9e3b78ba68ff7041ec56bab4ffef3ecf3d78f32f821e5fc7b67"
     },
     {
       "path": "cards-v1-layout.json",
@@ -43,8 +43,8 @@
     {
       "path": "cards-v1-small-a4.pdf",
       "description": "Tarjetas reducidas para el tablero A4",
-      "bytes": 15957,
-      "sha256": "31f59ae118c38fc9ae2de66e6b117f509636465aced0ab4ae3cec8ed4ecd4b79"
+      "bytes": 15961,
+      "sha256": "cf330ebf99deb0ffa7ffc7a6c168036a58325753568c8c9622c3b2ee0da90125"
     },
     {
       "path": "cards-v1-small-layout.json",
@@ -56,7 +56,7 @@
       "path": "cards-v1-sheet-1.svg",
       "description": "Hoja 1 de tarjetas en SVG",
       "bytes": 31728,
-      "sha256": "a0c17250b72dd3f1a713951df17d42d22f2d312f68a2fc6989b4f963a4d342ed"
+      "sha256": "e0643c8679917e64242a81ea5bee39d548ecc339c15002ba47e91d01102c4497"
     },
     {
       "path": "cards-v1-sheet-2.svg",
@@ -80,7 +80,7 @@
       "path": "cards/card-12.svg",
       "description": "EXTRACT_TEXT #12",
       "bytes": 2075,
-      "sha256": "835a52d6d8d5024fe363c9076eb308258cefd870ba88aad6bff555d97f84ebef"
+      "sha256": "0613b599896075949d6d8624642967025d3d510d076ac08443f8a91a27369b28"
     },
     {
       "path": "cards/card-13.svg",
@@ -140,7 +140,7 @@
       "path": "cards/card-22.svg",
       "description": "EXTRACT_TEXT #22",
       "bytes": 2229,
-      "sha256": "16832df616eb690176e6d9dca286376a107e26f3f34053a11000e8dea109888c"
+      "sha256": "27107251d65a87d0613cc45cd55593bb2f0b1c0956dfaca9a5a61d9b4d6b2583"
     },
     {
       "path": "cards/card-23.svg",

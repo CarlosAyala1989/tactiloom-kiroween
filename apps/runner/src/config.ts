@@ -1,4 +1,9 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+
+/** Repository root (apps/runner/src → ../../..). Relative paths in env are resolved against it. */
+export const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 const RunnerEnvSchema = z.object({
   DATABASE_URL: z.string().min(1, 'DATABASE_URL es obligatoria'),
@@ -26,7 +31,7 @@ export function loadRunnerConfig(env: NodeJS.ProcessEnv = process.env): RunnerCo
   const parsed = RunnerEnvSchema.parse(env);
   return {
     databaseUrl: parsed.DATABASE_URL,
-    workspaceRoot: parsed.WORKSPACE_ROOT,
+    workspaceRoot: path.isAbsolute(parsed.WORKSPACE_ROOT) ? parsed.WORKSPACE_ROOT : path.join(REPO_ROOT, parsed.WORKSPACE_ROOT),
     pollIntervalMs: parsed.RUNNER_POLL_INTERVAL_MS,
     leaseMs: parsed.RUNNER_LEASE_MS,
     maxAttempts: parsed.RUNNER_MAX_ATTEMPTS,
