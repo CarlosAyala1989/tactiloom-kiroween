@@ -3,9 +3,9 @@ import { getBoardTemplate, type CardCatalogEntry } from '@ritualos/contracts';
 import { boardItems, cardItems } from './designs';
 import { renderSvg } from './svg';
 
-export { CARD_TITLES, cardItems, boardItems } from './designs';
+export { CARD_TITLES, TITLE_SIZE_MM, cardItems, boardItems } from './designs';
 export { CARD_ICONS, iconSvg } from './icons';
-export { markerModules } from './aruco';
+export { ARUCO_DICTIONARY, ARUCO_MARKER_COUNT, markerModules } from './aruco';
 export { renderSvg } from './svg';
 
 export function cardSvg(entry: CardCatalogEntry): string {

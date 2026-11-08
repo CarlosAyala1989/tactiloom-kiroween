@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`official two-branch example (§4.3) > computes contentHash from the canonical payload (snapshot detects semantic drift) 1`] = `"sha256:8523e3513eed0fa83d4e7cfe46703a24207b2b9bdb4c949e24821e36f7a1f433"`;
