@@ -1,0 +1,27 @@
+{
+  "name": "@ritualos/workflow-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RitualOS workflow engine: executes verified ritual-ir/1 DAGs with a closed set of handlers inside a file sandbox",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ritualos/compiler": "workspace:*",
+    "@ritualos/contracts": "workspace:*",
+    "unpdf": "2.1.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "pdf-lib": "1.17.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

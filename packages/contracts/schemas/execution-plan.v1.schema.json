@@ -1,0 +1,245 @@
+{
+  "$id": "https://ritualos.dev/schemas/execution-plan.v1.schema.json",
+  "title": "RitualOS Execution Plan (ritual-plan/1)",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "planVersion": {
+      "type": "string",
+      "const": "ritual-plan/1"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "uploadedFileId": {
+          "type": "string"
+        },
+        "originalName": {
+          "type": "string"
+        },
+        "mime": {
+          "type": "string"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "uploadedFileId",
+        "originalName",
+        "mime",
+        "bytes",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "path": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "START",
+              "INPUT_FILE",
+              "EXTRACT_TEXT",
+              "VALIDATE_FIELDS",
+              "CONDITION",
+              "CREATE_REPORT",
+              "SAVE_REPORT",
+              "REQUEST_REVIEW",
+              "END"
+            ]
+          }
+        },
+        "required": [
+          "nodeId",
+          "kind"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "predicate": {
+              "type": "string",
+              "const": "allRequiredPresent"
+            },
+            "result": {
+              "type": "boolean"
+            },
+            "port": {
+              "type": "string",
+              "enum": [
+                "NEXT",
+                "TRUE",
+                "FALSE"
+              ]
+            }
+          },
+          "required": [
+            "nodeId",
+            "predicate",
+            "result",
+            "port"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "validation": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "fields": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "email": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "workshop": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "email",
+                "workshop"
+              ],
+              "additionalProperties": false
+            },
+            "missingFields": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "name",
+                  "email",
+                  "workshop"
+                ]
+              }
+            },
+            "invalidFields": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "name",
+                  "email",
+                  "workshop"
+                ]
+              }
+            },
+            "isValid": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "fields",
+            "missingFields",
+            "invalidFields",
+            "isValid"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "WRITE_ARTIFACT",
+              "CREATE_REVIEW_TASK"
+            ]
+          },
+          "descriptionEs": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nodeId",
+          "kind",
+          "descriptionEs",
+          "target"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reportPreview": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 20000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "planHash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "planVersion",
+    "contentHash",
+    "input",
+    "path",
+    "decision",
+    "validation",
+    "effects",
+    "reportPreview",
+    "planHash"
+  ],
+  "additionalProperties": false
+}

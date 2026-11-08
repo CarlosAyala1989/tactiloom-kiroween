@@ -1,0 +1,55 @@
+{
+  "name": "ritualos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RitualOS — Build workflows with your hands. Run them on your computer.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "postinstall": "prisma generate",
+    "build": "pnpm --filter @ritualos/web build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint . --max-warnings=0 && pnpm vision:lint",
+    "test": "pnpm -r test && pnpm vision:test",
+    "test:ts": "pnpm -r test",
+    "test:integration": "vitest run --config tests/integration/vitest.config.ts",
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
+    "contracts:schemas": "pnpm --filter @ritualos/contracts schemas",
+    "board:generate": "pnpm --filter @ritualos/board-kit generate",
+    "examples:generate": "pnpm --filter @ritualos/board-kit examples && services/vision/.venv/bin/python -m ritualos_vision.fixtures --out assets/examples/boards",
+    "benchmark:vision": "services/vision/.venv/bin/python -m ritualos_vision.benchmark --out docs/benchmark-results/synthetic-latest.json",
+    "vision:setup": "python3 -m venv services/vision/.venv && services/vision/.venv/bin/pip install -r services/vision/requirements-dev.txt",
+    "vision:dev": "cd services/vision && .venv/bin/uvicorn ritualos_vision.app:app --host 127.0.0.1 --port ${VISION_PORT:-8210}",
+    "vision:test": "cd services/vision && .venv/bin/pytest -q",
+    "vision:lint": "cd services/vision && .venv/bin/ruff check . && .venv/bin/ruff format --check .",
+    "db:up": "docker compose up -d db",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:reset-demo": "tsx scripts/reset-demo.ts",
+    "runner:dev": "pnpm --filter @ritualos/runner dev",
+    "web:dev": "pnpm --filter @ritualos/web dev"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.65.0",
+    "@types/node": "24.19.2",
+    "dotenv": "18.0.9",
+    "eslint": "9.39.5",
+    "globals": "17.14.0",
+    "prisma": "7.10.1",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0"
+  },
+  "dependencies": {
+    "@ritualos/contracts": "workspace:*",
+    "@ritualos/db": "workspace:*"
+  }
+}

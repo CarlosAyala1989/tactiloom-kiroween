@@ -1,0 +1,263 @@
+{
+  "$id": "https://ritualos.dev/schemas/board-template.v1.schema.json",
+  "title": "RitualOS BoardTemplate v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "templateId": {
+      "type": "string",
+      "const": "board-v1"
+    },
+    "protocolVersion": {
+      "type": "string",
+      "const": "ritual-board/1"
+    },
+    "description": {
+      "type": "string"
+    },
+    "dictionary": {
+      "type": "string",
+      "const": "DICT_4X4_100"
+    },
+    "markerBits": {
+      "type": "number",
+      "const": 4
+    },
+    "markerBorderBits": {
+      "type": "number",
+      "const": 1
+    },
+    "columns": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "rows": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "units": {
+      "type": "string",
+      "const": "mm"
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "landscape",
+            "portrait"
+          ]
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "format",
+        "orientation",
+        "width",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "cellWidth": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cellHeight": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "cellWidth",
+        "cellHeight"
+      ],
+      "additionalProperties": false
+    },
+    "fiducials": {
+      "minItems": 4,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "markerId": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "corner": {
+            "type": "string",
+            "enum": [
+              "top-left",
+              "top-right",
+              "bottom-right",
+              "bottom-left"
+            ]
+          },
+          "center": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          },
+          "size": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "markerId",
+          "corner",
+          "center",
+          "size"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "card": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cornerRadius": {
+          "type": "number",
+          "minimum": 0
+        },
+        "markerSize": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "markerCenter": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "width",
+        "height",
+        "cornerRadius",
+        "markerSize",
+        "markerCenter"
+      ],
+      "additionalProperties": false
+    },
+    "canonical": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "tolerances": {
+      "type": "object",
+      "properties": {
+        "cellCenterAxisFraction": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 0.5
+        },
+        "orientationDegrees": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 45
+        },
+        "markerSizeRelative": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxReprojectionErrorMm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "cellCenterAxisFraction",
+        "orientationDegrees",
+        "markerSizeRelative",
+        "maxReprojectionErrorMm"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "templateId",
+    "protocolVersion",
+    "description",
+    "dictionary",
+    "markerBits",
+    "markerBorderBits",
+    "columns",
+    "rows",
+    "units",
+    "page",
+    "grid",
+    "fiducials",
+    "card",
+    "canonical",
+    "tolerances"
+  ],
+  "additionalProperties": false
+}

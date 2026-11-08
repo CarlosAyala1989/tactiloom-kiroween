@@ -1,0 +1,40 @@
+[project]
+name = "ritualos-vision"
+version = "1.0.0"
+description = "RitualOS vision service: ArUco board reading, homography and cell assignment"
+license = "MIT"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = [
+  "slow: generates many synthetic scenes",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S", "SIM", "PL"]
+ignore = [
+  "PLR0912", # pipeline functions are intentionally linear
+  "PLR0913",
+  "PLR0915",
+  "PLR2004", # geometric constants are documented inline
+  "PLR0911",
+  "S101",    # asserts in tests
+  "PLC0415", # lazy imports of optional dev dependencies
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "PLR", "N802"]
+"scripts/*" = ["E402"]
+# Pydantic models mirror the camelCase JSON contract field names.
+"ritualos_vision/models.py" = ["N815"]
+
+[tool.ruff.format]
+quote-style = "double"

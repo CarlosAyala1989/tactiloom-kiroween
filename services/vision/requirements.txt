@@ -1,0 +1,8 @@
+# Runtime dependencies of the RitualOS vision service (pinned; see docs/adr/0001-architecture.md)
+fastapi==0.162.2
+uvicorn==0.54.0
+python-multipart==0.0.33
+pydantic==2.14.3
+numpy==2.5.4
+opencv-contrib-python-headless==5.0.0.93
+pillow==13.0.0

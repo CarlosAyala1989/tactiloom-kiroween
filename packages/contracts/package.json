@@ -1,0 +1,29 @@
+{
+  "name": "@ritualos/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RitualOS shared contracts: Zod schemas, JSON Schemas, board template and card catalog",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./catalog/board-v1.json": "./catalog/board-v1.json",
+    "./catalog/cards-v1.json": "./catalog/cards-v1.json",
+    "./schemas/*": "./schemas/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "schemas": "tsx scripts/generate-json-schemas.ts"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.4.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "kitVersion": "board-kit/1.0.0",
+  "dictionary": "DICT_4X4_100",
+  "boardTemplate": "board-v1",
+  "catalogVersion": "cards-v1",
+  "files": [
+    {
+      "path": "board-v1-a3.pdf",
+      "description": "Tablero A3 horizontal, escala real",
+      "bytes": 6599,
+      "sha256": "4e810a125967686028783f8b243b2a7ca2b1fe4aaf6842f4fa2402e39fe477fb"
+    },
+    {
+      "path": "board-v1-a3.svg",
+      "description": "Tablero A3 en SVG (1 unidad = 1 mm)",
+      "bytes": 17264,
+      "sha256": "2ea5fc85b296bf7afd08d6a50f303753abbf710f07dc0ff93a90c02352fc8d3f"
+    },
+    {
+      "path": "board-v1-a4-tiles.pdf",
+      "description": "Tablero en 4 hojas A4 a escala real",
+      "bytes": 39722,
+      "sha256": "9bf30234a6c64a3c44459c69d6408333c1bf82220e77ca58715a652ad2bc1f94"
+    },
+    {
+      "path": "board-v1-small-a4.pdf",
+      "description": "Tablero reducido (0,707) en una hoja A4",
+      "bytes": 7168,
+      "sha256": "aeff01ddf6aefc68a4d5aa45fd8daed14414b9420d532cc408479eb77f836eb3"
+    },
+    {
+      "path": "cards-v1-a4.pdf",
+      "description": "26 tarjetas en A4 (escala real)",
+      "bytes": 16465,
+      "sha256": "eae1377d9026eb1647e4ce25788d956d56c0809016274a7910fc48dfd9c2fb09"
+    },
+    {
+      "path": "cards-v1-layout.json",
+      "description": "Posición (mm) de cada tarjeta en cards-v1-a4.pdf",
+      "bytes": 3283,
+      "sha256": "6d5572210b606bcc4bc8a576cc685c3c66945b4409d1f8b547f87384d9f569b7"
+    },
+    {
+      "path": "cards-v1-small-a4.pdf",
+      "description": "Tarjetas reducidas para el tablero A4",
+      "bytes": 15957,
+      "sha256": "31f59ae118c38fc9ae2de66e6b117f509636465aced0ab4ae3cec8ed4ecd4b79"
+    },
+    {
+      "path": "cards-v1-small-layout.json",
+      "description": "Posición (mm) en cards-v1-small-a4.pdf",
+      "bytes": 3658,
+      "sha256": "5ec5a1f0db8589d83aa4d6d75178a8ce3aeaf8507741715a618d3cb10b98aa82"
+    },
+    {
+      "path": "cards-v1-sheet-1.svg",
+      "description": "Hoja 1 de tarjetas en SVG",
+      "bytes": 31728,
+      "sha256": "a0c17250b72dd3f1a713951df17d42d22f2d312f68a2fc6989b4f963a4d342ed"
+    },
+    {
+      "path": "cards-v1-sheet-2.svg",
+      "description": "Hoja 2 de tarjetas en SVG",
+      "bytes": 19943,
+      "sha256": "a045ff6847093d732e601228a906639965c83d9ea0b884807ac911560e988fda"
+    },
+    {
+      "path": "cards/card-10.svg",
+      "description": "START #10",
+      "bytes": 1916,
+      "sha256": "b3248449c9434739c4121be704e291b881d6d5ec59660871787a0c5ad604312b"
+    },
+    {
+      "path": "cards/card-11.svg",
+      "description": "INPUT_FILE #11",
+      "bytes": 2124,
+      "sha256": "76f9be4b263669757d2dcba9d92a03db412f102fe81d3e508cd7fa9884219ff8"
+    },
+    {
+      "path": "cards/card-12.svg",
+      "description": "EXTRACT_TEXT #12",
+      "bytes": 2075,
+      "sha256": "835a52d6d8d5024fe363c9076eb308258cefd870ba88aad6bff555d97f84ebef"
+    },
+    {
+      "path": "cards/card-13.svg",
+      "description": "VALIDATE_FIELDS #13",
+      "bytes": 2083,
+      "sha256": "8d3d19fc89df6a7f08b562aeed3bcb448ff1f8364b3d7c82b94b44b9fbb16172"
+    },
+    {
+      "path": "cards/card-14.svg",
+      "description": "CONDITION #14",
+      "bytes": 2298,
+      "sha256": "811d38d1f4a45b1e32ef06a671cae2590caf41e774091d17c66fed2d31011a90"
+    },
+    {
+      "path": "cards/card-15.svg",
+      "description": "CREATE_REPORT #15",
+      "bytes": 2091,
+      "sha256": "abe4a753b83de151bc10174cbf3dd7a0bcc9b10fed14235c8198eb1bd22c0ec1"
+    },
+    {
+      "path": "cards/card-16.svg",
+      "description": "SAVE_REPORT #16",
+      "bytes": 2133,
+      "sha256": "7ec798bffff7950a7b123bd4195082a3baaf111fbb7f55ec9ac0dc5a7e5e5381"
+    },
+    {
+      "path": "cards/card-17.svg",
+      "description": "END #17",
+      "bytes": 1695,
+      "sha256": "cd62cb9d2e3cf4e2efa2a6f956833e4795340fb4d47b50cc3ebf2176e59758e2"
+    },
+    {
+      "path": "cards/card-18.svg",
+      "description": "REQUEST_REVIEW #18",
+      "bytes": 2251,
+      "sha256": "cfdf29fe9621baf11c13c2ed64cbf4ede783e2e0f744e1ba90ab9fc3c63c2cb8"
+    },
+    {
+      "path": "cards/card-19.svg",
+      "description": "END #19",
+      "bytes": 1902,
+      "sha256": "550dd242309fa833aba1612f71b37d61c4adbcf217b2f21cf584c6d15ee91388"
+    },
+    {
+      "path": "cards/card-20.svg",
+      "description": "START #20",
+      "bytes": 1844,
+      "sha256": "308876583f14c84d8318925369d78cb1cf5c4ca39f11ecedc4d0cab2bc061f1c"
+    },
+    {
+      "path": "cards/card-21.svg",
+      "description": "INPUT_FILE #21",
+      "bytes": 2127,
+      "sha256": "f5deaaf0f2da9384f985ef24e09137bcf10a95cfe7f0a344e80827f4d3bd62a5"
+    },
+    {
+      "path": "cards/card-22.svg",
+      "description": "EXTRACT_TEXT #22",
+      "bytes": 2229,
+      "sha256": "16832df616eb690176e6d9dca286376a107e26f3f34053a11000e8dea109888c"
+    },
+    {
+      "path": "cards/card-23.svg",
+      "description": "VALIDATE_FIELDS #23",
+      "bytes": 2226,
+      "sha256": "e04e25284546b95e6ec59b9b0f29b7cbcfa823c817c5f357302c70e58f3593d6"
+    },
+    {
+      "path": "cards/card-24.svg",
+      "description": "CONDITION #24",
+      "bytes": 2228,
+      "sha256": "1b3101a4954ff220d71480782067e169faed42f4181bc303b8a7554b583b50b2"
+    },
+    {
+      "path": "cards/card-25.svg",
+      "description": "CREATE_REPORT #25",
+      "bytes": 2168,
+      "sha256": "76ed63fe54286bfa65378e1fae5e9fc661c6347415edcf47513a0740cf2d1b68"
+    },
+    {
+      "path": "cards/card-26.svg",
+      "description": "SAVE_REPORT #26",
+      "bytes": 2128,
+      "sha256": "e3e1275b44212fed96ea75aa93de4167511fe205989893aef288496e8767ea69"
+    },
+    {
+      "path": "cards/card-27.svg",
+      "description": "END #27",
+      "bytes": 2050,
+      "sha256": "5a3688a26c416183d3174e4209798cbc8e53b40fa2130c67393426e1ca62d297"
+    },
+    {
+      "path": "cards/card-28.svg",
+      "description": "REQUEST_REVIEW #28",
+      "bytes": 2179,
+      "sha256": "eb9e168d572146b76cdefc93ca2f2a71fa16fb0a209fb1717061d7afdd16736a"
+    },
+    {
+      "path": "cards/card-29.svg",
+      "description": "END #29",
+      "bytes": 1836,
+      "sha256": "f7745f8b20543eeb1e6372e6f8160655b49f1544250f859cd33f0c032f1278a6"
+    },
+    {
+      "path": "cards/card-30.svg",
+      "description": "END #30",
+      "bytes": 1910,
+      "sha256": "8f7e08cf23ef993cbd8261b195a9dd3a73d2d151011b863f5af302fbcee905a9"
+    },
+    {
+      "path": "cards/card-31.svg",
+      "description": "END #31",
+      "bytes": 1972,
+      "sha256": "dae06a4da2efd597f4c1c6d369f257a2ee5e0fea060064e574e016dc75f31481"
+    },
+    {
+      "path": "cards/card-32.svg",
+      "description": "REQUEST_REVIEW #32",
+      "bytes": 2256,
+      "sha256": "dcfe68e7746df4c9d6d4c70bfba2ab12bdf1e9e0b9a9b891048f5ddea74d22cb"
+    },
+    {
+      "path": "cards/card-33.svg",
+      "description": "CONDITION #33",
+      "bytes": 2232,
+      "sha256": "fb65ddc6d5b766487cf24f7fd729981d44db878f5957b72a4e7e0bec087bc6eb"
+    },
+    {
+      "path": "cards/card-34.svg",
+      "description": "CREATE_REPORT #34",
+      "bytes": 2089,
+      "sha256": "5b0303ef9bf106f16e11f5dedbf0538c92ae06fa143e3026d3b8990abad787ba"
+    },
+    {
+      "path": "cards/card-35.svg",
+      "description": "SAVE_REPORT #35",
+      "bytes": 2131,
+      "sha256": "675567d67c2036f64427b867a18c0d59e1c099899c7bf4e9c3c6e62b35b229fd"
+    },
+    {
+      "path": "board-v1.json",
+      "description": "Geometría del tablero (contrato)",
+      "bytes": 1477,
+      "sha256": "a289c696a802d38109ffde919bc3d274129f49d8d1f865948eb75445dccd748c"
+    },
+    {
+      "path": "cards-v1.json",
+      "description": "Catálogo markerId → tipo → instancia",
+      "bytes": 3834,
+      "sha256": "cab0064c32f57356ac74d999ed905031d4057c80efce00952e36fdd0fd39ff37"
+    },
+    {
+      "path": "ASSEMBLY.md",
+      "description": "Manual de impresión y montaje (es/en)",
+      "bytes": 5697,
+      "sha256": "72e9dc79fb4bb357dbf1f3789ed5b9134392880d446119ce43f80d1b5f56e82b"
+    }
+  ]
+}

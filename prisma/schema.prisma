@@ -1,0 +1,339 @@
+// RitualOS persistence model (PostgreSQL). See docs/adr/0001-architecture.md.
+// Connection URL lives in prisma.config.ts (Prisma 7); the client uses @prisma/adapter-pg.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../packages/db/src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  DEMO
+  MEMBER
+  ADMIN
+}
+
+enum SourceMode {
+  physical
+  image
+  simulator
+}
+
+enum RunStatus {
+  DRAFT
+  COMPILED
+  AWAITING_APPROVAL
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+enum JobKind {
+  PREVIEW
+  EXECUTE
+}
+
+enum JobStatus {
+  PENDING
+  LEASED
+  DONE
+  FAILED
+  DEAD
+}
+
+enum NodeRunStatus {
+  STARTED
+  SUCCEEDED
+  FAILED
+  SKIPPED
+  PREDICTED
+}
+
+enum ArtifactType {
+  REPORT_MARKDOWN
+  REPORT_JSON
+}
+
+enum ReviewStatus {
+  OPEN
+  RESOLVED
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String?     @unique
+  role       UserRole    @default(DEMO)
+  createdAt  DateTime    @default(now())
+  sessions   Session[]
+  workspaces Workspace[]
+}
+
+model Session {
+  id          String    @id @default(cuid())
+  tokenHash   String    @unique
+  userId      String
+  workspaceId String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  lastSeenAt  DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([workspaceId])
+}
+
+model Workspace {
+  id          String              @id @default(cuid())
+  ownerId     String
+  name        String
+  demoMode    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  expiresAt   DateTime?
+  owner       User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  sessions    Session[]
+  captures    BoardCapture[]
+  workflows   Workflow[]
+  versions    WorkflowVersion[]
+  documents   UploadedDocument[]
+  runs        Run[]
+  artifacts   GeneratedArtifact[]
+  reviewTasks ReviewTask[]
+  auditEvents AuditEvent[]
+
+  @@index([ownerId])
+  @@index([expiresAt])
+}
+
+model BoardTemplate {
+  id             String   @id
+  version        String
+  cols           Int
+  rows           Int
+  catalogVersion String
+  description    String
+  geometry       Json
+  createdAt      DateTime @default(now())
+}
+
+model CardCatalogEntry {
+  markerId       Int     @id
+  type           String
+  cardInstanceId String  @unique
+  version        String
+  set            String
+  printAssetPath String
+  enabled        Boolean @default(true)
+}
+
+model BoardCapture {
+  id              String            @id @default(cuid())
+  workspaceId     String
+  sourceMode      SourceMode
+  requestId       String
+  imageAssetId    String?
+  imageSha256     String?
+  detectorVersion String
+  detectionJson   Json
+  boardStateJson  Json
+  diagnostics     Json
+  cardsDetected   Int
+  calibrated      Boolean
+  capturedAt      DateTime          @default(now())
+  workspace       Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions        WorkflowVersion[]
+
+  @@index([workspaceId, capturedAt])
+}
+
+model Workflow {
+  id              String            @id @default(cuid())
+  workspaceId     String
+  name            String
+  activeVersionId String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  workspace       Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions        WorkflowVersion[]
+
+  @@index([workspaceId, createdAt])
+}
+
+model WorkflowVersion {
+  id              String              @id @default(cuid())
+  workflowId      String
+  workspaceId     String
+  versionNumber   Int
+  boardCaptureId  String?
+  sourceMode      SourceMode
+  compilerVersion String
+  valid           Boolean
+  boardStateJson  Json
+  irJson          Json?
+  contentHash     String?
+  diagnostics     Json
+  createdAt       DateTime            @default(now())
+  workflow        Workflow            @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workspace       Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  capture         BoardCapture?       @relation(fields: [boardCaptureId], references: [id], onDelete: SetNull)
+  parameters      WorkflowParameters?
+  runs            Run[]
+
+  @@unique([workflowId, versionNumber])
+  @@index([workspaceId, createdAt])
+  @@index([contentHash])
+}
+
+model WorkflowParameters {
+  versionId       String          @id
+  perCardInstance Json
+  version         WorkflowVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+}
+
+model UploadedDocument {
+  id           String    @id @default(cuid())
+  workspaceId  String
+  originalName String
+  mime         String
+  bytes        Int
+  sha256       String
+  sandboxPath  String
+  isDemo       Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+}
+
+model Run {
+  id                String              @id @default(cuid())
+  workflowVersionId String
+  workspaceId       String
+  requestedById     String?
+  approvedById      String?
+  status            RunStatus           @default(DRAFT)
+  sourceMode        SourceMode
+  contentHash       String
+  inputSnapshot     Json?
+  plan              Json?
+  planHash          String?
+  previewedAt       DateTime?
+  approvedAt        DateTime?
+  cancelRequestedAt DateTime?
+  startedAt         DateTime?
+  endedAt           DateTime?
+  outcome           Json?
+  errorCode         String?
+  errorMessage      String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  workflowVersion   WorkflowVersion     @relation(fields: [workflowVersionId], references: [id], onDelete: Cascade)
+  workspace         Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  jobs              Job[]
+  events            NodeRunEvent[]
+  artifacts         GeneratedArtifact[]
+  reviewTasks       ReviewTask[]
+
+  @@index([workspaceId, createdAt])
+  @@index([status])
+}
+
+model Job {
+  id             String    @id @default(cuid())
+  runId          String
+  kind           JobKind
+  status         JobStatus @default(PENDING)
+  idempotencyKey String    @unique
+  attempts       Int       @default(0)
+  maxAttempts    Int       @default(3)
+  availableAt    DateTime  @default(now())
+  leaseOwner     String?
+  leaseExpiresAt DateTime?
+  heartbeatAt    DateTime?
+  lastError      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  run            Run       @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([status, availableAt])
+  @@index([status, leaseExpiresAt])
+  @@index([runId])
+}
+
+model NodeRunEvent {
+  id                String        @id @default(cuid())
+  runId             String
+  phase             JobKind
+  attempt           Int
+  seq               Int
+  nodeId            String
+  nodeKind          String
+  status            NodeRunStatus
+  safeInputSummary  Json?
+  safeOutputSummary Json?
+  errorCode         String?
+  durationMs        Int?
+  timestamp         DateTime      @default(now())
+  run               Run           @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, phase, attempt, seq])
+  @@index([runId, timestamp])
+}
+
+model GeneratedArtifact {
+  id          String       @id @default(cuid())
+  runId       String
+  workspaceId String
+  nodeId      String
+  type        ArtifactType
+  safeName    String
+  sandboxPath String
+  mime        String
+  size        Int
+  sha256      String
+  createdAt   DateTime     @default(now())
+  run         Run          @relation(fields: [runId], references: [id], onDelete: Cascade)
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, nodeId, type])
+  @@index([workspaceId, createdAt])
+}
+
+model ReviewTask {
+  id            String       @id @default(cuid())
+  runId         String
+  workspaceId   String
+  nodeId        String
+  label         String
+  missingFields Json
+  invalidFields Json
+  status        ReviewStatus @default(OPEN)
+  createdAt     DateTime     @default(now())
+  run           Run          @relation(fields: [runId], references: [id], onDelete: Cascade)
+  workspace     Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, nodeId])
+  @@index([workspaceId, createdAt])
+}
+
+model AuditEvent {
+  id                     String     @id @default(cuid())
+  workspaceId            String?
+  actorId                String?
+  action                 String
+  entityId               String?
+  requestId              String?
+  metadataWithoutSecrets Json?
+  createdAt              DateTime   @default(now())
+  workspace              Workspace? @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId, createdAt])
+  @@index([action, createdAt])
+}

@@ -1,0 +1,8 @@
+# Development / test dependencies (not installed in the production image)
+-r requirements.txt
+pytest==9.2.0
+hypothesis==6.170.15
+httpx2==2.16.0
+jsonschema==4.26.0
+pypdfium2==5.15.1
+ruff==0.17.4

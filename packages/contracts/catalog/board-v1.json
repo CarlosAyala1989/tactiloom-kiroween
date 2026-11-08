@@ -1,0 +1,33 @@
+{
+  "templateId": "board-v1",
+  "protocolVersion": "ritual-board/1",
+  "description": "Ritual Board Grammar v1: 8 columnas x 4 filas, 4 fiduciales ArUco (0 TL, 1 TR, 2 BR, 3 BL) fuera de las casillas.",
+  "dictionary": "DICT_4X4_100",
+  "markerBits": 4,
+  "markerBorderBits": 1,
+  "columns": 8,
+  "rows": 4,
+  "units": "mm",
+  "page": { "format": "A3", "orientation": "landscape", "width": 420, "height": 297 },
+  "grid": { "x": 22, "y": 34.5, "cellWidth": 47, "cellHeight": 57 },
+  "fiducials": [
+    { "markerId": 0, "corner": "top-left", "center": { "x": 20, "y": 20 }, "size": 20 },
+    { "markerId": 1, "corner": "top-right", "center": { "x": 400, "y": 20 }, "size": 20 },
+    { "markerId": 2, "corner": "bottom-right", "center": { "x": 400, "y": 277 }, "size": 20 },
+    { "markerId": 3, "corner": "bottom-left", "center": { "x": 20, "y": 277 }, "size": 20 }
+  ],
+  "card": {
+    "width": 41,
+    "height": 51,
+    "cornerRadius": 2.5,
+    "markerSize": 22,
+    "markerCenter": { "x": 20.5, "y": 24 }
+  },
+  "canonical": { "width": 1600, "height": 800 },
+  "tolerances": {
+    "cellCenterAxisFraction": 0.32,
+    "orientationDegrees": 18,
+    "markerSizeRelative": 0.35,
+    "maxReprojectionErrorMm": 4.0
+  }
+}

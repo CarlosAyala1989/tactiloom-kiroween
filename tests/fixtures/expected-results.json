@@ -1,0 +1,1722 @@
+{
+  "generatedBy": "python -m ritualos_vision.fixtures",
+  "note": "Ground truth from the scene specifications. Tests compare detector output against it; the detector never reads it.",
+  "boards": [
+    {
+      "id": "valid-board",
+      "file": "assets/examples/boards/valid-board.png",
+      "gallery": true,
+      "titleEs": "Tablero válido (dos ramas)",
+      "descriptionEs": "Las 10 tarjetas del ejemplo oficial: rama SÍ crea y guarda un reporte, rama NO pide revisión.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 1
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-perspective",
+      "file": "assets/examples/boards/valid-board-perspective.png",
+      "gallery": true,
+      "titleEs": "Tablero válido en perspectiva",
+      "descriptionEs": "Mismo flujo fotografiado en ángulo, con desenfoque, ruido y tarjetas ligeramente desalineadas.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.16,
+            0.14
+          ],
+          [
+            0.86,
+            0.1
+          ],
+          [
+            0.97,
+            0.9
+          ],
+          [
+            0.04,
+            0.9500000000000001
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.9,
+        "noise_sigma": 3.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.15,
+        "jpeg_quality": 90,
+        "seed": 2
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-linear",
+      "file": "assets/examples/boards/valid-board-linear.png",
+      "gallery": true,
+      "titleEs": "Flujo lineal alternativo",
+      "descriptionEs": "Segundo flujo válido con el juego B (#20–#27): siempre genera un reporte con el estado de validación.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.11528144756184877,
+            0.08329430600255355
+          ],
+          [
+            0.9349950413604864,
+            0.11023171756569433
+          ],
+          [
+            0.9358099129455019,
+            0.9354052362781526
+          ],
+          [
+            0.024013058124471732,
+            0.9076474348796795
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 3
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 20,
+            "row": 3,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 21,
+            "row": 3,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 22,
+            "row": 3,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 23,
+            "row": 3,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 25,
+            "row": 3,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 26,
+            "row": 3,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 27,
+            "row": 3,
+            "col": 6,
+            "orientation": "E"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "invalid-board-missing-end",
+      "file": "assets/examples/boards/invalid-board-missing-end.png",
+      "gallery": true,
+      "titleEs": "Falta una tarjeta FIN",
+      "descriptionEs": "Se retiró FIN #19: la rama NO (PEDIR REVISIÓN #18) queda sin salida y no compila.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.10500000000000001,
+            0.11
+          ],
+          [
+            0.9049999999999999,
+            0.09
+          ],
+          [
+            0.96,
+            0.91
+          ],
+          [
+            0.045000000000000005,
+            0.935
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 4
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DANGLING_OUTPUT",
+          "NONTERMINATING_PATH"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-ambiguous",
+      "file": "assets/examples/boards/invalid-board-ambiguous.png",
+      "gallery": true,
+      "titleEs": "Tarjeta entre dos casillas",
+      "descriptionEs": "CREAR REPORTE #15 quedó entre las casillas (0,5) y (1,5): la lectura se bloquea con AMBIGUOUS_POSITION.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 5
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": [
+          "AMBIGUOUS_POSITION"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "AMBIGUOUS_POSITION"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-moved-card",
+      "file": "assets/examples/boards/invalid-board-moved-card.png",
+      "gallery": true,
+      "titleEs": "Tarjeta movida",
+      "descriptionEs": "CREAR REPORTE #15 se movió a (1,5): la rama SÍ queda sin receptor y GUARDAR/FIN quedan inalcanzables.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.083,
+            0.098
+          ],
+          [
+            0.9229999999999999,
+            0.08600000000000001
+          ],
+          [
+            0.956,
+            0.914
+          ],
+          [
+            0.047,
+            0.929
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 6
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 15,
+            "row": 1,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DANGLING_OUTPUT",
+          "UNREACHABLE_NODE"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-missing-corner",
+      "file": "assets/examples/boards/invalid-board-missing-corner.png",
+      "gallery": true,
+      "titleEs": "Esquina tapada",
+      "descriptionEs": "Una mano tapa el marcador de esquina 2: sin las 4 esquinas no se calibra la perspectiva.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 7
+      },
+      "vision": {
+        "calibrated": false,
+        "cards": [],
+        "errorCodes": [
+          "BOARD_FIDUCIAL_MISSING"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "BOARD_FIDUCIAL_MISSING"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-tilted-card",
+      "file": "assets/examples/boards/invalid-board-tilted-card.png",
+      "gallery": true,
+      "titleEs": "Tarjeta girada en diagonal",
+      "descriptionEs": "CONDICIÓN #14 está girada ~35°: no se puede decidir hacia dónde apunta (AMBIGUOUS_ORIENTATION).",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 8
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": [
+          "AMBIGUOUS_ORIENTATION"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "AMBIGUOUS_ORIENTATION"
+        ]
+      }
+    },
+    {
+      "id": "valid-board-rotated-90",
+      "file": "tests/fixtures/boards/valid-board-rotated-90.jpg",
+      "gallery": false,
+      "titleEs": "Foto girada 90°",
+      "descriptionEs": "Cámara en vertical.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 1,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 9
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-rotated-180",
+      "file": "tests/fixtures/boards/valid-board-rotated-180.jpg",
+      "gallery": false,
+      "titleEs": "Foto girada 180°",
+      "descriptionEs": "Tablero fotografiado desde el otro lado.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.116,
+            0.11599999999999999
+          ],
+          [
+            0.8959999999999999,
+            0.092
+          ],
+          [
+            0.962,
+            0.908
+          ],
+          [
+            0.044000000000000004,
+            0.9380000000000001
+          ]
+        ],
+        "rotate90": 2,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 10
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-dim",
+      "file": "tests/fixtures/boards/valid-board-dim.jpg",
+      "gallery": false,
+      "titleEs": "Poca luz",
+      "descriptionEs": "Exposición baja con gradiente de iluminación.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 3.0,
+        "brightness": 0.5,
+        "offset": 0.0,
+        "gradient": 0.3,
+        "jpeg_quality": 90,
+        "seed": 11
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-bright",
+      "file": "tests/fixtures/boards/valid-board-bright.jpg",
+      "gallery": false,
+      "titleEs": "Mucha luz",
+      "descriptionEs": "Sobreexposición moderada.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.15,
+        "offset": 18.0,
+        "gradient": 0.05,
+        "jpeg_quality": 90,
+        "seed": 12
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-small",
+      "file": "tests/fixtures/boards/valid-board-small.jpg",
+      "gallery": false,
+      "titleEs": "Resolución baja",
+      "descriptionEs": "Foto de 960×720 del ejemplo oficial.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 960,
+        "height": 720,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 13
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "invalid-board-unknown-card",
+      "file": "tests/fixtures/boards/invalid-board-unknown-card.jpg",
+      "gallery": false,
+      "titleEs": "Tarjeta ajena al catálogo",
+      "descriptionEs": "Un marcador ArUco #85 (no registrado) aparece en (3,7).",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 14
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": [
+          "UNKNOWN_CARD"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "UNKNOWN_CARD"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-duplicate",
+      "file": "tests/fixtures/boards/invalid-board-duplicate.jpg",
+      "gallery": false,
+      "titleEs": "Tarjeta duplicada",
+      "descriptionEs": "Dos copias impresas de FIN #17 sobre el tablero.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 15
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 17,
+            "row": 3,
+            "col": 0,
+            "orientation": "E"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DUPLICATE_INSTANCE"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-occluded",
+      "file": "tests/fixtures/boards/invalid-board-occluded.jpg",
+      "gallery": false,
+      "titleEs": "Marcador tapado",
+      "descriptionEs": "Un dedo tapa EXTRAER TEXTO #12: no se inventa la tarjeta, el flujo queda roto.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 16
+      },
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DANGLING_OUTPUT",
+          "UNREACHABLE_NODE"
+        ]
+      }
+    },
+    {
+      "id": "blank-table",
+      "file": "tests/fixtures/boards/blank-table.jpg",
+      "gallery": false,
+      "titleEs": "Sin tablero",
+      "descriptionEs": "Solo la mesa: no hay marcadores.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "camera": {
+        "width": 1400,
+        "height": 1050,
+        "corners": [
+          [
+            0.05,
+            0.08
+          ],
+          [
+            0.95,
+            0.08
+          ],
+          [
+            0.95,
+            0.92
+          ],
+          [
+            0.05,
+            0.92
+          ]
+        ],
+        "rotate90": 0,
+        "blur_sigma": 0.6,
+        "noise_sigma": 2.0,
+        "brightness": 1.0,
+        "offset": 0.0,
+        "gradient": 0.08,
+        "jpeg_quality": 90,
+        "seed": 17
+      },
+      "vision": {
+        "calibrated": false,
+        "cards": [],
+        "errorCodes": [
+          "NO_MARKERS_FOUND"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "NO_MARKERS_FOUND"
+        ]
+      }
+    }
+  ],
+  "negativeFiles": [
+    {
+      "file": "tests/fixtures/boards/corrupt-image.png",
+      "httpStatus": 422,
+      "code": "IMAGE_CORRUPT"
+    }
+  ]
+}

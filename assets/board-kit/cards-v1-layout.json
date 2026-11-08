@@ -1,0 +1,216 @@
+{
+  "pageWidth": 210,
+  "pageHeight": 297,
+  "scale": 1,
+  "pages": 2,
+  "slots": [
+    {
+      "markerId": 10,
+      "page": 0,
+      "x": 17,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 11,
+      "page": 0,
+      "x": 62,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 12,
+      "page": 0,
+      "x": 107,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 13,
+      "page": 0,
+      "x": 152,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 14,
+      "page": 0,
+      "x": 17,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 15,
+      "page": 0,
+      "x": 62,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 16,
+      "page": 0,
+      "x": 107,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 17,
+      "page": 0,
+      "x": 152,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 18,
+      "page": 0,
+      "x": 17,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 19,
+      "page": 0,
+      "x": 62,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 20,
+      "page": 0,
+      "x": 107,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 21,
+      "page": 0,
+      "x": 152,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 22,
+      "page": 0,
+      "x": 17,
+      "y": 208.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 23,
+      "page": 0,
+      "x": 62,
+      "y": 208.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 24,
+      "page": 0,
+      "x": 107,
+      "y": 208.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 25,
+      "page": 0,
+      "x": 152,
+      "y": 208.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 26,
+      "page": 1,
+      "x": 17,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 27,
+      "page": 1,
+      "x": 62,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 28,
+      "page": 1,
+      "x": 107,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 29,
+      "page": 1,
+      "x": 152,
+      "y": 43.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 30,
+      "page": 1,
+      "x": 17,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 31,
+      "page": 1,
+      "x": 62,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 32,
+      "page": 1,
+      "x": 107,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 33,
+      "page": 1,
+      "x": 152,
+      "y": 98.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 34,
+      "page": 1,
+      "x": 17,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    },
+    {
+      "markerId": 35,
+      "page": 1,
+      "x": 62,
+      "y": 153.5,
+      "width": 41,
+      "height": 51
+    }
+  ]
+}

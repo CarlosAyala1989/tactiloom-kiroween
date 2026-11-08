@@ -1,0 +1,28 @@
+{
+  "name": "@ritualos/board-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RitualOS printable board and cards (SVG/PDF) with real ArUco DICT_4X4_100 markers",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "generate": "tsx scripts/generate-kit.ts",
+    "examples": "tsx scripts/generate-example-documents.ts"
+  },
+  "dependencies": {
+    "@ritualos/contracts": "workspace:*",
+    "pdf-lib": "1.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

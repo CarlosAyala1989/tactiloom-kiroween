@@ -1,0 +1,541 @@
+{
+  "scenarios": [
+    {
+      "id": "valid-board",
+      "file": "assets/examples/boards/valid-board.png",
+      "titleEs": "Tablero válido (dos ramas)",
+      "descriptionEs": "Las 10 tarjetas del ejemplo oficial: rama SÍ crea y guarda un reporte, rama NO pide revisión.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-perspective",
+      "file": "assets/examples/boards/valid-board-perspective.png",
+      "titleEs": "Tablero válido en perspectiva",
+      "descriptionEs": "Mismo flujo fotografiado en ángulo, con desenfoque, ruido y tarjetas ligeramente desalineadas.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "valid-board-linear",
+      "file": "assets/examples/boards/valid-board-linear.png",
+      "titleEs": "Flujo lineal alternativo",
+      "descriptionEs": "Segundo flujo válido con el juego B (#20–#27): siempre genera un reporte con el estado de validación.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 20,
+            "row": 3,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 21,
+            "row": 3,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 22,
+            "row": 3,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 23,
+            "row": 3,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 25,
+            "row": 3,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 26,
+            "row": 3,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 27,
+            "row": 3,
+            "col": 6,
+            "orientation": "E"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": true,
+        "errorCodes": []
+      }
+    },
+    {
+      "id": "invalid-board-missing-end",
+      "file": "assets/examples/boards/invalid-board-missing-end.png",
+      "titleEs": "Falta una tarjeta FIN",
+      "descriptionEs": "Se retiró FIN #19: la rama NO (PEDIR REVISIÓN #18) queda sin salida y no compila.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DANGLING_OUTPUT",
+          "NONTERMINATING_PATH"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-ambiguous",
+      "file": "assets/examples/boards/invalid-board-ambiguous.png",
+      "titleEs": "Tarjeta entre dos casillas",
+      "descriptionEs": "CREAR REPORTE #15 quedó entre las casillas (0,5) y (1,5): la lectura se bloquea con AMBIGUOUS_POSITION.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": [
+          "AMBIGUOUS_POSITION"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "AMBIGUOUS_POSITION"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-moved-card",
+      "file": "assets/examples/boards/invalid-board-moved-card.png",
+      "titleEs": "Tarjeta movida",
+      "descriptionEs": "CREAR REPORTE #15 se movió a (1,5): la rama SÍ queda sin receptor y GUARDAR/FIN quedan inalcanzables.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 14,
+            "row": 0,
+            "col": 4,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 15,
+            "row": 1,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": []
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "DANGLING_OUTPUT",
+          "UNREACHABLE_NODE"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-missing-corner",
+      "file": "assets/examples/boards/invalid-board-missing-corner.png",
+      "titleEs": "Esquina tapada",
+      "descriptionEs": "Una mano tapa el marcador de esquina 2: sin las 4 esquinas no se calibra la perspectiva.",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": false,
+        "cards": [],
+        "errorCodes": [
+          "BOARD_FIDUCIAL_MISSING"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "BOARD_FIDUCIAL_MISSING"
+        ]
+      }
+    },
+    {
+      "id": "invalid-board-tilted-card",
+      "file": "assets/examples/boards/invalid-board-tilted-card.png",
+      "titleEs": "Tarjeta girada en diagonal",
+      "descriptionEs": "CONDICIÓN #14 está girada ~35°: no se puede decidir hacia dónde apunta (AMBIGUOUS_ORIENTATION).",
+      "provenance": "synthetic: rasterised from assets/board-kit PDFs (pypdfium2), composed and photographed with OpenCV (warpPerspective, blur, noise, JPEG); not a physical camera capture",
+      "vision": {
+        "calibrated": true,
+        "cards": [
+          {
+            "markerId": 10,
+            "row": 0,
+            "col": 0,
+            "orientation": "E"
+          },
+          {
+            "markerId": 11,
+            "row": 0,
+            "col": 1,
+            "orientation": "E"
+          },
+          {
+            "markerId": 12,
+            "row": 0,
+            "col": 2,
+            "orientation": "E"
+          },
+          {
+            "markerId": 13,
+            "row": 0,
+            "col": 3,
+            "orientation": "E"
+          },
+          {
+            "markerId": 15,
+            "row": 0,
+            "col": 5,
+            "orientation": "E"
+          },
+          {
+            "markerId": 16,
+            "row": 0,
+            "col": 6,
+            "orientation": "E"
+          },
+          {
+            "markerId": 17,
+            "row": 0,
+            "col": 7,
+            "orientation": "E"
+          },
+          {
+            "markerId": 18,
+            "row": 1,
+            "col": 4,
+            "orientation": "S"
+          },
+          {
+            "markerId": 19,
+            "row": 2,
+            "col": 4,
+            "orientation": "S"
+          }
+        ],
+        "errorCodes": [
+          "AMBIGUOUS_ORIENTATION"
+        ]
+      },
+      "compile": {
+        "valid": false,
+        "errorCodes": [
+          "AMBIGUOUS_ORIENTATION"
+        ]
+      }
+    }
+  ]
+}

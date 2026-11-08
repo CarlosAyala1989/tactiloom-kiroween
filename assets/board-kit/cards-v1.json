@@ -1,0 +1,198 @@
+{
+  "catalogVersion": "cards-v1",
+  "dictionary": "DICT_4X4_100",
+  "reservedFiducialIds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "instanceIdRange": {
+    "min": 10,
+    "max": 89
+  },
+  "cards": [
+    {
+      "markerId": 10,
+      "kind": "START",
+      "cardInstanceId": "start-10",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 11,
+      "kind": "INPUT_FILE",
+      "cardInstanceId": "input-11",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 12,
+      "kind": "EXTRACT_TEXT",
+      "cardInstanceId": "extract-12",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 13,
+      "kind": "VALIDATE_FIELDS",
+      "cardInstanceId": "validate-13",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 14,
+      "kind": "CONDITION",
+      "cardInstanceId": "condition-14",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 15,
+      "kind": "CREATE_REPORT",
+      "cardInstanceId": "report-15",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 16,
+      "kind": "SAVE_REPORT",
+      "cardInstanceId": "save-16",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 17,
+      "kind": "END",
+      "cardInstanceId": "end-17",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 18,
+      "kind": "REQUEST_REVIEW",
+      "cardInstanceId": "review-18",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 19,
+      "kind": "END",
+      "cardInstanceId": "end-19",
+      "set": "A",
+      "enabled": true
+    },
+    {
+      "markerId": 20,
+      "kind": "START",
+      "cardInstanceId": "start-20",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 21,
+      "kind": "INPUT_FILE",
+      "cardInstanceId": "input-21",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 22,
+      "kind": "EXTRACT_TEXT",
+      "cardInstanceId": "extract-22",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 23,
+      "kind": "VALIDATE_FIELDS",
+      "cardInstanceId": "validate-23",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 24,
+      "kind": "CONDITION",
+      "cardInstanceId": "condition-24",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 25,
+      "kind": "CREATE_REPORT",
+      "cardInstanceId": "report-25",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 26,
+      "kind": "SAVE_REPORT",
+      "cardInstanceId": "save-26",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 27,
+      "kind": "END",
+      "cardInstanceId": "end-27",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 28,
+      "kind": "REQUEST_REVIEW",
+      "cardInstanceId": "review-28",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 29,
+      "kind": "END",
+      "cardInstanceId": "end-29",
+      "set": "B",
+      "enabled": true
+    },
+    {
+      "markerId": 30,
+      "kind": "END",
+      "cardInstanceId": "end-30",
+      "set": "extra",
+      "enabled": true
+    },
+    {
+      "markerId": 31,
+      "kind": "END",
+      "cardInstanceId": "end-31",
+      "set": "extra",
+      "enabled": true
+    },
+    {
+      "markerId": 32,
+      "kind": "REQUEST_REVIEW",
+      "cardInstanceId": "review-32",
+      "set": "extra",
+      "enabled": true
+    },
+    {
+      "markerId": 33,
+      "kind": "CONDITION",
+      "cardInstanceId": "condition-33",
+      "set": "extra",
+      "enabled": true
+    },
+    {
+      "markerId": 34,
+      "kind": "CREATE_REPORT",
+      "cardInstanceId": "report-34",
+      "set": "extra",
+      "enabled": true
+    },
+    {
+      "markerId": 35,
+      "kind": "SAVE_REPORT",
+      "cardInstanceId": "save-35",
+      "set": "extra",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "$id": "https://ritualos.dev/schemas/board-state.v1.schema.json",
+  "title": "RitualOS BoardState (ritual-board/1)",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "type": "string",
+      "const": "ritual-board/1"
+    },
+    "sourceMode": {
+      "type": "string",
+      "enum": [
+        "physical",
+        "image",
+        "simulator"
+      ]
+    },
+    "board": {
+      "type": "object",
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "const": "board-v1"
+        },
+        "columns": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 64
+        },
+        "rows": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 64
+        },
+        "calibrated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "templateId",
+        "columns",
+        "rows",
+        "calibrated"
+      ]
+    },
+    "cards": {
+      "maxItems": 64,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "markerId": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 999
+          },
+          "row": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 63
+          },
+          "col": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 63
+          },
+          "orientation": {
+            "type": "string",
+            "enum": [
+              "N",
+              "E",
+              "S",
+              "W"
+            ]
+          },
+          "quality": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cardInstanceId": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "START",
+              "INPUT_FILE",
+              "EXTRACT_TEXT",
+              "VALIDATE_FIELDS",
+              "CONDITION",
+              "CREATE_REPORT",
+              "SAVE_REPORT",
+              "REQUEST_REVIEW",
+              "END"
+            ]
+          }
+        },
+        "required": [
+          "markerId",
+          "row",
+          "col",
+          "orientation"
+        ]
+      }
+    },
+    "diagnostics": {
+      "default": [],
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "BOARD_FIDUCIAL_MISSING",
+              "DUPLICATE_FIDUCIAL",
+              "HOMOGRAPHY_DEGENERATE",
+              "NO_MARKERS_FOUND",
+              "TOO_MANY_MARKERS",
+              "MARKER_SIZE_MISMATCH",
+              "AMBIGUOUS_POSITION",
+              "AMBIGUOUS_ORIENTATION",
+              "CARD_NOT_IN_CELL",
+              "UNKNOWN_CARD",
+              "INVALID_BOARD_STATE",
+              "BOARD_DIMENSIONS_MISMATCH",
+              "BOARD_NOT_CALIBRATED",
+              "CARD_COLLISION",
+              "DUPLICATE_INSTANCE",
+              "MISSING_START",
+              "MULTIPLE_STARTS",
+              "MISSING_END",
+              "DANGLING_OUTPUT",
+              "INCOMPATIBLE_PORTS",
+              "MULTIPLE_INPUTS",
+              "UNREACHABLE_NODE",
+              "CYCLE_UNSUPPORTED",
+              "NONTERMINATING_PATH",
+              "BRANCH_TARGETS_IDENTICAL",
+              "MISSING_REQUIRED_DATA",
+              "INVALID_PARAMETER",
+              "UNUSED_PARAMETER",
+              "INPUT_NOT_SELECTED",
+              "TOO_MANY_NODES",
+              "IR_INVALID",
+              "IR_HASH_MISMATCH",
+              "UNSUPPORTED_FILE_TYPE",
+              "UNSAFE_FILE_PATH",
+              "FILE_NOT_FOUND",
+              "FILE_TOO_LARGE",
+              "FILE_CHANGED",
+              "PDF_NO_TEXT_LAYER",
+              "EXTRACTION_FAILED",
+              "OUTPUT_TOO_LARGE",
+              "RUN_TIMEOUT",
+              "RUN_CANCELLED",
+              "NODE_LIMIT_EXCEEDED",
+              "PRECONDITION_FAILED",
+              "INTERNAL_ERROR"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "vision",
+              "compiler",
+              "runtime"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "markerIds": {
+            "maxItems": 64,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
+            }
+          },
+          "cells": {
+            "maxItems": 64,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "row": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 63
+                },
+                "col": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 63
+                }
+              },
+              "required": [
+                "row",
+                "col"
+              ]
+            }
+          },
+          "nodeIds": {
+            "maxItems": 64,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          "suggestion": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "stage",
+          "message"
+        ]
+      }
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "sourceMode",
+    "board",
+    "cards"
+  ]
+}
