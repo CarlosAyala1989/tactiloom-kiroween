@@ -17,11 +17,12 @@ export interface BoardCardView {
 const ROTATION: Record<Orientation, number> = { E: 0, S: 90, W: 180, N: 270 };
 
 function Arrow({ degrees, color, label }: { degrees: number; color: string; label?: string }) {
+  // Fill as a style (not an attribute) so `color` can be a theme variable.
   return (
     <svg viewBox="0 0 40 40" className="h-7 w-7" style={{ transform: `rotate(${degrees}deg)` }} aria-hidden="true">
-      <path d="M6 17 H25 V10 L36 20 L25 30 V23 H6 Z" fill={color} />
+      <path d="M6 17 H25 V10 L36 20 L25 30 V23 H6 Z" style={{ fill: color }} />
       {label && (
-        <text x="6" y="14" fontSize="8" fill={color} fontWeight="700">
+        <text x="6" y="14" fontSize="8" style={{ fill: color }} fontWeight="700">
           {label}
         </text>
       )}
@@ -40,7 +41,7 @@ export function CardTile({ card, compact = false }: { card: Pick<BoardCardView, 
       {!compact && (
         <span className="flex items-center gap-0.5">
           <Arrow degrees={ROTATION[card.orientation]} color={spec.color} />
-          {card.kind === 'CONDITION' && <Arrow degrees={ROTATION[card.orientation] + 90} color="#bcae9a" />}
+          {card.kind === 'CONDITION' && <Arrow degrees={ROTATION[card.orientation] + 90} color="var(--color-muted)" />}
         </span>
       )}
       <span className="mono text-[0.65rem] text-muted">#{card.markerId}</span>
@@ -82,7 +83,7 @@ export function BoardGrid({ cards, caption, errorCells, selectedMarkerId, onCell
   return (
     <figure className="w-full overflow-x-auto">
       <figcaption className="sr-only">{caption}</figcaption>
-      <div role="grid" aria-label={caption} className="grid min-w-[640px] gap-1.5 rounded-xl border border-ink-700 bg-[#f2ece2]/5 p-2" style={{ gridTemplateColumns: '1.5rem repeat(8, minmax(0, 1fr))' }}>
+      <div role="grid" aria-label={caption} className="grid min-w-[640px] gap-1.5 rounded-xl border border-ink-700 bg-paper/5 p-2" style={{ gridTemplateColumns: '1.5rem repeat(8, minmax(0, 1fr))' }}>
         <div aria-hidden="true" />
         {cols.map((col) => (
           <div key={`h${col}`} aria-hidden="true" className="text-center text-[0.65rem] text-muted">

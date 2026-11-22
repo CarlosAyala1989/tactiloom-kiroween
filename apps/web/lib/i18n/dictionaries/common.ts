@@ -4,9 +4,9 @@ import type { Locale } from '@tactiloom/contracts';
 const es = {
   appName: 'Tactiloom',
   tagline: 'Construye flujos con tus manos. Ejecútalos en tu computadora.',
-  metaDescription: 'Automatización tangible: tarjetas ArUco sobre un tablero → OpenCV → grafo tipado → ejecución segura y aprobada.',
+  metaDescription: 'Diseña flujos de documentos con tarjetas impresas: Tactiloom lee la foto del tablero y ejecuta el flujo solo cuando lo apruebas.',
   skipToContent: 'Saltar al contenido',
-  footer: 'Tactiloom · MIT · Datos de demostración ficticios · Antecedentes: FloBlocks (2025) y Sheets (2015) exploraron la programación con tarjetas y webcam.',
+  footer: 'Tactiloom · Kiroween 2026 (Frankenstein) · MIT · Datos de demostración ficticios · Antecedentes: FloBlocks (2025) y Sheets (2015) exploraron la programación con tarjetas y webcam.',
   nav: {
     label: 'Principal',
     studio: 'Estudio',
@@ -22,6 +22,12 @@ const es = {
   language: {
     label: 'Idioma',
     changed: (name: string) => `Idioma cambiado a ${name}.`,
+  },
+  theme: {
+    label: 'Tema',
+    system: 'Tema del sistema',
+    light: 'Tema claro',
+    dark: 'Tema oscuro',
   },
   modes: {
     physical: 'Cámara (física)',
@@ -109,9 +115,9 @@ export type CommonMessages = typeof es;
 const en: CommonMessages = {
   appName: 'Tactiloom',
   tagline: 'Build workflows with your hands. Run them on your computer.',
-  metaDescription: 'Tangible automation: ArUco cards on a board → OpenCV → typed graph → safe, approved execution.',
+  metaDescription: 'Design document workflows with printed cards: Tactiloom reads a photo of the board and runs the workflow only when you approve it.',
   skipToContent: 'Skip to content',
-  footer: 'Tactiloom · MIT · Fictitious demo data · Prior art: FloBlocks (2025) and Sheets (2015) explored programming with cards and a webcam.',
+  footer: 'Tactiloom · Kiroween 2026 (Frankenstein) · MIT · Fictitious demo data · Prior art: FloBlocks (2025) and Sheets (2015) explored programming with cards and a webcam.',
   nav: {
     label: 'Main',
     studio: 'Studio',
@@ -127,6 +133,12 @@ const en: CommonMessages = {
   language: {
     label: 'Language',
     changed: (name: string) => `Language changed to ${name}.`,
+  },
+  theme: {
+    label: 'Theme',
+    system: 'System theme',
+    light: 'Light theme',
+    dark: 'Dark theme',
   },
   modes: {
     physical: 'Camera (physical)',
@@ -211,9 +223,9 @@ const en: CommonMessages = {
 const it: CommonMessages = {
   appName: 'Tactiloom',
   tagline: 'Costruisci flussi con le mani. Eseguili sul tuo computer.',
-  metaDescription: 'Automazione tangibile: carte ArUco su un tabellone → OpenCV → grafo tipizzato → esecuzione sicura e approvata.',
+  metaDescription: 'Progetta flussi di documenti con carte stampate: Tactiloom legge la foto del tabellone ed esegue il flusso solo quando lo approvi.',
   skipToContent: 'Vai al contenuto',
-  footer: 'Tactiloom · MIT · Dati dimostrativi fittizi · Precedenti: FloBlocks (2025) e Sheets (2015) hanno esplorato la programmazione con carte e webcam.',
+  footer: 'Tactiloom · Kiroween 2026 (Frankenstein) · MIT · Dati dimostrativi fittizi · Precedenti: FloBlocks (2025) e Sheets (2015) hanno esplorato la programmazione con carte e webcam.',
   nav: {
     label: 'Principale',
     studio: 'Studio',
@@ -229,6 +241,12 @@ const it: CommonMessages = {
   language: {
     label: 'Lingua',
     changed: (name: string) => `Lingua cambiata in ${name}.`,
+  },
+  theme: {
+    label: 'Tema',
+    system: 'Tema di sistema',
+    light: 'Tema chiaro',
+    dark: 'Tema scuro',
   },
   modes: {
     physical: 'Fotocamera (fisica)',
@@ -313,9 +331,9 @@ const it: CommonMessages = {
 const fr: CommonMessages = {
   appName: 'Tactiloom',
   tagline: 'Construisez des flux avec vos mains. Exécutez-les sur votre ordinateur.',
-  metaDescription: 'Automatisation tangible : des cartes ArUco sur un plateau → OpenCV → graphe typé → exécution sûre et approuvée.',
+  metaDescription: 'Concevez des flux de documents avec des cartes imprimées : Tactiloom lit la photo du plateau et n’exécute le flux que lorsque vous l’approuvez.',
   skipToContent: 'Aller au contenu',
-  footer: 'Tactiloom · MIT · Données de démonstration fictives · Antériorité : FloBlocks (2025) et Sheets (2015) ont exploré la programmation avec des cartes et une webcam.',
+  footer: 'Tactiloom · Kiroween 2026 (Frankenstein) · MIT · Données de démonstration fictives · Antériorité : FloBlocks (2025) et Sheets (2015) ont exploré la programmation avec des cartes et une webcam.',
   nav: {
     label: 'Principale',
     studio: 'Studio',
@@ -331,6 +349,12 @@ const fr: CommonMessages = {
   language: {
     label: 'Langue',
     changed: (name: string) => `Langue changée : ${name}.`,
+  },
+  theme: {
+    label: 'Thème',
+    system: 'Thème du système',
+    light: 'Thème clair',
+    dark: 'Thème sombre',
   },
   modes: {
     physical: 'Caméra (physique)',

@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
+/*
+ * Colour tokens, each as light-dark(<light theme>, <dark theme>). Both themes are composed
+ * separately: the dark one is the original warm workstation, the light one the paper of the
+ * printed kit. The names come from the dark palette; in both themes each token keeps one role:
+ *   ink-950 recessed surfaces (fields, code, diagram)   ink-900 page      ink-850 panels
+ *   ink-800 controls     ink-700 borders and hover      ink-600 control borders
+ *   ink-500 dim marks    paper main text                muted secondary text
+ *   amber primary action    amber-strong accent text, focus and selection    on-amber text on amber
+ * The theme follows the operating system unless <html data-theme="light|dark"> pins it
+ * (header switcher, kept in the tactiloom_theme cookie and rendered by the server).
+ */
 @theme {
-  --color-ink-950: #120f0b;
-  --color-ink-900: #19150f;
-  --color-ink-850: #1f1a14;
-  --color-ink-800: #27211a;
-  --color-ink-700: #383026;
-  --color-ink-600: #4d4234;
-  --color-ink-500: #6b5d4b;
-  --color-paper: #f5efe6;
-  --color-muted: #bcae9a;
+  --color-ink-950: light-dark(#efe8dd, #120f0b);
+  --color-ink-900: light-dark(#f6f1e8, #19150f);
+  --color-ink-850: light-dark(#fffcf7, #1f1a14);
+  --color-ink-800: light-dark(#ffffff, #27211a);
+  --color-ink-700: light-dark(#e4dacb, #383026);
+  --color-ink-600: light-dark(#9d8d74, #4d4234);
+  --color-ink-500: light-dark(#8a7a62, #6b5d4b);
+  --color-paper: light-dark(#1c1711, #f5efe6);
+  --color-muted: light-dark(#615242, #bcae9a);
   --color-amber: #f0a43c;
-  --color-amber-strong: #ffbd5c;
-  --color-ok: #52c47e;
-  --color-warn: #f2c14e;
-  --color-err: #f0705f;
-  --color-info: #6fb4f2;
+  --color-amber-hover: light-dark(#e8952e, #ffbd5c);
+  --color-amber-strong: light-dark(#9a5800, #ffbd5c);
+  --color-on-amber: #1a1206;
+  --color-ok: light-dark(#18703c, #52c47e);
+  --color-warn: light-dark(#8a5a00, #f2c14e);
+  --color-err: light-dark(#b42318, #f0705f);
+  --color-info: light-dark(#1f5fae, #6fb4f2);
+  /* NO branch of CONDITION (the YES branch uses ok), in text and in the diagram. */
+  --color-branch-false: light-dark(#a34a00, #f08c00);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
 
 :root {
+  color-scheme: light dark;
+  accent-color: var(--color-amber);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
   color-scheme: dark;
 }
 
@@ -30,11 +52,9 @@ body {
   color: var(--color-paper);
 }
 
-body {
-  background-image:
-    radial-gradient(circle at 15% -10%, rgba(240, 164, 60, 0.12), transparent 40%),
-    radial-gradient(circle at 100% 0%, rgba(111, 180, 242, 0.06), transparent 35%);
-  background-attachment: fixed;
+::selection {
+  background: color-mix(in srgb, var(--color-amber) 40%, transparent);
+  color: var(--color-paper);
 }
 
 /* Visible focus for keyboard users everywhere. */
@@ -84,10 +104,10 @@ body {
 .btn-primary {
   background: var(--color-amber);
   border-color: var(--color-amber);
-  color: #1a1206;
+  color: var(--color-on-amber);
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-amber-strong);
+  background: var(--color-amber-hover);
 }
 .btn-danger {
   border-color: color-mix(in srgb, var(--color-err) 70%, transparent);
@@ -122,4 +142,16 @@ body {
 
 .react-flow__attribution {
   display: none;
+}
+
+/* React Flow reads these variables in both of its colour modes; map them to the theme tokens. */
+.react-flow {
+  --xy-background-color: transparent;
+  --xy-background-pattern-dots-color: var(--color-ink-700);
+  --xy-edge-stroke: var(--color-muted);
+  --xy-edge-label-color: var(--color-paper);
+  --xy-edge-label-background-color: var(--color-ink-900);
+  --xy-node-color: var(--color-paper);
+  --xy-handle-background-color: var(--color-ink-500);
+  --xy-handle-border-color: var(--color-ink-950);
 }

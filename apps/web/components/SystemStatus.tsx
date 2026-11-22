@@ -29,7 +29,7 @@ export function SystemStatus() {
   ];
   const state = (up: boolean | undefined) => (up === undefined ? t.system.unknown : up ? t.system.up : t.system.down);
   return (
-    <ul className="flex items-center gap-2" aria-label={t.system.label}>
+    <ul className="flex flex-wrap items-center gap-x-2 gap-y-1" aria-label={t.system.label}>
       {items.map(([label, up]) => (
         <li key={label} className="flex items-center gap-1" title={`${label}: ${state(up)}`}>
           <span aria-hidden="true" className={`inline-block h-2 w-2 rounded-full ${up === undefined ? 'bg-ink-500' : up ? 'bg-ok' : 'bg-err'}`} />

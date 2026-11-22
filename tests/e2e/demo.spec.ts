@@ -4,6 +4,26 @@ import { expect, test } from '@playwright/test';
 const shots = (name: string) => `tests/e2e/.artifacts/${name}.png`;
 
 test.describe('remote demo without camera (judges path)', () => {
+  test('the home page says what Tactiloom does, labels its sources and its main button analyses the example photo', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Construye flujos con tus manos. Ejecútalos en tu computadora.');
+    await expect(page.getByText('Imagen sintética generada desde el kit imprimible; no es una captura de cámara.')).toBeVisible();
+    // The example workflow is the demo case of the product brief, in the words printed on the cards.
+    await expect(page.getByRole('list', { name: 'Tarjetas del flujo, en orden' }).getByRole('listitem')).toHaveText(['INICIO', 'ARCHIVO', 'EXTRAER TEXTO', 'VALIDAR CAMPOS', 'CONDICIÓN']);
+    await expect(page.locator('[data-branch="TRUE"]')).toContainText('SÍ');
+    await expect(page.locator('[data-branch="TRUE"] li')).toHaveText(['CREAR REPORTE', 'GUARDAR REPORTE', 'FIN']);
+    await expect(page.locator('[data-branch="FALSE"]')).toContainText('NO');
+    await expect(page.locator('[data-branch="FALSE"] li')).toHaveText(['PEDIR REVISIÓN', 'FIN']);
+    for (const mode of ['Cámara (física)', 'Imagen (OpenCV)', 'Simulador digital: no utiliza cámara']) {
+      await expect(page.getByText(mode, { exact: true })).toBeVisible();
+    }
+
+    await page.getByTestId('home-try-example').click();
+    await expect(page).toHaveURL(/\/studio\?scenario=valid-board-perspective$/);
+    await expect(page.getByText('10 tarjetas reconocidas')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId('compile-status')).toHaveText(/Programa válido/);
+  });
+
   test('gallery image → OpenCV → compile → dry-run → approval → real report; then invalid document → review task', async ({ page }) => {
     await page.goto('/gallery');
     await page.getByTestId('analyze-valid-board-perspective').click();

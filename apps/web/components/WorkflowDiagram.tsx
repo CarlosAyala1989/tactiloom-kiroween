@@ -18,13 +18,14 @@ export interface DiagramNode {
 
 type CardNodeData = { node: DiagramNode; state: NodeRunState; hasError: boolean; selected: boolean };
 
+/** Theme tokens (globals.css), so the rings follow the light and dark themes. */
 const STATE_RING: Record<NodeRunState, string> = {
   idle: 'transparent',
-  predicted: '#6fb4f2',
-  running: '#f2c14e',
-  succeeded: '#52c47e',
-  failed: '#f0705f',
-  skipped: '#6b5d4b',
+  predicted: 'var(--color-info)',
+  running: 'var(--color-warn)',
+  succeeded: 'var(--color-ok)',
+  failed: 'var(--color-err)',
+  skipped: 'var(--color-ink-500)',
 };
 
 function CardNode({ data }: NodeProps<Node<CardNodeData>>) {
@@ -35,8 +36,12 @@ function CardNode({ data }: NodeProps<Node<CardNodeData>>) {
   const handle = '!h-1.5 !w-1.5 !min-h-0 !min-w-0 !border-0 !bg-ink-500';
   return (
     <div
-      className="w-[136px] rounded-xl border-2 bg-ink-950 px-2 py-1.5 text-paper shadow-lg"
-      style={{ borderColor: data.hasError ? '#f0705f' : spec.color, boxShadow: data.state !== 'idle' ? `0 0 0 3px ${ring}` : undefined, outline: data.selected ? '2px solid #ffbd5c' : undefined }}
+      className="w-[136px] rounded-xl border-2 bg-ink-850 px-2 py-1.5 text-paper shadow-lg"
+      style={{
+        borderColor: data.hasError ? 'var(--color-err)' : spec.color,
+        boxShadow: data.state !== 'idle' ? `0 0 0 3px ${ring}` : undefined,
+        outline: data.selected ? '2px solid var(--color-amber-strong)' : undefined,
+      }}
     >
       <Handle id="t-l" type="target" position={Position.Left} className={handle} isConnectable={false} />
       <Handle id="t-t" type="target" position={Position.Top} className={handle} isConnectable={false} />
@@ -117,9 +122,9 @@ export function WorkflowDiagram({
       type: 'smoothstep',
       label: edge.port === 'NEXT' ? undefined : t.branch[edge.port],
       animated: states[edge.from] === 'succeeded' && (states[edge.to] === 'running' || states[edge.to] === 'succeeded'),
-      style: { stroke: edge.port === 'FALSE' ? '#f08c00' : edge.port === 'TRUE' ? '#52c47e' : '#bcae9a', strokeWidth: 2 },
-      labelStyle: { fill: '#f5efe6', fontWeight: 700 },
-      labelBgStyle: { fill: '#19150f' },
+      style: { stroke: edge.port === 'FALSE' ? 'var(--color-branch-false)' : edge.port === 'TRUE' ? 'var(--color-ok)' : 'var(--color-muted)', strokeWidth: 2 },
+      labelStyle: { fill: 'var(--color-paper)', fontWeight: 700 },
+      labelBgStyle: { fill: 'var(--color-ink-900)' },
     }));
   }, [edges, nodes, states, t]);
   return (
@@ -137,10 +142,9 @@ export function WorkflowDiagram({
         elementsSelectable={Boolean(onSelect)}
         onNodeClick={(_event, node) => onSelect?.(node.id)}
         proOptions={{ hideAttribution: true }}
-        colorMode="dark"
         minZoom={0.3}
       >
-        <Background gap={24} color="#383026" />
+        <Background gap={24} color="var(--color-ink-700)" />
       </ReactFlow>
     </div>
   );

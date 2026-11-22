@@ -5,7 +5,9 @@ import { usePathname } from 'next/navigation';
 import { useId, useState } from 'react';
 import { isLocale, LOCALE_NATIVE_NAMES, LOCALES } from '@/lib/i18n/config';
 import { useI18n } from '@/lib/i18n/provider';
+import type { ThemePreference } from '@/lib/theme';
 import { SystemStatus } from './SystemStatus';
+import { ThemeSwitcher } from './ThemeSwitcher';
 import { useSession } from './SessionProvider';
 
 function Logo() {
@@ -58,7 +60,7 @@ function LanguageSwitcher() {
   );
 }
 
-export function Nav() {
+export function Nav({ theme }: { theme: ThemePreference }) {
   const pathname = usePathname();
   const session = useSession();
   const { t } = useI18n();
@@ -95,9 +97,10 @@ export function Nav() {
             );
           })}
         </ul>
-        <div className="ml-auto flex items-center gap-3 text-xs text-muted">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-x-3 gap-y-2 text-xs text-muted">
           {hours !== null && <span title={t.nav.demoExpiresTitle}>{t.nav.demoExpires(hours)}</span>}
           <SystemStatus />
+          <ThemeSwitcher initialTheme={theme} />
           <LanguageSwitcher />
         </div>
       </nav>

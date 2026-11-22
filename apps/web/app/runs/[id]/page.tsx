@@ -92,7 +92,7 @@ function Timeline({ status }: { status: RunStatus }) {
       {FLOW.map((step, i) => (
         <li
           key={step}
-          className={`rounded px-2 py-1 ${i < index ? 'bg-ink-700 text-paper' : i === index ? 'bg-amber text-ink-950 font-bold' : 'text-muted'}`}
+          className={`rounded px-2 py-1 ${i < index ? 'bg-ink-700 text-paper' : i === index ? 'bg-amber text-on-amber font-bold' : 'text-muted'}`}
           aria-current={i === index ? 'step' : undefined}
           title={t.runStatusShort[step]}
           aria-label={`${t.runStatusShort[step]} (${step})`}

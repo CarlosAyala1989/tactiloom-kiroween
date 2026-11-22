@@ -6,33 +6,27 @@ const esCards = (n: number) => (n === 1 ? '1 tarjeta' : `${n} tarjetas`);
 
 const es = {
   home: {
-    conceptLabel: 'Ilustración conceptual: tablero con tarjetas encadenadas y una rama de revisión',
-    /** `no` = label of the FALSE branch. */
-    conceptFalseTurn: (no: string) => `${no} ↓ gira a la derecha`,
-    conceptCaption: 'Ilustración conceptual — la demo real procesa fotos con OpenCV',
-    intro:
-      'Tactiloom convierte tarjetas físicas con marcadores ArUco, colocadas sobre un tablero, en un programa real: la cámara lee el tablero, un compilador lo traduce a un grafo tipado y un worker aislado lo ejecuta sobre documentos de prueba —solo después de que lo apruebes.',
-    tryDemo: 'Probar demo (sin hardware)',
-    howItWorks: 'Cómo funciona',
+    lede: 'Coloca tarjetas impresas sobre un tablero y tómale una foto. Tactiloom reconoce las tarjetas, las convierte en un flujo y lo ejecuta sobre documentos PDF o de texto solo cuando tú lo apruebas.',
+    tryExample: 'Analizar la foto de ejemplo',
     printKit: 'Imprimir el kit',
-    stepsLabel: 'Tres pasos',
-    steps: [
-      { title: '1 · Imprime', text: 'Tablero 8×4 con 4 marcadores de esquina y tarjetas con marcadores ArUco reales (A3, mosaico A4 o versión reducida).' },
-      { title: '2 · Coloca', text: 'Una tarjeta por casilla. La flecha impresa es el flujo; CONDICIÓN envía SÍ hacia adelante y NO a la derecha.' },
-      { title: '3 · Escanea y ejecuta', text: 'OpenCV lee el tablero, el compilador valida el grafo, revisas el dry-run y apruebas. Solo entonces corre el worker.' },
-    ],
-    realTitle: 'Qué es real en esta demo',
-    real: [
-      '✓ Los marcadores se detectan desde los píxeles (OpenCV 5, DICT_4X4_100, homografía con 16 esquinas).',
-      '✓ El grafo se compila con reglas geométricas públicas y diagnósticos en español.',
-      '✓ El worker extrae texto real del PDF, valida campos y escribe un reporte descargable en un sandbox.',
-      '✓ Nada se ejecuta sin un dry-run revisado y una aprobación explícita con hash.',
-      '✓ Interfaz, kit imprimible, reportes y superposición de OpenCV en español, inglés, italiano y francés.',
-      '• Las imágenes de la galería son sintéticas (renderizadas desde el kit) y así se etiquetan.',
-      '• El simulador construye el tablero digitalmente y está marcado «no utiliza cámara».',
-    ],
-    priorArt:
-      'Tactiloom no inventó la programación tangible: FloBlocks (2025) y Sheets (2015) ya usaron tarjetas y webcam. Aquí la integramos con un motor seguro de automatización documental, trazabilidad y aprobación.',
+    howItWorks: 'Cómo funciona',
+    noHardware: 'Puedes probarlo ahora, sin cámara ni impresora.',
+    photoAlt: 'Tablero impreso de Tactiloom visto en ángulo, con diez tarjetas: ocho en la fila superior y dos en la columna de la condición.',
+    photoCaption: 'Imagen sintética generada desde el kit imprimible; no es una captura de cámara.',
+    exampleTitle: 'Ejemplo: revisar solicitudes para un taller',
+    exampleText:
+      'El tablero de la foto lee una solicitud en PDF y comprueba que tenga nombre, correo válido y taller. Si está completa, crea y guarda un reporte; si falta algo, abre una tarea de revisión.',
+    flowLabel: 'Tarjetas del flujo, en orden',
+    branchesLabel: 'Ramas de la condición',
+    startTitle: 'Elige cómo empezar',
+    /** before + <a>link</a> (judges guide) + after */
+    judges: { before: 'La ', link: 'guía para jueces', after: ' explica qué es real y qué es simulado en esta demo.' },
+    /** One row per source mode; the mode label itself comes from `modes`. */
+    start: {
+      physical: { text: 'Imprime el kit, coloca las tarjetas y fotografía el tablero con tu cámara desde el Estudio.', link: 'Abrir el Estudio' },
+      image: { text: 'Elige una imagen de ejemplo y analízala con OpenCV, sin cámara.', link: 'Ver la galería' },
+      simulator: { text: 'Coloca y gira tarjetas en pantalla; los errores aparecen al instante.', link: 'Abrir el simulador' },
+    },
   },
   howItWorks: {
     title: 'Cómo funciona',
@@ -209,32 +203,25 @@ const enCards = (n: number) => (n === 1 ? '1 card' : `${n} cards`);
 
 const en: PagesMessages = {
   home: {
-    conceptLabel: 'Concept illustration: a board with chained cards and a review branch',
-    conceptFalseTurn: (no: string) => `${no} ↓ turns right`,
-    conceptCaption: 'Concept illustration — the real demo processes photos with OpenCV',
-    intro:
-      'Tactiloom turns physical cards with ArUco markers, laid out on a board, into a real program: the camera reads the board, a compiler translates it into a typed graph and an isolated worker runs it on test documents — only after you approve it.',
-    tryDemo: 'Try the demo (no hardware)',
-    howItWorks: 'How it works',
+    lede: 'Place printed cards on a board and take a photo. Tactiloom recognises the cards, turns them into a workflow and runs it on PDF or text documents only when you approve it.',
+    tryExample: 'Analyse the example photo',
     printKit: 'Print the kit',
-    stepsLabel: 'Three steps',
-    steps: [
-      { title: '1 · Print', text: 'An 8×4 board with 4 corner markers and cards carrying real ArUco markers (A3, A4 tiles or reduced version).' },
-      { title: '2 · Place', text: 'One card per cell. The printed arrow is the flow; CONDITION sends YES forward and NO to the right.' },
-      { title: '3 · Scan and run', text: 'OpenCV reads the board, the compiler validates the graph, you review the dry run and approve. Only then does the worker run.' },
-    ],
-    realTitle: 'What is real in this demo',
-    real: [
-      '✓ Markers are detected from the pixels (OpenCV 5, DICT_4X4_100, homography with 16 corners).',
-      '✓ The graph is compiled with public geometric rules, with diagnostics in English.',
-      '✓ The worker extracts the real text of the PDF, validates fields and writes a downloadable report in a sandbox.',
-      '✓ Nothing runs without a reviewed dry run and an explicit approval bound to a hash.',
-      '✓ Interface, printable kit, reports and OpenCV overlay in Spanish, English, Italian and French.',
-      '• Gallery images are synthetic (rendered from the kit) and labelled as such.',
-      '• The simulator builds the board digitally and is labelled “does not use a camera”.',
-    ],
-    priorArt:
-      'Tactiloom did not invent tangible programming: FloBlocks (2025) and Sheets (2015) already used cards and a webcam. Here we combine it with a safe document-automation engine, traceability and approval.',
+    howItWorks: 'How it works',
+    noHardware: 'You can try it now, without a camera or a printer.',
+    photoAlt: 'A printed Tactiloom board seen at an angle, with ten cards: eight along the top row and two in the condition’s column.',
+    photoCaption: 'Synthetic image generated from the printable kit; it is not a camera capture.',
+    exampleTitle: 'Example: reviewing workshop applications',
+    exampleText:
+      'The board in the photo reads a PDF application form and checks that it has a name, a valid email and a workshop. If it is complete, it creates and saves a report; if anything is missing, it opens a review task.',
+    flowLabel: 'Workflow cards, in order',
+    branchesLabel: 'Branches of the condition',
+    startTitle: 'Choose how to start',
+    judges: { before: 'The ', link: 'judges guide', after: ' explains what is real and what is simulated in this demo.' },
+    start: {
+      physical: { text: 'Print the kit, place the cards and photograph the board with your camera from the Studio.', link: 'Open the Studio' },
+      image: { text: 'Pick an example image and analyse it with OpenCV, no camera needed.', link: 'See the gallery' },
+      simulator: { text: 'Place and rotate cards on screen; errors show up immediately.', link: 'Open the simulator' },
+    },
   },
   howItWorks: {
     title: 'How it works',
@@ -398,32 +385,25 @@ const itCards = (n: number) => (n === 1 ? '1 carta' : `${n} carte`);
 
 const it: PagesMessages = {
   home: {
-    conceptLabel: 'Illustrazione concettuale: tabellone con carte concatenate e un ramo di revisione',
-    conceptFalseTurn: (no: string) => `${no} ↓ gira a destra`,
-    conceptCaption: 'Illustrazione concettuale — la demo reale elabora foto con OpenCV',
-    intro:
-      'Tactiloom trasforma carte fisiche con marcatori ArUco, disposte su un tabellone, in un programma reale: la fotocamera legge il tabellone, un compilatore lo traduce in un grafo tipizzato e un worker isolato lo esegue su documenti di prova, ma solo dopo che lo hai approvato.',
-    tryDemo: 'Prova la demo (senza hardware)',
-    howItWorks: 'Come funziona',
+    lede: 'Disponi carte stampate su un tabellone e scatta una foto. Tactiloom riconosce le carte, le trasforma in un flusso e lo esegue su documenti PDF o di testo solo quando lo approvi.',
+    tryExample: 'Analizza la foto di esempio',
     printKit: 'Stampa il kit',
-    stepsLabel: 'Tre passaggi',
-    steps: [
-      { title: '1 · Stampa', text: 'Tabellone 8×4 con 4 marcatori d’angolo e carte con veri marcatori ArUco (A3, mosaico A4 o versione ridotta).' },
-      { title: '2 · Disponi', text: 'Una carta per casella. La freccia stampata è il flusso; CONDIZIONE manda SÌ in avanti e NO a destra.' },
-      { title: '3 · Scansiona ed esegui', text: 'OpenCV legge il tabellone, il compilatore convalida il grafo, rivedi il dry-run e approvi. Solo allora parte il worker.' },
-    ],
-    realTitle: 'Che cosa è reale in questa demo',
-    real: [
-      '✓ I marcatori vengono rilevati dai pixel (OpenCV 5, DICT_4X4_100, omografia con 16 angoli).',
-      '✓ Il grafo viene compilato con regole geometriche pubbliche e diagnostica in italiano.',
-      '✓ Il worker estrae il testo reale del PDF, convalida i campi e scrive un report scaricabile in una sandbox.',
-      '✓ Niente viene eseguito senza un dry-run rivisto e un’approvazione esplicita legata a un hash.',
-      '✓ Interfaccia, kit stampabile, report e sovrapposizione di OpenCV in spagnolo, inglese, italiano e francese.',
-      '• Le immagini della galleria sono sintetiche (generate dal kit) e sono etichettate come tali.',
-      '• Il simulatore costruisce il tabellone in digitale ed è contrassegnato con «non usa la fotocamera».',
-    ],
-    priorArt:
-      'Tactiloom non ha inventato la programmazione tangibile: FloBlocks (2025) e Sheets (2015) usavano già carte e webcam. Qui la integriamo con un motore sicuro di automazione documentale, tracciabilità e approvazione.',
+    howItWorks: 'Come funziona',
+    noHardware: 'Puoi provarlo subito, senza fotocamera né stampante.',
+    photoAlt: 'Un tabellone Tactiloom stampato visto di sbieco, con dieci carte: otto nella riga superiore e due nella colonna della condizione.',
+    photoCaption: 'Immagine sintetica generata dal kit stampabile; non è un’acquisizione della fotocamera.',
+    exampleTitle: 'Esempio: controllare le iscrizioni a un laboratorio',
+    exampleText:
+      'Il tabellone della foto legge una domanda di partecipazione in PDF e controlla che contenga nome, e-mail valida e laboratorio. Se è completa, crea e salva un report; se manca qualcosa, apre un’attività di revisione.',
+    flowLabel: 'Carte del flusso, in ordine',
+    branchesLabel: 'Rami della condizione',
+    startTitle: 'Scegli come iniziare',
+    judges: { before: 'La ', link: 'guida per la giuria', after: ' spiega che cosa è reale e che cosa è simulato in questa demo.' },
+    start: {
+      physical: { text: 'Stampa il kit, disponi le carte e fotografa il tabellone con la fotocamera dallo Studio.', link: 'Apri lo Studio' },
+      image: { text: 'Scegli un’immagine di esempio e analizzala con OpenCV, senza fotocamera.', link: 'Vai alla galleria' },
+      simulator: { text: 'Disponi e ruota le carte sullo schermo; gli errori compaiono subito.', link: 'Apri il simulatore' },
+    },
   },
   howItWorks: {
     title: 'Come funziona',
@@ -588,32 +568,25 @@ const frCards = (n: number) => (n <= 1 ? `${n} carte` : `${n} cartes`);
 
 const fr: PagesMessages = {
   home: {
-    conceptLabel: 'Illustration conceptuelle : plateau avec des cartes enchaînées et une branche de révision',
-    conceptFalseTurn: (no: string) => `${no} ↓ tourne à droite`,
-    conceptCaption: 'Illustration conceptuelle — la vraie démo traite des photos avec OpenCV',
-    intro:
-      'Tactiloom transforme des cartes physiques à marqueurs ArUco, posées sur un plateau, en un vrai programme : la caméra lit le plateau, un compilateur le traduit en graphe typé et un worker isolé l’exécute sur des documents de test — uniquement après votre approbation.',
-    tryDemo: 'Essayer la démo (sans matériel)',
-    howItWorks: 'Comment ça marche',
+    lede: 'Placez des cartes imprimées sur un plateau et prenez une photo. Tactiloom reconnaît les cartes, les transforme en flux et l’exécute sur des documents PDF ou texte, uniquement quand vous l’approuvez.',
+    tryExample: 'Analyser la photo d’exemple',
     printKit: 'Imprimer le kit',
-    stepsLabel: 'Trois étapes',
-    steps: [
-      { title: '1 · Imprimez', text: 'Un plateau 8×4 avec 4 marqueurs de coin et des cartes portant de vrais marqueurs ArUco (A3, mosaïque A4 ou version réduite).' },
-      { title: '2 · Placez', text: 'Une carte par case. La flèche imprimée indique le flux ; CONDITION envoie OUI tout droit et NON à droite.' },
-      { title: '3 · Scannez et exécutez', text: 'OpenCV lit le plateau, le compilateur valide le graphe, vous vérifiez le dry-run et vous approuvez. Ce n’est qu’alors que le worker exécute le flux.' },
-    ],
-    realTitle: 'Ce qui est réel dans cette démo',
-    real: [
-      '✓ Les marqueurs sont détectés à partir des pixels (OpenCV 5, DICT_4X4_100, homographie sur 16 coins).',
-      '✓ Le graphe est compilé selon des règles géométriques publiques, avec des diagnostics en français.',
-      '✓ Le worker extrait le vrai texte du PDF, valide les champs et écrit un rapport téléchargeable dans un sandbox.',
-      '✓ Rien ne s’exécute sans un dry-run vérifié et une approbation explicite liée à un hash.',
-      '✓ Interface, kit imprimable, rapports et superposition OpenCV en espagnol, anglais, italien et français.',
-      '• Les images de la galerie sont de synthèse (rendues à partir du kit) et signalées comme telles.',
-      '• Le simulateur construit le plateau numériquement et porte la mention « n’utilise pas de caméra ».',
-    ],
-    priorArt:
-      'Tactiloom n’a pas inventé la programmation tangible : FloBlocks (2025) et Sheets (2015) utilisaient déjà des cartes et une webcam. Ici, nous l’associons à un moteur sûr d’automatisation documentaire, à la traçabilité et à l’approbation.',
+    howItWorks: 'Comment ça marche',
+    noHardware: 'Vous pouvez l’essayer tout de suite, sans caméra ni imprimante.',
+    photoAlt: 'Un plateau Tactiloom imprimé vu de biais, avec dix cartes : huit sur la rangée du haut et deux dans la colonne de la condition.',
+    photoCaption: 'Image de synthèse générée à partir du kit imprimable ; ce n’est pas une capture de caméra.',
+    exampleTitle: 'Exemple : vérifier des demandes d’inscription à un atelier',
+    exampleText:
+      'Le plateau de la photo lit une demande d’inscription en PDF et vérifie qu’elle contient un nom, un courriel valide et un atelier. Si elle est complète, il crée et enregistre un rapport ; s’il manque quelque chose, il ouvre une tâche de révision.',
+    flowLabel: 'Cartes du flux, dans l’ordre',
+    branchesLabel: 'Branches de la condition',
+    startTitle: 'Choisissez comment commencer',
+    judges: { before: 'Le ', link: 'guide du jury', after: ' explique ce qui est réel et ce qui est simulé dans cette démo.' },
+    start: {
+      physical: { text: 'Imprimez le kit, placez les cartes et photographiez le plateau avec votre caméra depuis le Studio.', link: 'Ouvrir le Studio' },
+      image: { text: 'Choisissez une image d’exemple et analysez-la avec OpenCV, sans caméra.', link: 'Voir la galerie' },
+      simulator: { text: 'Placez et faites pivoter les cartes à l’écran ; les erreurs s’affichent aussitôt.', link: 'Ouvrir le simulateur' },
+    },
   },
   howItWorks: {
     title: 'Comment ça marche',

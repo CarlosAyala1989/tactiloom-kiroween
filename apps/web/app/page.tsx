@@ -1,106 +1,138 @@
-import type { CardKind } from '@tactiloom/contracts';
+import { CARD_KIND_SPECS, CARD_PRINTED_TITLES, type CardKind } from '@tactiloom/contracts';
+import Image from 'next/image';
 import Link from 'next/link';
-import type { Dictionary } from '@/lib/i18n';
+import { ModeBadge } from '@/components/ui';
+import { textOn } from '@/lib/client/contrast';
 import { getServerI18n } from '@/lib/i18n/server';
+import boardPhoto from './_assets/board-example.webp';
 
-const DEMO_ROW: readonly { kind: CardKind; color: string }[] = [
-  { kind: 'START', color: '#2f9e44' },
-  { kind: 'INPUT_FILE', color: '#1971c2' },
-  { kind: 'EXTRACT_TEXT', color: '#0c8599' },
-  { kind: 'VALIDATE_FIELDS', color: '#6741d9' },
-  { kind: 'CONDITION', color: '#e67700' },
-  { kind: 'CREATE_REPORT', color: '#c2255c' },
-  { kind: 'SAVE_REPORT', color: '#5c940d' },
-  { kind: 'END', color: '#495057' },
+/**
+ * Gallery scenario analysed by the primary action. The hero photo is that same image resized to a
+ * 1200 px WebP (from assets/examples/boards/valid-board-perspective.png) to keep the page light.
+ */
+const EXAMPLE_SCENARIO = 'valid-board-perspective';
+
+/** The demo workflow of the product brief: the cards of the example photo, in reading order. */
+const MAIN_PATH: readonly CardKind[] = ['START', 'INPUT_FILE', 'EXTRACT_TEXT', 'VALIDATE_FIELDS', 'CONDITION'];
+const BRANCHES: readonly { port: 'TRUE' | 'FALSE'; kinds: readonly CardKind[]; tone: string }[] = [
+  { port: 'TRUE', kinds: ['CREATE_REPORT', 'SAVE_REPORT', 'END'], tone: 'text-ok' },
+  { port: 'FALSE', kinds: ['REQUEST_REVIEW', 'END'], tone: 'text-branch-false' },
 ];
 
-/** Concept illustration only (static SVG); the real demo is in the Studio, Gallery and Simulator. */
-function ConceptBoard({ t }: { t: Dictionary }) {
+/** Where each source mode starts; the labels are the shared mode names. */
+const START_ROUTES = [
+  { mode: 'physical', href: '/studio' },
+  { mode: 'image', href: '/gallery' },
+  { mode: 'simulator', href: '/simulator' },
+] as const;
+
+/** Text column + content column, shared by every section so they line up. */
+const COLUMNS = 'grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]';
+
+function FlowArrow() {
   return (
-    <svg viewBox="0 0 860 300" className="h-auto w-full" role="img" aria-label={t.pages.home.conceptLabel}>
-      <rect x="0" y="0" width="860" height="300" rx="18" fill="#f5efe6" />
-      {[0, 1, 2, 3].map((r) => [0, 1, 2, 3, 4, 5, 6, 7].map((c) => <rect key={`${r}-${c}`} x={30 + c * 100} y={20 + r * 66} width="96" height="62" rx="6" fill="none" stroke="#c9bfae" />))}
-      {DEMO_ROW.map((card, i) => (
-        <g key={card.kind} transform={`translate(${36 + i * 100} 26)`}>
-          <rect width="84" height="50" rx="6" fill="#fff" stroke={card.color} strokeWidth="2.5" />
-          <rect width="84" height="14" rx="5" fill={card.color} />
-          <text x="42" y="11" fontSize="9" fill="#fff" textAnchor="middle" fontWeight="700">
-            {t.catalog.short[card.kind]}
-          </text>
-          <rect x="30" y="18" width="24" height="24" fill="#111" />
-          <path d="M60 30 h14 l-4 -4 M74 30 l-4 4" stroke={card.color} strokeWidth="2.5" fill="none" />
-        </g>
-      ))}
-      <g transform="translate(436 92)">
-        <rect width="84" height="50" rx="6" fill="#fff" stroke="#f08c00" strokeWidth="2.5" />
-        <rect width="84" height="14" rx="5" fill="#f08c00" />
-        <text x="42" y="11" fontSize="9" fill="#fff" textAnchor="middle" fontWeight="700">
-          {t.catalog.short.REQUEST_REVIEW}
-        </text>
-        <rect x="30" y="18" width="24" height="24" fill="#111" />
-      </g>
-      <g transform="translate(436 158)">
-        <rect width="84" height="50" rx="6" fill="#fff" stroke="#495057" strokeWidth="2.5" />
-        <rect width="84" height="14" rx="5" fill="#495057" />
-        <text x="42" y="11" fontSize="9" fill="#fff" textAnchor="middle" fontWeight="700">
-          {t.catalog.short.END}
-        </text>
-        <rect x="30" y="18" width="24" height="24" fill="#111" />
-      </g>
-      <text x="530" y="120" fontSize="12" fill="#e67700" fontWeight="700">
-        {t.pages.home.conceptFalseTurn(t.branch.FALSE)}
-      </text>
-      <text x="430" y="290" fontSize="12" fill="#6b5d4b" textAnchor="middle">
-        {t.pages.home.conceptCaption}
-      </text>
+    <svg aria-hidden="true" viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0 text-muted">
+      <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-export default async function HomePage() {
-  const { t } = await getServerI18n();
-  const home = t.pages.home;
+/** Cards in order, coloured like the header of each printed card. */
+function CardSequence({ kinds, titles, label }: { kinds: readonly CardKind[]; titles: Readonly<Record<CardKind, string>>; label?: string }) {
   return (
-    <div className="space-y-12">
-      <section className="grid items-center gap-8 pt-6 lg:grid-cols-2">
-        <div className="space-y-5">
-          <p className="chip text-amber-strong">Kiroween 2026 · Frankenstein</p>
-          <h1 className="text-4xl font-black leading-tight sm:text-5xl">{t.tagline}</h1>
-          <p className="max-w-xl text-lg text-muted">{home.intro}</p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/gallery" className="btn btn-primary">
-              {home.tryDemo}
-            </Link>
-            <Link href="/how-it-works" className="btn">
-              {home.howItWorks}
-            </Link>
-            <Link href="/kit" className="btn">
-              {home.printKit}
-            </Link>
+    <ol aria-label={label} className="flex flex-wrap items-center gap-x-1.5 gap-y-2">
+      {kinds.map((kind, index) => {
+        const color = CARD_KIND_SPECS[kind].color;
+        return (
+          <li key={`${kind}-${index}`} className="flex items-center gap-1.5">
+            {index > 0 && <FlowArrow />}
+            <span className="whitespace-nowrap rounded-md px-2 py-1 text-xs font-bold tracking-wide" style={{ background: color, color: textOn(color) }}>
+              {titles[kind]}
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export default async function HomePage() {
+  const { t, locale } = await getServerI18n();
+  const home = t.pages.home;
+  const titles = CARD_PRINTED_TITLES[locale];
+  return (
+    <div className="space-y-14">
+      <section className={`${COLUMNS} items-center pt-4`}>
+        <div className="space-y-6">
+          <h1 className="text-balance text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl">{t.tagline}</h1>
+          <p className="max-w-xl text-pretty text-lg text-muted">{home.lede}</p>
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+              <Link href={`/studio?scenario=${EXAMPLE_SCENARIO}`} className="btn btn-primary" data-testid="home-try-example">
+                {home.tryExample}
+              </Link>
+              <Link href="/kit" className="btn">
+                {home.printKit}
+              </Link>
+              <Link href="/how-it-works" className="text-sm font-semibold underline underline-offset-4 hover:text-amber-strong">
+                {home.howItWorks}
+              </Link>
+            </div>
+            <p className="text-sm text-muted">{home.noHardware}</p>
           </div>
         </div>
-        <div className="panel p-3">
-          <ConceptBoard t={t} />
+        <figure className="space-y-2">
+          <Image src={boardPhoto} alt={home.photoAlt} unoptimized preload className="h-auto w-full rounded-xl border border-ink-700" />
+          <figcaption className="text-xs text-muted">{home.photoCaption}</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="home-example" className={`${COLUMNS} border-t border-ink-700 pt-10`}>
+        <div className="space-y-3">
+          <h2 id="home-example" className="text-balance text-2xl font-bold">
+            {home.exampleTitle}
+          </h2>
+          <p className="max-w-xl text-pretty text-muted">{home.exampleText}</p>
+        </div>
+        <div className="space-y-3">
+          <CardSequence kinds={MAIN_PATH} titles={titles} label={home.flowLabel} />
+          <ul aria-label={home.branchesLabel} className="space-y-2">
+            {BRANCHES.map(({ port, kinds, tone }) => (
+              <li key={port} data-branch={port} className="flex items-start gap-2.5">
+                <span className={`chip w-12 shrink-0 justify-center ${tone}`}>{t.branch[port]}</span>
+                <CardSequence kinds={kinds} titles={titles} />
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3" aria-label={home.stepsLabel}>
-        {home.steps.map(({ title, text }) => (
-          <div key={title} className="panel p-5">
-            <h2 className="text-lg font-bold">{title}</h2>
-            <p className="mt-2 text-sm text-muted">{text}</p>
-          </div>
-        ))}
-      </section>
-
-      <section className="panel space-y-3 p-6">
-        <h2 className="text-xl font-bold">{home.realTitle}</h2>
-        <ul className="grid gap-2 text-sm md:grid-cols-2">
-          {home.real.map((item) => (
-            <li key={item}>{item}</li>
+      <section aria-labelledby="home-start" className={`${COLUMNS} border-t border-ink-700 pt-10`}>
+        <div className="space-y-3">
+          <h2 id="home-start" className="text-2xl font-bold">
+            {home.startTitle}
+          </h2>
+          <p className="max-w-xl text-sm text-muted">
+            {home.judges.before}
+            <Link href="/help" className="underline underline-offset-4 hover:text-paper">
+              {home.judges.link}
+            </Link>
+            {home.judges.after}
+          </p>
+        </div>
+        <ul className="divide-y divide-ink-700">
+          {START_ROUTES.map(({ mode, href }) => (
+            <li key={mode} className="grid gap-2 py-4 first:pt-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-x-8">
+              <div className="space-y-1.5">
+                <ModeBadge mode={mode} />
+                <p className="text-sm">{home.start[mode].text}</p>
+              </div>
+              <Link href={href} className="text-sm font-semibold text-amber-strong underline underline-offset-4 hover:text-paper">
+                {home.start[mode].link}
+              </Link>
+            </li>
           ))}
         </ul>
-        <p className="text-xs text-muted">{home.priorArt}</p>
       </section>
     </div>
   );
