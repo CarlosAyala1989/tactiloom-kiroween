@@ -13,6 +13,8 @@
 
 Kiroween 2026 · categoría **Frankenstein** · licencia [MIT](LICENSE) · estado real: [`docs/implementation-status.md`](docs/implementation-status.md).
 
+Guía en español: [cómo funciona el programa y cómo debería funcionar](docs/funcionamiento.md).
+
 > El brief original ([`RitualOS_KiroCLI_Prompt_Maestro.md`](RitualOS_KiroCLI_Prompt_Maestro.md)) usa el nombre
 > provisional *RitualOS*; el producto se llama **Tactiloom** (paquetes `@tactiloom/*`, contratos `tactiloom-*/1`).
 
